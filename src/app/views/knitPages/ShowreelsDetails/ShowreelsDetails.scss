@@ -1,0 +1,141 @@
+$primary:#001839;
+.showreelPlayList:hover{
+    box-shadow: none !important;
+}
+
+.showreelSnippet:hover{
+    box-shadow: none !important;
+}
+.showreelSettingCard:hover{
+    box-shadow: none !important;
+}
+.tabText{
+    // color: #001839;
+    text-transform: capitalize !important;
+}
+
+.MuiTab-textColorPrimary.Mui-selected {
+    color: $primary !important;
+    font-weight: bold !important;
+}
+.PrivateTabIndicator-colorPrimary-63 {
+    background-color: $primary !important;
+    width: 100px !important;
+    left: 220px !important;
+}
+
+.MuiTab-textColorPrimary {
+    color: #001839 !important;
+    font-weight: 300 !important;
+    font-family: 'Rubik' !important;
+    letter-spacing: 0px !important;
+}
+
+
+$breakpoint-tablet: 600px;
+@media (min-width: $breakpoint-tablet) {
+    .MuiTab-root {
+        min-width: 100px !important;
+    }
+}
+.PrivateTabIndicator-colorPrimary-70 {
+    background-color: $primary !important;
+}
+
+
+.checkbox-text-setting{
+    font-size: 15px !important;
+    color: #001839;    
+}
+.setting-tab-title{
+    font-weight: 500 !important;
+    color: #001839;
+    font-size: 15px !important;
+    margin-bottom: 10px !important;
+}
+.fontProperty{
+    display: flex;
+    flex-wrap:wrap;
+}
+.FontName{
+    margin-right: 5px;
+    margin-bottom: 5px;
+}
+.fontStyle{
+    margin-right: 5px;
+    margin-bottom: 5px;
+}
+.fontSize{
+    margin-right: 5px;
+    margin-bottom: 5px;
+}
+.alignMentButton{
+    cursor: pointer;
+    margin-right: 5px !important;
+    margin-bottom: 10px !important;
+    // border:1px solid #001839 !important;
+    // padding: 5px !important;
+    min-width: 25px !important;
+}
+.alignMentButton:hover, alignMentButton:focus{
+    background:#F6F3E6 !important;
+}
+
+
+.PrivateTabIndicator-root-66{
+    background: #001839 !important;
+}
+
+
+.add-showreel-video{
+    height: 550px;
+}
+.add-videos{
+    border-radius: 10px !important;
+}
+.add-showreel-video{
+    position: relative;
+}
+.add-video-img-text p{
+    font-size: 14px;
+    color:#001839;
+    opacity: 0.4;
+    margin-top: 10px;
+    line-height: 17px;
+}
+.add-video-img-text{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    text-align: center;
+    width: 100px;
+}
+.highlighted-color{
+    background-color: rgba(0, 24, 57, 0.15);
+    cursor: pointer;
+    padding: 2px;
+    border-radius: 5px;
+}
+.FontName p{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 95px;
+}
+.back-showreel-arrow{
+    height: 15px;
+    margin: 10px;
+    margin-left: 0px;
+    margin-top: 8px;
+}
+.header-showreel-div{
+    display: flex;
+}
+.padd-20{
+  padding: 20px;
+}
+.icon-showreel-image{
+  height:15px;
+  width: 15px;
+}

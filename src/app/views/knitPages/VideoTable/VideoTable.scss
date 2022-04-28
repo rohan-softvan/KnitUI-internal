@@ -1,0 +1,54 @@
+.imgThumbData{
+    display: flex;
+    height:60px;
+}
+.imgThumbVideo img{
+    width: 60px;
+    height: 60px;
+    border-radius: 5px;
+}
+.videoData{
+    padding-left: 20px;
+}
+.summaryDesc{
+    font-size: 14px !important;
+    font-family: Rubik !important;
+    line-height: 17px !important;
+    color: #001839;
+    font-weight: 300 !important;
+}
+.summaryTitle{
+    font-size:14px !important;
+    font-weight: 500 !important;
+    font-family: Rubik !important;
+    color: #001839;
+    margin-bottom: 3px;
+    line-height: 17px;
+}
+.v-align-top-td{
+    vertical-align: top !important;
+}
+.checkBox img{
+    width: 20px;
+    height: 20px;
+}
+.videotable{
+    border:0px !important;
+    border-radius: 0px;
+}
+.videoListTable.tableContainer{
+    border-radius: 0px;
+    border:0px;
+    height: auto;
+    max-height: 506px;
+}
+.noShadow.MuiPaper-elevation1:hover{
+    box-shadow: 0 3px 10px rgba(0,0,0,0.10) !important;
+}
+
+.video-main-card:hover{
+    box-shadow: none !important;
+}
+.MuiTableCell-root {
+    padding: 20px !important;
+}

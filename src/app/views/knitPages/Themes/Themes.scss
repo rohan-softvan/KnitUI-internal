@@ -1,0 +1,139 @@
+.MuiTab-textColorPrimary.Mui-selected{
+    font-weight: 900 !important;
+
+}
+.PrivateTabIndicator-colorPrimary-93{
+    background-color:#001839 !important;
+}
+.tabs button{
+    font-family: Rubik !important;
+}
+.brd-hidden fieldset{
+    border: 0px;
+    top:0px;
+}
+
+.analysis-skeleton{
+    background: #fff;
+    border:1px solid #DDDDDD;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+.analysis-header{
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.analysis-body{
+    padding:0px 20px 20px !important;
+}
+
+.processbar-val-show{
+    display: flex;
+    align-items: center;
+}
+.process-val{
+    width: 50px;
+    margin-right: 10px;
+}
+.process-val .MuiSkeleton-text{
+    margin-bottom: 0px !important;
+}
+.processbar-show{
+    width: 96%;
+}
+.blank-box{
+    width: 50px;
+    margin-right: 10px;
+}
+.like-responce-blank{
+    display: flex;
+    align-items: center;
+}
+.like-responce{
+    width: 96%;
+    display: flex;
+    justify-content: space-between;
+}
+.process-with-response{
+    padding: 10px 0px 10px;
+}
+.parallel-question{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.annotations-skeleton{
+    background: #fff;
+    border:1px solid #DDDDDD;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    padding: 20px;
+    display: flex;
+}
+.user-info-skeleton{
+    flex-grow: 0;
+    max-width: 25%;
+    flex-basis: 25%;
+}
+.user-details-skeleton{
+    display: flex;
+    width: 100%;
+    align-items: center;
+}
+.user-img-skeleton{
+    width: 60px;
+    margin-right: 15px;
+}
+.user-question-info{
+    width: calc(100% - 80px);
+}
+.transcript-skeleton{
+    flex-grow: 0;
+    max-width: 41.666667%;
+    flex-basis: 41.666667%;
+    padding-right: 10px;
+    padding-left: 10px;
+}
+.comment-skeleton{
+    flex-grow: 0;
+    max-width: 25%;
+    flex-basis: 25%;
+}
+.export-skeleton{
+    flex-grow: 0;
+    max-width: 8.333333%;
+    flex-basis: 8.333333%;
+}
+.theme-card-skeleton{
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    border:1px solid rgba($color: #000000, $alpha: 0.12);
+    margin-bottom: 15px;
+    display:flex;
+    align-items: center;
+}
+.ant-tree-treenode-switcher-close:hover .anticon-more {
+    display: block;
+
+}
+.add-theme-active{
+    border-color: transparent;
+    width: 15px !important;
+    padding: 0px !important;
+}
+.ant-tree-node-selected{
+  background-color: #bae7ff !important;
+  //background-color: transparent !important;
+  color: white;
+}
+.active-input .MuiInputBase-formControl{
+    border:1px solid #ccc;
+}
+.active-input .Mui-focused{
+    border:1px solid #001839 !important;
+}

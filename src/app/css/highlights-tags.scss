@@ -1,0 +1,160 @@
+.highlighted-theme1 {
+    background-color: rgba(18, 152, 138, 0.2);
+    // padding: 2px;
+    // border-radius: 5px;
+    cursor: pointer;
+
+}
+.highlighted-theme2 {
+    // background-color: #001839;
+    background-color: rgba(244, 160, 0, 0.2);
+    // padding: 2px;
+    // border-radius: 5px;
+    cursor: pointer;
+
+}
+.highlighted-theme3 {
+    background-color:rgba(0, 24, 57, 0.2);
+    // padding: 2px;
+    // border-radius: 5px;
+    cursor: pointer;
+
+}
+.highlighted-theme4 {
+    background-color: rgba(209, 73, 38, 0.2);
+    // padding: 2px;
+    // border-radius: 5px;
+    cursor: pointer;
+}
+.highlighted-theme5 {
+    background-color: rgba(8, 72, 64, 0.2);
+    // padding: 2px;
+    // border-radius: 5px;
+    cursor: pointer;
+}
+.highlighted-theme6 {
+    background-color: rgba(211, 101, 130, 0.2);
+    // padding: 2px;
+    // border-radius: 5px;
+    cursor: pointer;
+}
+.highlighted-theme7 {
+    background-color: rgba(100, 44, 169, 0.2);
+    // padding: 2px;
+    // border-radius: 5px;
+    cursor: pointer;
+}
+.highlighted-theme0{
+    background-color: rgba(108, 108, 108 , 0.2);
+    // padding: 2px;
+    // border-radius: 5px;
+    cursor: pointer;
+}
+/*****highlights Selected*****/
+.highlighted-theme1-active {
+    background-color: rgba(18, 152, 138, 0.4);
+    // padding: 2px;
+    // border-radius: 5px;
+    cursor: pointer;
+}
+.highlighted-theme2-active {
+    // background-color: #001839;
+    background-color: rgba(244, 160, 0, 0.4);
+    // padding: 2px;
+    // border-radius: 5px;
+    cursor: pointer;
+}
+.highlighted-theme3-active {
+    background-color:rgba(0, 24, 57, 0.4);
+    // padding: 2px;
+    // border-radius: 5px;
+    cursor: pointer;
+}
+.highlighted-theme4-active {
+    background-color: rgba(209, 73, 38, 0.4);
+    // padding: 2px;
+    // border-radius: 5px;
+    cursor: pointer;
+}
+.highlighted-theme5-active {
+    background-color: rgba(8, 72, 64, 0.4);
+    // padding: 2px;
+    // border-radius: 5px;
+    cursor: pointer;
+}
+.highlighted-theme6-active {
+    background-color: rgba(211, 101, 130, 0.4);
+    // padding: 2px;
+    // border-radius: 5px;
+    cursor: pointer;
+}
+.highlighted-theme7-active {
+    background-color: rgba(100, 44, 169, 0.4);
+    // padding: 2px;
+    // border-radius: 5px;
+    cursor: pointer;
+}
+.highlighted-theme0-active{
+    background-color: rgba(108, 108, 108 , 0.4);
+    // padding: 2px;
+    // border-radius: 5px;
+    cursor: pointer;
+}
+
+// For Theme Page
+.theme-highlighted-theme1 {
+    background-color: rgba(18, 152, 138, 0.2);
+    // padding: 2px;
+    // border-radius: 5px;
+    cursor: default;
+
+}
+.theme-highlighted-theme2 {
+    // background-color: #001839;
+    background-color: rgba(244, 160, 0, 0.2);
+    // padding: 2px;
+    // border-radius: 5px;
+    cursor: default;
+
+}
+.theme-highlighted-theme3 {
+    background-color:rgba(0, 24, 57, 0.2);
+    // padding: 2px;
+    // border-radius: 5px;
+    cursor: default;
+
+}
+.theme-highlighted-theme4 {
+    background-color: rgba(209, 73, 38, 0.2);
+    // padding: 2px;
+    // border-radius: 5px;
+    cursor: default;
+}
+.theme-highlighted-theme5 {
+    background-color: rgba(8, 72, 64, 0.2);
+    // padding: 2px;
+    // border-radius: 5px;
+    cursor: default;
+}
+.theme-highlighted-theme6 {
+    background-color: rgba(211, 101, 130, 0.2);
+    // padding: 2px;
+    // border-radius: 5px;
+    cursor: default;
+}
+.theme-highlighted-theme7 {
+    background-color: rgba(100, 44, 169, 0.2);
+    // padding: 2px;
+    // border-radius: 5px;
+    cursor: default;
+}
+.theme-highlighted-theme0{
+    background-color: rgba(108, 108, 108 , 0.2);
+    // padding: 2px;
+    // border-radius: 5px;
+    cursor: default;
+}
+.mix-color{
+    border-width: 2px !important;
+    mix-blend-mode: hard-light
+}

@@ -1,0 +1,184 @@
+@import "../views/knitPages/Projects/Projects.scss";
+@import "../components/sidebar/SideBar.scss";
+@import "./highlights-tags.scss";
+@import 'antd/dist/antd.css';
+// @import '../components/themeTreeCard/DragAndDropThemeTree.scss';
+// @import '../components/themeTreeCard/Treeview.scss';
+// @import '../views/knitPages/Data/Data.scss';
+// @import '../views/knitPages/VideoDetails/VideoDetails.scss';
+// @import '../views/knitPages/Videos/Videos.scss';
+// @import '../components/bulkAnnotationModal/BulkAnnotationModal.scss';
+// @import '../components/accordionComponent/accordion.scss';
+
+
+
+
+body {
+  margin: 0;
+  font-family: Rubik !important;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: #FBFBFB !important;
+}
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+  monospace;
+}
+.main-class {
+  padding: 40px;
+  width:100%
+}
+.MuiTypography-body1 {
+  font-family: 'Rubik' !important;
+}
+.title-class{
+  text-align: left;
+  letter-spacing: 0px;
+  color: #001839;
+  opacity: 1;
+  font-weight: 900 !important;
+  font-family: Rubik !important;
+}
+.icon{
+  height: 15px;
+  width: 15px;
+}
+::-webkit-scrollbar{
+  width: 5px;
+  height: 5px;
+}
+::-webkit-scrollbar-track{
+  background-color: #e2e2e2;
+  border-radius: 25px;
+  margin: 15px;
+  margin-top: 72px;
+}
+::-webkit-scrollbar-thumb{
+  background-color: #001839;
+  border-radius: 25px;
+  width:20px;
+}
+.mt-10{
+  margin-top: 10px !important;
+}
+.mt-5{
+  margin-top: 5px !important;
+}
+.mt-15{
+  margin-top: 15px !important;
+}
+.mt-20{
+  margin-top: 20px !important;
+}
+.mb-15{
+  margin-bottom: 15px !important;
+}
+.mb-20{
+  margin-bottom: 20px !important;
+}
+.c-pointer{
+  cursor:pointer;
+}
+.mt-30{
+  margin-top: 30px !important;
+}
+.mb-30{
+  margin-bottom: 30px !important;
+}
+
+
+.blur-background {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  position:fixed !important;
+}
+.sub-div-header{
+  display: flex;
+  justify-content: flex-end;
+}
+.nodata-show{
+  display: flex;
+  align-items: center;
+  height: calc(100vh - 240px);
+  justify-content: center;
+  text-align: center;
+}
+.nodata-innerdiv{
+  width: 220px;  
+}
+.nodata-innerdiv img{
+  margin-bottom: 20px;
+}
+.nodata-innerdiv p{
+  font-size: 14px;
+  font-weight: 300;
+  color:#001839;
+}
+.nodata-show-table{
+  display: flex;
+  align-items: center;
+  height: calc(100vh - 380px);
+  justify-content: center;
+  text-align: center;
+}
+
+
+.sorting-icon{
+  padding-right: 20px;
+}
+
+.ant-popover-inner{
+  box-shadow: 0px 0px 6px #00000029 !important;
+}
+
+.grid-question-title{
+  overflow: hidden;
+  display: block !important;
+  font-weight: 500 !important;
+  text-overflow: ellipsis;
+  line-height: 17px !important;
+  word-break: break-all !important;
+  -webkit-line-clamp: 1 !important;
+  -webkit-box-orient: vertical;
+  font-size: 14px !important;
+  color: #001839 !important;
+  padding: 10 px;
+  border-radius: 5 px;
+  height: 35 px;
+  /* width: 69%; */
+  white-space: nowrap;
+}
+.data-grid .MuiPaper-elevation1:hover{
+  box-shadow: none !important;
+}
+.MuiCheckbox-colorSecondary.Mui-checked {
+  color: #001839 !important;
+}
+
+
+//Paper Card CSS
+.MuiPaper-elevation1 {
+  border: 1px solid #DDDDDD;
+}
+.MuiPaper-elevation1:hover {
+  // box-shadow: 0 3px 10px rgba(0,0,0,.1) !important;
+  box-shadow:none !important;
+}
+.MuiPaper-rounded {
+  border-radius: 5px !important;
+}
+
+
+.header-content{
+  color: #001839;
+  font-weight: 700;
+}
+// .rgHeaderCell.sortable, .rgCell{
+//   width: 400px !important;
+// }
+
+//Remove Three Dot From Theme Tree
+// .ant-tree-draggable-icon{
+//   display: none;
+// }

@@ -1,0 +1,17 @@
+.MuiPopover-root .MuiMenu-paper {
+    //margin-top: 32px;
+    max-width: 136px !important;
+    // min-width: 136px !important;
+    overflow: scroll !important;
+    max-height: 200px;
+}
+ 
+.MuiPopover-root .MuiMenu-paper ul li p{
+    padding-left: 0px !important;
+}
+.MuiOutlinedInput-input {
+    min-width: auto !important;
+}
+.MuiSelect-select:focus{
+    background-color:transparent !important;
+}

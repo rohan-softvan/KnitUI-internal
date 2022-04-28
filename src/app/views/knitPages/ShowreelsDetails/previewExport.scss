@@ -1,0 +1,144 @@
+.demo-preview {
+    margin-top: 15px;
+    width: 100%;
+    text-align: center;
+  }
+//   $brand-default: #B0BEC5;
+//   $brand-primary: #2196F3;
+//   $brand-secondary: #323a45;
+//   $brand-success: #64DD17;
+//   $brand-warning: #FFD600;
+//   $brand-info:  #29B6F6;
+//   $brand-danger: #ef1c1c;
+//   $bg-light-gray: #f5f5f5;
+  .progress {
+  
+    background-color: #ECECEC;
+    border-radius: 3px;
+    box-shadow: none;
+    background-image: linear-gradient(135deg , #00183933 25%, transparent 25%, transparent 50%, #00183933 50%, #00183933 75%, transparent 75%, transparent);
+    background-size: 40px 40px;
+    animation: progress-bar-stripes 2s linear infinite;
+    height: 10px;
+    border-radius: 10px;
+    &.progress-xs {
+      height: 5px;
+      margin-top: 5px;
+    }
+    &.progress-sm {
+      height: 10px;
+      margin-top: 5px;
+    }
+    &.progress-lg {
+      height: 25px;
+    }
+    &.vertical {
+      position: relative;
+      width: 20px;
+      height: 200px;
+      display: inline-block;
+      margin-right: 10px;
+      > .progress-bar {
+        width: 100%!important;
+        position: absolute;
+        bottom: 0;
+      }
+      &.progress-xs {
+        width: 5px;
+        margin-top: 5px;
+      }
+      &.progress-sm {
+        width: 10px;
+        margin-top: 5px;
+      }
+      &.progress-lg {
+        width: 30px;
+      }
+    }
+  }
+  
+  .progress-bar {
+    background-color: #001839;
+    box-shadow:none;
+    height: 10px;
+    border-radius: 10px;
+    &.text-left{
+      text-align: left;
+      span{
+        margin-left: 10px;
+      }
+    }
+    &.text-right{
+      text-align: right;
+      span{
+        margin-right: 10px;
+      }
+    }
+  }
+  @mixin gradient-striped($color: rgba(255,255,255,.15), $angle: 45deg) {
+    // background-image: -webkit-linear-gradient($angle, $color 25%, transparent 25%, transparent 50%, $color 50%, $color 75%, transparent 75%, transparent);
+    // background-image: -o-linear-gradient($angle, $color 25%, transparent 25%, transparent 50%, $color 50%, $color 75%, transparent 75%, transparent);
+    // background-image: linear-gradient($angle, $color 25%, transparent 25%, transparent 50%, $color 50%, $color 75%, transparent 75%, transparent);
+  }
+  
+  @-webkit-keyframes progress-bar-stripes {
+    from  { background-position: 40px 0; }
+    to    { background-position: 0 0; }
+  }
+  
+  // Spec and IE10+
+  @keyframes progress-bar-stripes {
+    from  { background-position: 40px 0; }
+    to    { background-position: 0 0; }
+  }
+  
+  @mixin animation($animation) {
+    -webkit-animation: $animation;
+         -o-animation: $animation;
+            animation: $animation;
+  }
+  .progress.active .progress-bar,
+  .progress-bar.active {
+    @include animation(progress-bar-stripes 2s linear infinite);
+  }
+  .progress-striped .progress-bar,
+  .progress-bar-striped {
+    @include gradient-striped;
+    background-size: 40px 40px;
+  }
+
+  .progressbar-text{
+    font-size: 15px !important;
+    font-weight: 700 !important;
+    font-family: Rubik !important;
+    color: #001839 !important;
+    margin-top: 10px !important;
+  }
+
+  .center-btn{
+    margin: 0px auto !important;
+  }
+  .d-block-center{
+    display: block;
+    margin: 0px auto;
+    text-align: center;
+  }
+  .d-block-center p{
+    width: 230px;
+    font-size: 14px;
+    font-weight: 400 !important;
+    margin: 10px auto;
+    color:#001839;
+  }
+  .copylink{
+    color: #001839 !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    background: #fff !important;
+  }
+.d-block-center .MuiCircularProgress-colorPrimary {
+  color: #001839 !important;
+}
+.div-marginTop-40{
+margin-top: 40px;
+}

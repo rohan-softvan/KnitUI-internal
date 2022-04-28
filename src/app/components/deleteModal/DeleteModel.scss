@@ -1,0 +1,30 @@
+.deletemodel{
+    height: auto;
+    .MuiBackdrop-root{
+        opacity: 0.2 !important;
+    }
+    .MuiDialog-paperFullWidth{
+        box-shadow: 0px 3px 10px #0000001a;
+    }
+}
+.cancelbtn{
+    text-transform: capitalize !important;
+    color: #001839 !important;
+}
+.deletebtnmodel{
+    background: #F4A000 !important;
+    margin:10px !important;    
+    color:#001839 !important;
+}
+.CloseIcon{
+    width: 14px;
+}
+.deletedot{
+    padding: 0px !important;
+    position: absolute;
+    right: 10px;
+    .popper-label{
+        padding: 10px;
+        cursor: pointer;
+    }
+}

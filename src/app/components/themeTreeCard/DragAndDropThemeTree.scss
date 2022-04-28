@@ -1,0 +1,182 @@
+.popper-main {
+  display: -webkit-flex;
+  display: flex;
+  padding: 10px;
+  background: #fff;
+  border-radius: 5px;
+  box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.16);
+}
+
+.popper-text {
+  padding: 10px
+}
+
+.popper-lable {
+  font-size: 14px !important;
+  padding-left: 9px !important;
+}
+
+.icon {
+  height: 15px;
+  width: 15px;
+}
+
+.ant-tree {
+width: 100%;
+}
+.ant-tree-title .anticon-more {
+position: absolute;
+  right: 0px;
+  top: 5px;
+  display: none;
+}
+.ant-tree-show-line .ant-tree-indent-unit::before {
+  border-right:3px solid #e2e2e2 ;
+ // border-right:3px solid var(--main-color);
+}
+
+
+//.ant-tree .ant-tree-node-content-wrapper .ant-tree-node-selected {
+//background-color: transparent !important;
+//}
+//.ant-tree-node-content-wrapper .ant-tree-node-content-wrapper-normal .ant-tree-node-selected draggable{
+//  background-color: transparent !important;
+//}
+.drop-container{
+  background-color:transparent  !important;
+}
+
+//.ant-tree-node-selected{
+//  background-color: red !important;
+//  //background-color: transparent !important;
+//  color: white;
+//}
+.label-Bold-Text{
+  font-weight: 500 !important;
+  flex-grow: 1 !important;
+  font-size:14px !important;
+  font-family:'Rubik' !important;
+}
+.ant-tree-treenode {
+  display: flex;
+  align-items: flex-start;
+  padding: 0 0 10px 0 !important;
+  outline: none;
+}
+.right-arrow-icon{
+  margin-left: 20px;
+}
+.right-arrow-icon svg{
+  width: 0.7em;
+}
+.addDynamicTheme input {
+  border: 1px solid #001832;
+  border-radius: 5px;
+  height: 30px;
+}
+.addDynamicTheme input:hover, .addDynamicTheme input:focus{
+  border: 1px solid #001832 !important;
+  border-radius: 5px;
+}
+.addDynamicTheme .ant-btn {
+  border-color: transparent;
+  padding: 4px 5px;
+}
+.ant-popover-placement-rightTop{
+  // top: 435px !important;
+  margin-top: 0px !important;
+}
+
+.ant-popover-inner-content{
+  padding: 10px;
+  color: #001839;
+}
+
+.ant-tree-switcher-leaf-line::before{
+  content: none;
+}
+.ant-tree-switcher-leaf-line::after{
+  content: none;
+}
+
+.ant-tree-treenode-switcher-open:hover .anticon-more{
+  display: block;
+}
+.anticon-more.ant-popover-open{
+  display: block !important;
+}
+
+.ant-select-tree-node-content-wrapper[draggable='true'] .ant-tree-drop-indicator {
+  position: absolute;
+  z-index: 1;
+  height: 2px;
+  background-color:#183900 !important;
+  border-radius: 1px;
+  pointer-events: none;
+}
+.ant-select-tree-node-content-wrapper[draggable='true'] .ant-tree-drop-indicator::after {
+  position: absolute;
+  top: -3px;
+  left: -6px;
+  width: 8px;
+  height: 8px;
+  background-color: transparent;
+  border: 2px solid #183900 !important;
+  border-radius: 50%;
+  content: '';
+}
+.ant-select-tree .ant-select-tree-treenode.drop-container > [draggable] {
+  box-shadow: 0 0 0 2px #183900 !important;
+}
+.ant-tree-node-content-wrapper[draggable='true'] .ant-tree-drop-indicator {
+  background-color: #183900 !important;
+}
+.ant-tree-node-content-wrapper[draggable='true'] .ant-tree-drop-indicator::after {
+  background-color: transparent;
+  border: 2px solid #183900 !important;
+}
+.ant-tree .ant-tree-treenode.drop-container > [draggable] {
+  box-shadow: 0 0 0 2px #183900 !important;
+}
+
+.ant-popover-inner-content p{
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+.ant-popover-inner{
+  border-radius: 5px;
+}
+
+.mb-0{
+  margin-bottom: 0px !important;
+}
+.ant-tree-switcher{
+  width: 20px;
+}
+.subtheme-text-newLine{
+  word-break: break-all !important;
+margin-bottom: 0px;
+}
+.addDynamicTheme .ant-input-affix-wrapper{
+  border: 1px solid #001839;
+  border-radius: 5px;
+  height: 30px;
+  padding: 0px;
+}
+.addDynamicTheme .ant-input-affix-wrapper input{
+  height: 28px;
+}
+.addDynamicTheme .ant-input-affix-wrapper input:hover, .addDynamicTheme .ant-input-affix-wrapper input:focus{
+  border:transparent !important;
+}
+.addDynamicTheme .ant-input-affix-wrapper:hover, .addDynamicTheme .ant-input-affix-wrapper:focus{
+  border: 1px solid #001839;
+  box-shadow: none;
+}
+.addDynamicTheme .ant-input-affix-wrapper .ant-btn{
+  box-shadow: none;
+  background: transparent;
+}
+.addDynamicTheme .ant-btn{
+  padding: 3px 5px;
+}

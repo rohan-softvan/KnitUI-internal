@@ -1,0 +1,46 @@
+.MuiAccordion-rounded{
+    border-radius: 0px !important;
+    border-left: 0px;
+    border-right: 0px;
+    border-bottom: 0px;
+    border-top: 1px solid rgba(112,112,112,0.2);
+}
+.MuiAccordion-root.Mui-expanded{
+    margin:0px !important;
+}
+.MuiIconButton-label{
+    color: #001839;
+}
+.accordTitle p{
+    overflow: hidden;
+    position: relative;
+    line-height: 1.2em;
+    max-height: 20px;
+    text-align: justify;
+    padding-right: 1em;
+    color: #001839;
+    font-weight: 300;
+}
+.accordTitle p:before{
+    content: '...';
+    position: absolute;
+    right: 0;
+    bottom: 0;
+}
+.accordTitle p::after{
+    content: '';
+    position: absolute;
+    right: 0;
+    width: 1em;
+    height: 1em;
+    margin-top: 0.2em;
+    background: white;
+}
+.no-border-radius{
+    border-radius: 0px!important;
+}
+.border-tlr-none{
+    border-top:transparent;
+    border-right: transparent;
+    border-left: transparent;
+}

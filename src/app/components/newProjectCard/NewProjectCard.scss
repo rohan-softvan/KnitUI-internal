@@ -1,0 +1,107 @@
+.card {
+  margin: 10px;
+  box-shadow: 0px 3px 6px #00000017 !important;
+  border-radius: 5px;
+}
+.card:hover {
+  box-shadow: 0px 3px 30px  #00000033 !important
+}
+.moreVertIcon{
+  border-radius: 6px;
+  color:#001839
+}
+.moreVertIcon:active{
+  background-color: #152A7529;
+}
+.dot-icon{
+  display: flex;
+  justify-content: flex-end;
+}
+.MuiPaper-elevation1 {
+  border: 1px solid #DDDDDD;
+}
+// .MuiPaper-elevation1:hover {
+//   box-shadow: 0 3px 10px rgba(0,0,0,.1) !important;
+// }
+.MuiPaper-rounded {
+  border-radius: 10px !important;
+  // min-height: 155px !important;
+}
+.MuiCardContent-root {
+  padding: 20px !important;
+  cursor: pointer;
+}
+.cardTextSpace{
+  margin-top: 10px !important;
+}
+.cardContent{
+  padding: 10px !important;
+}
+
+.select-Pr-ttl{
+  color: rgb(0, 24, 57);
+  font-size: 14px !important;
+  font-weight: 500 !important;
+}
+.select-pr-sub-ttl{
+  color: #001839;
+  font-size: 12px !important;
+}
+.fix-modal-height-cr-prj{
+  height: 260px;
+  width: 600px;
+}
+.modal-box-card{
+  min-height: 140px;
+  border: 1px solid #DDDDDD;
+}
+.modal-box-card-active{
+  min-height: 140px;
+  border: 1px solid #001839;
+}
+.modal-box-card:hover{
+  box-shadow: none !important;
+}
+.mdl-small-desc{
+  color: #001839;
+  font-size: 14px !important;
+  min-height: 38px;
+}
+.mt-5-percent{
+  margin-top: 5% !important;
+}
+.projectModal .MuiOutlinedInput-input {
+  padding: 3px 5px 5px 5px !important;
+}
+
+.API-Token{
+  color: #001839;
+  height: 1.1876em;
+  margin: 0;
+  display: block;
+  padding: 6px 0 7px;
+  min-width: 0;
+  background: none;
+  box-sizing: content-box;
+  animation-name: mui-auto-fill-cancel;
+  letter-spacing: inherit;
+  animation-duration: 10ms;
+  -webkit-tap-highlight-color: transparent;
+  font-size: 14px;
+  width: 90%;
+  margin-top:10px;
+  padding-left:0px !important;
+  font-family: 'Rubik';
+}
+
+.MuiInputBase-input {
+  font-size: 14px !important;
+}
+
+
+.MuiAutocomplete-popper ::-webkit-scrollbar-track {
+  background-color: #e2e2e2;
+  border-radius: 25px;
+  margin: 15px;
+  /* margin-top: 72px; */
+}

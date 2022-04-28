@@ -1,0 +1,157 @@
+.subTitle{
+    text-align: left;
+    letter-spacing: 0.5px !important;
+    color: #001839;
+    opacity: 1;
+    font-size: 12px !important;
+}
+.innerLayoutSpace{
+    margin-top: 18px !important;
+}
+@media screen and (max-width: 500px) {
+    .root{
+        overflow: scroll;
+    }
+}
+.table {
+    /* min-width: 700px; */
+    overflow: scroll;
+    border: 1px solid #DDDDDD;
+    border-radius: 10px;
+}
+.MuiTableCell-head {
+    color: #001839 !important;
+    font-weight: 800 !important;
+    line-height: 1.5rem;
+}
+.profileIcon {
+    cursor: "pointer";
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0
+}
+.table-image-cell{
+    width:80px;
+}
+.MuiTableCell-body {
+    color: #001839 !important;
+}
+.buttonDiv{
+    display: flex;
+    justify-content:flex-end;
+}
+.MuiSwitch-edgeStart{
+    color:#001839 !important;
+}
+.popper-main{
+    display:flex;
+    padding: 5px;
+}
+.popper-text{
+    padding:10px
+}
+.popper-lable{
+    font-size: 14px !important;
+    font-weight: 900 !important;
+    padding-left: 9px !important;
+}
+.projectModal .close-icon{
+    width: 20px !important;
+    height: 20px !important;
+    color:#001839;
+}
+.MuiPaper-elevation1 {
+    box-shadow: none !important;
+}
+.MuiInputBase-input {
+    height:10px !important;
+}
+.MuiOutlinedInput-input{
+    padding: 10px 14px 10px 0px !important;
+    min-width:190px !important;    
+}
+.MuiFormControl-root .MuiOutlinedInput-input{
+    font-family: Rubik !important;
+    font:revert;
+    font-size: 14px;
+    font-weight: 400;
+}
+.MuiInputLabel-outlined.MuiInputLabel-marginDense {
+    font-size: 12px !important;
+}
+.Component-closeButton-66 {
+    color: #001839 !important;
+  }
+
+  .MuiTypography-body1 {
+    font-size: 1rem;
+    font-family: Rubik !important;
+    font-weight: 400;
+    line-height: 1.5;
+    letter-spacing: 0.00938em;
+}
+.MuiTableCell-root {
+    display: table-cell;
+    padding: 16px;
+    font-size: 0.875rem;
+    text-align: left;
+    font-family: Rubik !important;
+    font-weight: 400;
+    line-height: 1.43;
+    border-bottom: 1px solid rgba(224, 224, 224, 1);
+    letter-spacing: 0.01071em;
+    vertical-align: inherit;
+}
+
+
+.MuiInputBase-root {
+    color: #001839 !important;
+}
+.project-ttl-name{
+    color: #001839;
+    font-Size: 15px !important;
+    font-weight: 500 !important;
+
+    overflow: hidden;
+    display: block !important;
+    text-overflow: ellipsis;
+    line-height: 17px !important;
+    word-break: break-all !important;
+    -webkit-line-clamp: 1 !important;
+    -webkit-box-orient: vertical;
+    border-radius: 5px;
+    width: 160px;
+    white-space: nowrap;
+}
+.sub-ttl-desc{
+    color: #001839;
+    font-size: 14px !important;
+    font-weight: 300 !important;
+}
+.projectcard-skeleton {
+    max-width: 230px !important;
+    min-width: 230px;
+    padding: 20px !important;
+    position: relative;
+    border: 1px solid #DDDDDD;
+    border-radius: 10px !important;
+    margin: 10px;
+}
+.clearAllFilter{
+    cursor: pointer;
+    text-decoration: underline;
+    color: #001839;
+    font-size: 14px !important;
+    font-weight: 500 !important;
+    margin-left: 5px !important;
+    position: relative;
+    top: -2px;
+}
+
+.highcharts-xaxis-labels text, .highcharts-xaxis text, .highcharts-yaxis text, .highcharts-yaxis-labels text{
+    font-family: 'Rubik';
+}

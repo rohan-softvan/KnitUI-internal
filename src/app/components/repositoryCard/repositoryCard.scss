@@ -1,0 +1,115 @@
+$primary:#001839;
+
+.repository-main-card{
+    width: 250px;
+    margin-right: 20px;
+    margin-bottom: 20px;
+    // height: 170px;
+    cursor: pointer;
+}
+.repository-main-card:hover{
+    box-shadow:  0 3px 10px rgba(0,0,0,.1) !important;
+}
+.dot-main{
+    display: flex;
+    justify-content: flex-end;
+    color:$primary;
+}
+.showReel-title{
+    font-size: 15px !important;
+    font-weight: 500 !important;
+    color:$primary;
+}
+
+.title-short {
+  overflow: hidden;
+  display: block !important;
+  text-overflow: ellipsis;
+  line-height: 17px !important;
+  word-break: break-all !important;
+  -webkit-line-clamp: 1 !important;
+  -webkit-box-orient: vertical;
+  border-radius: 5px;
+  width: 160px;
+  white-space: nowrap;
+}
+
+.sub-title {
+    color: #001839;
+    font-size: 15px !important;
+    font-weight: 300 !important;
+}
+.showReels0
+{
+  position: relative;
+  top: 0;
+  left: 0;
+  height: 34px;
+  width: 34px;
+  padding: 3px;
+  background: white;
+  border-radius: 5px;
+}
+.showReels1
+{
+  position: absolute;
+  top: 0px;
+  left: 20px;
+  height: 32px;
+  width: 34px;
+  padding: 3px;
+  background: white;
+  border-radius: 5px;
+}
+.showReels2
+{
+  position: absolute;
+  top: 0px;
+  left: 40px;
+  height: 32px;
+  width: 34px;
+  padding: 3px;
+  background: white;
+  border-radius: 5px;
+}
+.showReels3
+{
+  position: absolute;
+  top: 0px;
+  left: 60px;
+  height: 32px;
+  width: 34px;
+  padding: 3px;
+  background: white;
+  border-radius: 5px;
+}
+.showReels4{
+    position: absolute;
+    top: 0px;
+    left: 80px;
+    height: 32px;
+    width: 34px;
+    background: white;
+    border-radius: 5px;
+    padding: 1px 0px 2px 3px;
+}
+.showReels4-inside-div{
+    background: #CCD0D7;
+    height: 100%;
+    width: 100%;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 15px;
+    color:$primary;
+}
+
+.popper-showreels{
+  display: flex;
+    padding: 10px;
+    background: #fff;
+    border-radius: 5px;
+    box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.16);
+    align-items: center;
+}

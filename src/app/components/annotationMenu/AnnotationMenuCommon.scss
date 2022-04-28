@@ -1,0 +1,66 @@
+
+.main-navigation ul li .hoverWhiteBg .right-arrow{
+    display: none !important;
+ }
+.main-navigation ul li:hover .hoverWhiteBg .right-arrow{
+  display: block !important;
+}
+
+/** 1st level**/
+.main-navigation ul li:hover ul li .hoverWhiteBg  .right-arrow{
+  display: none !important;
+}
+.main-navigation ul li:hover ul li:hover .hoverWhiteBg  .right-arrow{
+  display: block !important;
+}
+
+
+/** 2nd level**/
+.main-navigation ul li:hover ul li:hover ul li .hoverWhiteBg  .right-arrow{
+  display: none !important;
+}
+.main-navigation ul li:hover ul li:hover ul li:hover .hoverWhiteBg  .right-arrow{
+  display: block !important;
+}
+/** 3rd level**/
+.main-navigation ul li:hover ul li:hover ul li:hover ul li .hoverWhiteBg  .right-arrow{
+  display: none !important;
+}
+.main-navigation ul li:hover ul li:hover ul li:hover ul li:hover .hoverWhiteBg  .right-arrow{
+  display: block !important;
+}
+/** 4th level**/
+.main-navigation ul li:hover ul li:hover ul li:hover ul li:hover ul li .hoverWhiteBg  .right-arrow{
+  display: none !important;
+}
+.main-navigation ul li:hover ul li:hover ul li:hover ul li:hover ul li:hover  .hoverWhiteBg  .right-arrow{
+  display: block !important;
+}
+/** 5th level**/
+.main-navigation ul li:hover ul li:hover ul li:hover ul li:hover ul li:hover ul li .hoverWhiteBg  .right-arrow{
+  display: none !important;
+}
+.main-navigation ul li:hover ul li:hover ul li:hover ul li:hover ul li:hover ul li:hover .hoverWhiteBg  .right-arrow{
+  display: block !important;
+}
+/** 6th level**/
+.main-navigation ul li:hover ul li:hover ul li:hover ul li:hover ul li:hover ul li:hover ul li .hoverWhiteBg  .right-arrow{
+  display: none !important;
+}
+.main-navigation ul li:hover ul li:hover ul li:hover ul li:hover ul li:hover ul li:hover ul li:hover .hoverWhiteBg  .right-arrow{
+  display: block !important;
+}
+/** 7th level**/
+.main-navigation ul li:hover ul li:hover ul li:hover ul li:hover ul li:hover ul li:hover ul li:hover ul li .hoverWhiteBg  .right-arrow{
+  display: none !important;
+}
+.main-navigation ul li:hover ul li:hover ul li:hover ul li:hover ul li:hover ul li:hover ul li:hover ul li:hover .hoverWhiteBg  .right-arrow{
+  display: block !important;
+}
+/** 8th level**/
+.main-navigation ul li:hover ul li:hover ul li:hover ul li:hover ul li:hover ul li:hover ul li:hover ul li:hover ul li .hoverWhiteBg  .right-arrow{
+  display: none !important;
+}
+.main-navigation ul li:hover ul li:hover ul li:hover ul li:hover ul li:hover ul li:hover ul li:hover ul li:hover ul li:hover .hoverWhiteBg  .right-arrow{
+  display: block !important;
+}

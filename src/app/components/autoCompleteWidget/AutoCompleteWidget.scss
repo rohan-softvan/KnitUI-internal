@@ -1,0 +1,21 @@
+$primary: #001839;
+$font: Rubik ; 
+$white-color: #fff;
+.MuiOutlinedInput-root {
+    height: 30px;
+    border-top-left-radius: 5px !important;
+    border-top-right-radius: 5px !important;
+    //    border-radius: 5px !important;
+    font-family: $font !important ;
+    background: $white-color;
+}
+
+.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+    border-color: $primary !important;
+    color: $primary !important;
+    font-family: $font !important ;
+}
+
+.root{
+    margin-left: 20px !important;
+}

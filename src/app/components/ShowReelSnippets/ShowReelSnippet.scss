@@ -1,0 +1,22 @@
+.showreel-snippet-list{
+    // display: flex;
+    // border-bottom: 1px solid #e2e2e2;
+    padding: 15px;
+    // height: 99px;
+    align-items: center;
+}
+.showreel-snippet-thumbnail {
+    width: 167px;
+    height: 93px;
+    border-radius: 10px;
+}
+.inside-space-snippets{
+    padding:0px 0px 0px 10px;
+    margin-top: 15px;
+}
+.snippets-video-duration {
+    font-size: 13px !important;
+    font-weight: 300 !important;
+    color: #001839;
+    width: 80%;
+}

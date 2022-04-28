@@ -1,0 +1,32 @@
+.main-chart-div{
+    padding: 20px 0px 0px;
+    width: 100%;
+     display: flex;
+}
+.main-legend-div{
+    height: 300;
+    overflow: auto;
+     display: flex;
+}
+.legend-inner-div{
+    display: grid;
+    max-height: 10px;
+}
+.legends-title-div{
+    height: 10px;
+    display: flex;
+    justify-content: flex-start;
+    margin: 10px;
+    margin-bottom: 20px;
+}
+.legend-title{
+    font-size: 15px;
+    font-weight: 400;
+    color: #001839 
+}
+.legend-lable{
+    font-size: 15px !important;
+    font-weight: 300 !important;
+    padding-left: 10px;
+    color: #001839;
+}

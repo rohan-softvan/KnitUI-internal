@@ -1,0 +1,42 @@
+[
+    {
+      "statement": "it's good",
+      "participation": 4,
+      "stronglyAgree": 8,
+      "agree": 15,
+      "disagree": 6,
+      "stronglyDisagree": 30
+    },
+    {
+      "statement": "it's sweet",
+      "participation": 16,
+      "stronglyAgree": 28,
+      "agree": 18,
+      "disagree": 30,
+      "stronglyDisagree": 31
+    },
+    {
+      "statement": "it's spicy",
+      "participation": 9,
+      "stronglyAgree": 31,
+      "agree": 18,
+      "disagree": 8,
+      "stronglyDisagree": 11
+    },
+    {
+      "statement": "worth eating",
+      "participation": 13,
+      "stronglyAgree": 31,
+      "agree": 20,
+      "disagree": 23,
+      "stronglyDisagree": 7
+    },
+    {
+      "statement": "worth buying",
+      "participation": 31,
+      "stronglyAgree": 18,
+      "agree": 16,
+      "disagree": 31,
+      "stronglyDisagree": 17
+    }
+  ]

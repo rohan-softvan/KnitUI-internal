@@ -1,0 +1,65 @@
+//.card {
+//margin: 10px;
+//box-shadow: 0px 3px 6px #00000017 !important;
+//border-radius: 10px !important;
+//    border-color:#e2e2e2 !important;
+//}
+//.card:hover {
+//    //box-shadow: 0px 3px 10px  #00000033 !important
+//    box-shadow: 0 3px 10px rgba(0,0,0,.1) !important
+//}
+.card-main{
+    // margin: 10px !important;
+    //box-shadow: 0px 3px 6px #00000017 !important;
+    border-radius: 10px !important;
+    border-color:#e2e2e2 !important;
+}
+.card-main:hover {
+    //box-shadow: 0px 3px 10px  #00000033 !important
+    box-shadow: 0 3px 10px rgba(0,0,0,.1) !important
+}
+.moreVertIcon{
+border-radius: 6px;
+color:#001839
+}
+.moreVertIcon:active{
+    background-color: #152A7529;
+}
+.dot-icon{
+    display: flex;
+    justify-content: flex-end;
+}
+
+.MuiCardContent-root {
+    padding: 20px !important;
+}
+.dot-icon{
+    position: absolute;
+    right: 22px;
+    top: 28px;
+    z-index: 1;
+}
+.popper-main{
+    display: -webkit-flex;
+    display:flex;
+    padding: 10px;
+    background: #fff;
+    border-radius: 5px;
+    box-shadow: 0px 0px 6px rgba(0,0,0,0.16);
+}
+.card-fixed-width{
+  max-width: 250px !important;
+}
+.popper-label{
+    font-size: 13px !important;
+    color: #001839;
+}
+.project-sub-cards{
+    display: flex;
+    justify-content: center;
+    max-width: 250px !important;
+    min-width: 250px;
+    padding: 10px !important;
+    position: relative;
+}
+

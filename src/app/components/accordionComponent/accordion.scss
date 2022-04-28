@@ -1,0 +1,35 @@
+.MuiAccordion-rounded:last-child {
+    border-top-left-radius: 0px !important;
+    border-top-right-radius: 0px !important;
+    border-bottom-left-radius: 10px !important;
+    border-bottom-right-radius: 10px !important;
+}
+.MuiAccordion-rounded:first-child {
+    border-top-left-radius: 10px !important;
+    border-top-right-radius: 10px !important;
+    border-bottom-left-radius: 0px !important;
+    border-bottom-right-radius: 0px !important;
+    
+}
+.MuiAccordion-rounded {
+    border-radius: 0px !important;
+}
+.MuiAccordion-rounded {
+    border-radius: 0px !important;
+}
+.MuiAccordion-root.Mui-expanded {
+    margin: 0px !important; 
+    box-shadow: none;
+}
+.accordionCard{
+    box-shadow: none !important;
+    border-radius: 0px !important;
+
+}
+.accordionCard:hover{
+    box-shadow: none !important;
+}
+.accordQuestion{
+    font-size: 14px !important;
+    font-weight: 500 !important;
+}

@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
+  <g id="Group_1013" data-name="Group 1013" transform="translate(-6492 360)">
+    <g id="Group_819" data-name="Group 819" transform="translate(6492 -360)">
+      <g id="Group_368" data-name="Group 368">
+        <g id="Path_224" data-name="Path 224" fill="none" stroke-linecap="round">
+          <path d="M5,0H15a5,5,0,0,1,5,5V15a5,5,0,0,1-5,5H5a5,5,0,0,1-5-5V5A5,5,0,0,1,5,0Z" stroke="none"/>
+          <path d="M 5 2 C 3.345790863037109 2 2 3.345790863037109 2 5 L 2 15 C 2 16.65420913696289 3.345790863037109 18 5 18 L 15 18 C 16.65420913696289 18 18 16.65420913696289 18 15 L 18 5 C 18 3.345790863037109 16.65420913696289 2 15 2 L 5 2 M 5 0 L 15 0 C 17.76141929626465 0 20 2.238580703735352 20 5 L 20 15 C 20 17.76141929626465 17.76141929626465 20 15 20 L 5 20 C 2.238580703735352 20 0 17.76141929626465 0 15 L 0 5 C 0 2.238580703735352 2.238580703735352 0 5 0 Z" stroke="none" fill="#fff"/>
+        </g>
+      </g>
+    </g>
+    <g id="tick" transform="translate(6496.994 -405.097)">
+      <g id="Group_181" data-name="Group 181" transform="translate(0.006 51.097)">
+        <path id="Path_91" data-name="Path 91" d="M9.872,51.219a.4.4,0,0,0-.564-.01l-.01.01L2.789,57.727.674,55.613a.4.4,0,0,0-.564.564l2.4,2.4a.4.4,0,0,0,.564,0l6.792-6.792a.4.4,0,0,0,.01-.564Z" transform="translate(-0.006 -51.097)" fill="none" stroke="#fff" stroke-width="1"/>
+      </g>
+    </g>
+  </g>
+</svg>

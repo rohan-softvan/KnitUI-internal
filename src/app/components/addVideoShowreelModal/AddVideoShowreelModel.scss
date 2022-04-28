@@ -1,0 +1,37 @@
+.newShowreelData{
+    border:1px solid #DDDDDD;
+    border-radius: 5px;
+    padding: 20px;
+    width: 250px !important;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+    height: 68px;
+}
+.newShowreelData svg{
+    margin-right: 10px;
+    height: 18px;
+    position: relative;
+    top: 3px;
+}
+.addNewReel{
+    color:#001839;
+    font-size: 15px !important;
+    font-weight: 500 !important; 
+    text-align: center;   
+    padding-right: 10px;
+    cursor: pointer;
+}
+.NewshowReelFill{
+    font-size: 15px;
+}
+.AddedShowReelBox{
+    border:1px solid #DDDDDD;
+    border-radius: 5px;
+    padding: 20px;
+    width: 250px;
+    height: 122px;
+}
+.newReelFlex{
+    display: flex;
+}

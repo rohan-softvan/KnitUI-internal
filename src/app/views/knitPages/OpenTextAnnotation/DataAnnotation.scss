@@ -1,0 +1,254 @@
+.back-arrow {
+    height: 15px;
+    margin: 10px;
+    margin-left: 0px;
+    margin-top: 8px;
+}
+.tags_box {
+    color: #fff;
+    border: none;
+    //cursor: pointer;
+    height: 30px;
+    display: inline-flex;
+    outline: 0;
+    padding: 8px 12px 8px 10px;
+    font-size: 0.8125rem;
+    box-sizing: border-box;
+    transition: background-color 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
+    box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+    align-items: center;
+    white-space: nowrap;
+    border-radius: 5px;
+    vertical-align: middle;
+    justify-content: center;
+    text-decoration: none;
+    // background-color: #D14926;
+    opacity: 0.7;
+    margin-right:10px;
+    margin-bottom: 5px;
+    margin-top: 5px;
+}
+.tags_box_icon{
+    width: 12px;
+    position: relative;
+    top: 1px;
+    left: 6px;
+    cursor: pointer;
+}
+revo-grid[theme=material] revogr-header{
+    border-top: 1px solid #ddd !important;
+}
+revo-grid[theme=material] revogr-data .rgCell, revo-grid[theme=material] revogr-header .rgHeaderCell{
+    border-right: 1px solid #ddd !important;    
+    background-color: unset !important;
+}
+revo-grid[theme=material] revogr-data .rgCell:last-child, revo-grid[theme=material] revogr-header .rgHeaderCell:last-child{
+    border-right: 0px !important;
+}
+revo-grid[theme=material] revogr-data .rgRow{
+    border-bottom: 1px solid #ddd !important;
+}
+revo-grid[theme=material] revogr-data .rgRow:last-child{
+    box-shadow: none;
+    border-bottom: none !important;
+}
+revo-grid[theme=material] revogr-data .rgRow:first-child{
+    border-bottom: 0px !important;
+}
+revo-grid[theme=material] revogr-header .header-rgRow:not(.group){
+    border-bottom: 1px solid #ddd !important;
+}
+
+revo-grid[theme=material] revogr-data .rgRow.focused-rgRow {
+    background-color: #F6F3E6 !important;
+}
+
+revogr-header .rgHeaderCell i.asc:after{
+    content: "\25B2";
+}
+revogr-header .rgHeaderCell i.desc:after{
+    content: "\25bc";
+}
+revo-grid[theme=material] revogr-data .rgRow:first-child{
+    box-shadow: 0 -1px 0 0 #ddd inset;
+}
+.popper-card{
+    z-index: 1;
+}
+revo-grid[theme=material] revogr-header .rgHeaderCell.sortable:hover{
+    background-color: transparent !important;
+}
+revogr-data{
+    display: flex !important;
+    width: 100% !important;
+}
+revogr-data .rgCell{
+    height: 100%;
+    // overflow: inherit;
+    display: flex !important;
+    text-overflow: initial;
+    white-space: nowrap;
+    font-size: 14px;
+    line-height: 20px;
+    display: flex;
+    align-items: center;
+    color: #001839 !important; 
+    overflow: overlay !important;
+}
+.rgCell:nth-child(3){
+    flex-wrap:wrap;    
+}
+revogr-data .rgCell .inner-cell::selection,
+revogr-data .rgCell .inner-cell::-moz-selection,
+revogr-data .rgCell .inner-cell::-webkit-selection {
+    background:#000;
+    color:#fff;
+}
+revogr-data .rgCell .inner-cell{
+    -moz-user-select: text;
+    -webkit-user-select: text;
+    -ms-user-select: text;
+    user-select: text;
+    margin: 2px 0px;
+}
+revo-grid[theme=material]{
+    font-family: Rubik !important;
+}
+
+.MuiPopover-root .MuiMenu-paper{
+    overflow: hidden !important;
+}
+.react-draggable{
+    z-index: 1;
+}
+.header-content{
+    font-weight: 500 !important;
+}
+revogr-viewport-scroll{
+    z-index: 0;
+}
+.dataCheckedBox{
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
+.header-content input, .rgRow input[type='checkbox'] {
+    -webkit-appearance: none;
+    appearance: none;
+    background-color: #fff;
+    margin: 0;
+    color: #001839;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #001839;
+    border-radius: 4px;
+    transform: translateY(-0.075em);
+    display: inline-grid;
+    place-content: center;
+}
+.header-content input[type='checkbox']::before, .rgRow input[type='checkbox']::before {
+    content: "";
+    width:10px;
+    height: 10px;
+    transform: scale(0);
+    transform-origin: bottom left;
+    transition: 120ms transform ease-in-out;
+    background-color: #001839;
+    clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+}
+.header-content input[type="checkbox"]:checked::before, .rgRow input[type="checkbox"]:checked::before {
+    transform: scale(1);
+}
+revo-grid[theme=material] revogr-data .rgCell.disabled{
+    background-color: unset !important;
+}
+.title{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.inner-content-table{
+    border:1px solid rgb(221, 221, 221) !important;
+    border-radius: 10px;
+}
+revo-grid .main-viewport{
+    height: auto;
+    display:grid;
+}
+.sementic-search input{
+    width: 500px;
+}
+.mix-color {
+    border-width: 2px !important;
+    mix-blend-mode: hard-light;
+}
+
+  .rgCell.disabled{
+    word-break: break-all;
+    display: flex;
+    vertical-align: middle;
+    line-height: 20px;
+    overflow: overlay;
+    flex-wrap: wrap;
+  }
+
+  .sub-div-header .MuiFormControl-root{
+    margin-right:0px !important;
+  }
+  .selected-text{
+    background-color: rgba(0, 24, 57, 0.2);
+    padding: 2px;
+    border-radius: 5px;
+}
+.search-error{
+    justify-content: center;
+    display: flex;
+    align-items: center;
+}
+.info-icon{
+    margin-right: 10px;
+}
+.header-content div{
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  padding-right: 15px !important;
+}
+.asc-icon:after {
+    content: "\25B2" !important;
+    top:17px !important;
+}
+.desc-icon:after {
+    content: "\25bc" !important;
+    top:17px !important;
+}
+.rgHeaderCell .header-content div:after{
+    content: "▲ ▼";
+    position: absolute;
+    right: 3px;
+    white-space: break-spaces;
+    padding: 0;
+    box-sizing: inherit;
+    width: 20px;
+    height: 30px;
+    line-height: 15px;
+    top: 10px;
+}
+.main-class-name {
+    display: flex;
+    flex-flow: row wrap;
+}
+
+.alert-annotation .MuiSvgIcon-root {
+    fill: white !important;
+}
+revogr-scroll-virtual.horizontal{
+    overflow-x: hidden !important;
+}
+
+.react-draggable{
+    transform: translate(-50%,-50%) !important;
+    left: 50% !important;
+    top: 50% !important;
+}

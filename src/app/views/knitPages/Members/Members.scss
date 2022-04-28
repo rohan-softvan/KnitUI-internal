@@ -1,0 +1,115 @@
+$primary: #001839;
+$font:Rubik;
+.title-class{
+    text-align: left;
+    letter-spacing: 0px;
+    color: $primary;
+    opacity: 1;
+    font-weight: 900 !important;
+    font-family: Rubik !important;
+}
+.subTitle{
+    text-align: left;
+    letter-spacing: 0.5px !important;
+    color: $primary;
+    opacity: 1;   
+    font-size: 12px !important;
+    font-family: Rubik !important;
+}
+.root{
+    width: '100%';
+    margin-top: 30px;
+    overflow-x: 'auto';
+    box-shadow:none !important;
+    border-radius: 10px;
+    /* max-width: 500px; */
+    /* overflow: scroll; */
+}
+.icon-align{
+    text-align: end !important;
+}
+@media screen and (max-width: 500px) {
+    .root{
+        overflow: scroll;
+    }
+  }
+.table {
+    /* min-width: 700px; */
+    overflow: scroll;
+    border: 1px solid #e2e2e2;
+    border-radius: 10px;
+    margin-left: 0px !important;
+    background: #fff;
+}
+.MuiTableCell-head {
+    color: $primary !important;
+    font-weight: 800 !important;
+    font-family: Rubik !important ;
+    line-height: 1.5rem;
+}
+.profileIcon {
+    cursor: "pointer";
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0
+}
+.table-image-cell{
+    width:80px;
+}
+.MuiTableCell-body {
+    color: $primary !important;
+    font-family: Rubik !important;;
+}
+.buttonDiv{
+    display: flex;
+    justify-content:flex-end;
+}
+.MuiSwitch-edgeStart{
+    color:$primary !important;
+}
+.popper-main{
+    display: -webkit-flex;
+    display:flex;
+    padding: 10px;
+    background:#fff;
+    border-radius: 5px;
+    box-shadow: 0px 0px 6px rgba(0,0,0,0.16);
+    align-items: center;
+}
+.popper-text{
+    padding:10px
+}
+.popper-lable{
+    font-size: 13px !important;
+    padding-left: 9px !important;
+    font-weight: 400 !important;
+    color: #001839;
+}
+.close-icon{
+    width: 18px !important;
+    height: 18px !important;
+    cursor: pointer;
+    color: #001839;
+}
+.MuiPaper-elevation1 {
+    //box-shadow: 0px 0px 6px #00000029 !important; 
+    box-shadow: none !important;
+}
+
+.MuiOutlinedInput-inputMarginDense {
+    padding-top: 6.5px !important;
+    padding-bottom: 7.5px !important;
+}
+.MuiInputBase-input {
+    height: 1.1876em !important;
+}
+.MuiTable-root {
+    border-collapse: unset !important;
+}
+.MuiFormLabel-root {
+    line-height: 0.6 !important;
+}

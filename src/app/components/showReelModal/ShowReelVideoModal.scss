@@ -1,0 +1,48 @@
+.VideoImage{
+  width: 120px;
+  height: 120px;
+  resize: none;
+  max-width: 100%;
+  border-radius: 5px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+.video-card-showreel{
+  margin-right: 20px;
+  max-width: 100%;
+  width: 120px;
+  border: none !important;
+  position: relative;
+  margin-bottom: 20px;
+  border-radius: 5px !important;
+}
+.video-card-showreel .videoTitle{
+  color: #001839 !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+}
+.video-card-showreel .videoDate{
+  color: #001839 !important;
+  font-size: 13px !important;
+  font-weight: 400 !important;
+}
+.video-card-showreel .videomin{
+  color: #001839 !important;
+  font-size: 13px !important;
+  font-weight: 400 !important;
+}
+.close-icon{
+  width: 18px !important;
+  height: 18px !important;
+  cursor: pointer;
+  color: #001839;
+}
+.modal-radius-box .MuiDialog-paperWidthMd{
+  border-radius: 10px !important;
+  box-shadow: 0px 3px 10px #0000001A;
+  -webkit-box-shadow: 0px 3px 10px #0000001A;
+  -moz-box-shadow: 0px 3px 10px #0000001A;
+  -ms-box-shadow: 0px 3px 10px #0000001A;
+  -o-box-shadow: 0px 3px 10px #0000001A;
+}
