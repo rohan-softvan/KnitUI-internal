@@ -49,6 +49,8 @@ class Dashboard extends Component {
   }
     componentDidMount() {
         let userId = cookie.get("user_Id")
+        let email =cookie.get("user_email")
+        console.log('email==>',email)
         signal();
 
         if(userId){
@@ -59,7 +61,7 @@ class Dashboard extends Component {
         refreshToken().then((data) => {
                 cookie.set("csrf", data.idToken.jwtToken, { httpOnly: false, path: "/" });
         });
-        let email =cookie.get("user_email")
+
         this.checkUserMail(email)
     }
 
@@ -68,7 +70,7 @@ getPlayerID = async () =>{
     OneSignal.getUserId().then(value => {
           if(value){
           this.setState({oneSignalPlayerId:value},()=>{
-              this.sendAppIdtooneSignal();            
+              this.sendAppIdtooneSignal();
           });
               clearTimeout(timer);
       }else{
@@ -140,7 +142,7 @@ getPlayerID = async () =>{
             }
         })
     }
-    
+
     sendAppIdtooneSignal = () =>{
         if(this.state.oneSignalFlag && this.state.userID && this.state.oneSignalPlayerId){
             let user_data={
@@ -157,26 +159,33 @@ getPlayerID = async () =>{
     }
 
     checkUserMail = (email) => {
-        if (email !== "") {
+        if (email !== "" && email !== undefined) {
             let data = {
                 email: email
             };
             checkEmailExist(data).then((response) => {
-                if (response.data.length > 0) {
+                if (JSON.stringify(response.data.user_details) !== '{}') {
                     let organizationId="";
                     let userId=""
-                    if(response.data[0].organization_id.length > 0 && response.data[0].organization_id[0] != null ){
-                        this.setState({organization: response.data[0].organization_id[0].$oid})
-                        organizationId=response.data[0].organization_id[0].$oid;
-                        cookie.set("organization_id", response.data[0].organization_id[0].$oid)
+                    if(response.data.user_details.organization_id.length > 0 && response.data.user_details.organization_id[0] != null ){
+                        this.setState({organization: response.data.user_details.organization_id[0].$oid})
+                        organizationId=response.data.user_details.organization_id[0].$oid;
+                        cookie.set("organization_id", response.data.user_details.organization_id[0].$oid)
                     }
-                   
-                    userId=response.data[0]._id.$oid;
-                    this.setState({ userID: response.data[0]._id.$oid,organizationId:response.data[0].organization_id[0].$oid },()=>{
+                    let projectIdList=[]
+                    if(response.data.project_details.length > 0){
+                        for(let i in response.data.project_details){
+                            projectIdList.push(response.data.project_details[i]._id.$oid)
+                        }
+                    }
+                    console.log('projectIdList==>',projectIdList)
+                    localStorage.setItem("projectIdList",projectIdList)
+                    userId=response.data.user_details._id.$oid;
+                    this.setState({ userID: response.data.user_details._id.$oid,organizationId:response.data.user_details.organization_id[0].$oid },()=>{
                         this.getOneSignalPlayerId();
                     });
                     this.getData(userId,organizationId);
-                     cookie.set("user_Id",response.data[0]._id.$oid)
+                     cookie.set("user_Id",response.data.user_details._id.$oid)
                 }
             });
         }
@@ -199,11 +208,11 @@ getPlayerID = async () =>{
                 }
             });
         // }, 1000);
-       
+
     }
 
-    handleDeleteProject = (id) => {        
-        let outerThis = this;        
+    handleDeleteProject = (id) => {
+        let outerThis = this;
         deleteProject (id).then(response => {
             if (response.data) {
                 this.getData(this.state.userID,this.state.organizationId);
@@ -211,7 +220,7 @@ getPlayerID = async () =>{
         })
     }
 
-    
+
 
     renderTitle=()=>{
         return(
@@ -269,7 +278,7 @@ getPlayerID = async () =>{
                         return (
                             <>
                                 <Grid item xs={12} lg={2} md={2} sm={2} className={"project-sub-cards"}>
-                                    <ProjectCard data={item} onClick={()=>{this.handleRedirect(item.projectId,item.title,item.type)}} 
+                                    <ProjectCard data={item} onClick={()=>{this.handleRedirect(item.projectId,item.title,item.type)}}
                                     onSelectedDelete={()=>{this.handleDeleteProject(item.projectId)}} />
                                 </Grid>
                             </>

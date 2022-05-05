@@ -16,6 +16,14 @@ import FormatBoldIcon from '@material-ui/icons/FormatBold';
 import FormatItalicIcon from '@material-ui/icons/FormatItalic';
 import Paper from '@material-ui/core/Paper';
 import { styled } from '@material-ui/core/styles';
+import CustomColorPicker from "./CustomColorPicker";
+import Divider from "@material-ui/core/Divider";
+import Popover from "@material-ui/core/Popover";
+import OutlinedInput from "@material-ui/core/OutlinedInput";
+import {chartEditorEnum} from "../../../enums";
+import {setGraphConfig} from "../../../redux/slice/ChartEditorSlice";
+import {useDispatch, useSelector} from "react-redux";
+
 
 let fontsize = [
     {
@@ -138,8 +146,10 @@ const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
     },
 }));
 
-export default function LegendTab({expanedState, setTabState}) {
 
+export default function LegendTab({expanedState, setTabState}) {
+    const dispatch = useDispatch();
+    let graphConfig = useSelector((state) => state.chart.graphConfig);
     const [selectedQuestions, setSelectedQuestions] = React.useState([]);
     const switchlabel = { inputProps: { 'aria-label': 'Switch demo' } };
 
@@ -148,6 +158,14 @@ export default function LegendTab({expanedState, setTabState}) {
 
     const [alignment, setAlignment] = React.useState('center');
     const [formats, setFormats] = React.useState(() => ['']);
+    const [usedColors,setUsedColor] = React.useState([])
+    const [anchorEl, setAnchorEl] = React.useState(null);
+    const [open,setOpen] = React.useState(false)
+    const [currentColor, setCurrentColor]= React.useState('')
+
+    const [invertAxis, setInvertAxis] = React.useState(graphConfig.chart.inverted);
+    const [xAxisTitle, setXAxisTitle] = React.useState(graphConfig.chart.inverted);
+
     const handleFormat = (
         event: React.MouseEvent<HTMLElement>,
         newFormats: string[],
@@ -165,6 +183,31 @@ export default function LegendTab({expanedState, setTabState}) {
     const toggleXSetting = () => {
         if (Height == '0px') setHeight('100%'); else setHeight('0px');
         setShow(!Show)
+    }
+
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+        setOpen(true)
+    };
+
+    const id = 'transitions-popper';
+
+    const handleClose = () => {
+        setAnchorEl(null);
+        setOpen(false)
+        usedColors.push(currentColor)
+    };
+
+    const handleCallback = (childData) =>{
+        setCurrentColor(childData)
+    }
+
+    const handleChartInvertAxis = (event) => {
+        setInvertAxis(event.target.checked);
+        let newConfig = JSON.parse(JSON.stringify(graphConfig));
+        newConfig['chart']['inverted'] = event.target.checked
+        console.log("Checked Event",newConfig)
+        dispatch(setGraphConfig(newConfig));
     }
 
     /*Y Axis*/
@@ -191,16 +234,29 @@ export default function LegendTab({expanedState, setTabState}) {
                         <Typography>Inverted Axis</Typography>
                     </Grid>
                     <Grid item xs={6} className={'SwitchIcon'}>
-                        <Switch {...switchlabel} defaultChecked />
+                        <Switch
+                            checked={invertAxis}
+                            onChange={handleChartInvertAxis}
+                        />
                     </Grid>
                 </Grid>
 
                 <Grid container spacing={2}>
                     <Grid item xs={12}>
                         <div className={'customGridTitle'}>
-                            <div className={'selectFullDropdown'}>
-                                <FormHelperText id="title-text">Axis X</FormHelperText>                               
-                                <SelectComponent menu={position} />
+                            <div className={'LeftTitle'}>
+                                <FormHelperText id="title-text">Axis X</FormHelperText>
+                                {/*<SelectComponent menu={position} />*/}
+                                <OutlinedInput
+                                    id="titleText"
+                                    aria-describedby="axisx-title-text"
+                                    inputProps={{
+                                        'aria-label': 'title',
+                                    }}
+                                    // value={headingText}
+                                    // onBlur={handleTitleSave}
+                                    // onChange={handleTitleChange}
+                                />
                             </div>
                             <div className={'settingToggle'}>
                                 {
@@ -259,6 +315,39 @@ export default function LegendTab({expanedState, setTabState}) {
                                 </div>
                                 <div className={'rightGrid'}>
                                     <FormHelperText id="title-text">Axis X text color</FormHelperText>
+                                    <div className={'colorPiker'}
+                                         style={{
+                                             width: 'calc(100% - 30px)'
+                                         }}>
+                                        <div className={'fixColors'}>
+                                            <div className={'ActiveColor'} style={{'backgroundColor':'#28B5A6'}}></div>
+                                            <Divider flexItem orientation="vertical" sx={{ mx: 0.5, my: 1 }} />
+                                            <div className={'ColorVariation'} style={{'backgroundColor':'#000000'}}></div>
+                                            <div className={'ColorVariation'} style={{'backgroundColor':'#FCD364'}}></div>
+                                        </div>
+                                        <div className={'colorDropdown'}>
+                                            <button aria-describedby={id} type="button" onClick={handleClick}>
+                                                Auto
+                                            </button>
+                                            <Popover
+                                                id={id}
+                                                open={open}
+                                                anchorEl={anchorEl}
+                                                onClose={handleClose}
+                                                anchorOrigin={{
+                                                    vertical: 'bottom',
+                                                    horizontal: 'center',
+                                                }}
+                                                transformOrigin={{
+                                                    vertical: 'top',
+                                                    horizontal: 'center',
+                                                }}
+                                                style={{height:'auto'}}
+                                            >
+                                                <CustomColorPicker parentCallback = {handleCallback} usedColors={usedColors}></CustomColorPicker>
+                                            </Popover>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div className={'blankSpace'}></div>
                             </div>
@@ -291,14 +380,79 @@ export default function LegendTab({expanedState, setTabState}) {
                             </div>
                         </Grid>
                     </Grid>
+
+                    <Grid container spacing={2}>
+                        <Grid item xs={12}>
+                            <div className={'customGridhalf'}>
+                                <div className={'leftGrid'}>
+                                    <FormHelperText id="title-text">Gridline color</FormHelperText>
+                                    <div className={'colorPiker'}
+                                         style={{
+                                             width: 'calc(100% - 30px)'
+                                         }}>
+                                        <div className={'fixColors'}>
+                                            <div className={'ActiveColor'} style={{'backgroundColor':'#28B5A6'}}></div>
+                                            <Divider flexItem orientation="vertical" sx={{ mx: 0.5, my: 1 }} />
+                                            <div className={'ColorVariation'} style={{'backgroundColor':'#000000'}}></div>
+                                            <div className={'ColorVariation'} style={{'backgroundColor':'#FCD364'}}></div>
+                                        </div>
+                                        <div className={'colorDropdown'}>
+                                            <button aria-describedby={id} type="button" onClick={handleClick}>
+                                                Auto
+                                            </button>
+                                            <Popover
+                                                id={id}
+                                                open={open}
+                                                anchorEl={anchorEl}
+                                                onClose={handleClose}
+                                                anchorOrigin={{
+                                                    vertical: 'bottom',
+                                                    horizontal: 'center',
+                                                }}
+                                                transformOrigin={{
+                                                    vertical: 'top',
+                                                    horizontal: 'center',
+                                                }}
+                                                style={{height:'auto'}}
+                                            >
+                                                <CustomColorPicker parentCallback = {handleCallback} usedColors={usedColors}></CustomColorPicker>
+                                            </Popover>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className={'rightGrid'}>
+                                    <FormHelperText id="title-text">Gridline width</FormHelperText>
+                                    <div className={'axisbox'}>
+                                        <Typography style={{'color': '#28B5A6','cursor':'pointer'}}>1px</Typography>
+                                        <Divider orientation="vertical" variant="middle" flexItem className={'bgDivider'}/>
+                                        <div className={'widthValue'}>
+                                            <Typography className={'widthDecimal'}>2px</Typography>
+                                            <Typography className={'widthDecimal'}>3px</Typography>
+                                            <Typography className={'widthDecimal'}>4px</Typography>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className={'blankSpace'}></div>
+                            </div>
+                        </Grid>
+                    </Grid>
                 </div>
 
                 <Grid container spacing={2}>
                     <Grid item xs={12}>
                         <div className={'customGridTitle'}>
-                            <div className={'selectFullDropdown'}>
-                                <FormHelperText id="title-text">Axis Y</FormHelperText>                               
-                                <SelectComponent menu={position} />
+                            <div className={'LeftTitle'}>
+                                <FormHelperText id="title-text">Axis Y</FormHelperText>
+                                <OutlinedInput
+                                    id="titleText"
+                                    aria-describedby="axisx-title-text"
+                                    inputProps={{
+                                        'aria-label': 'title',
+                                    }}
+                                    // value={headingText}
+                                    // onBlur={handleTitleSave}
+                                    // onChange={handleTitleChange}
+                                />
                             </div>
                             <div className={'settingToggle'}>
                                 {
@@ -356,6 +510,39 @@ export default function LegendTab({expanedState, setTabState}) {
                                 </div>
                                 <div className={'rightGrid'}>
                                     <FormHelperText id="title-text">Axis Y text color</FormHelperText>
+                                    <div className={'colorPiker'}
+                                         style={{
+                                             width: 'calc(100% - 30px)'
+                                         }}>
+                                        <div className={'fixColors'}>
+                                            <div className={'ActiveColor'} style={{'backgroundColor':'#28B5A6'}}></div>
+                                            <Divider flexItem orientation="vertical" sx={{ mx: 0.5, my: 1 }} />
+                                            <div className={'ColorVariation'} style={{'backgroundColor':'#000000'}}></div>
+                                            <div className={'ColorVariation'} style={{'backgroundColor':'#FCD364'}}></div>
+                                        </div>
+                                        <div className={'colorDropdown'}>
+                                            <button aria-describedby={id} type="button" onClick={handleClick}>
+                                                Auto
+                                            </button>
+                                            <Popover
+                                                id={id}
+                                                open={open}
+                                                anchorEl={anchorEl}
+                                                onClose={handleClose}
+                                                anchorOrigin={{
+                                                    vertical: 'bottom',
+                                                    horizontal: 'center',
+                                                }}
+                                                transformOrigin={{
+                                                    vertical: 'top',
+                                                    horizontal: 'center',
+                                                }}
+                                                style={{height:'auto'}}
+                                            >
+                                                <CustomColorPicker parentCallback = {handleCallback} usedColors={usedColors}></CustomColorPicker>
+                                            </Popover>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div className={'blankSpace'}></div>
                             </div>
@@ -385,6 +572,62 @@ export default function LegendTab({expanedState, setTabState}) {
                                     <FormHelperText id="title-text">Major Gridline</FormHelperText>                               
                                     <SelectComponent menu={axisValue} />
                                 </div>
+                            </div>
+                        </Grid>
+                    </Grid>
+
+                    <Grid container spacing={2}>
+                        <Grid item xs={12}>
+                            <div className={'customGridhalf'}>
+                                <div className={'leftGrid'}>
+                                    <FormHelperText id="title-text">Gridline color</FormHelperText>
+                                    <div className={'colorPiker'}
+                                         style={{
+                                             width: 'calc(100% - 30px)'
+                                         }}>
+                                        <div className={'fixColors'}>
+                                            <div className={'ActiveColor'} style={{'backgroundColor':'#28B5A6'}}></div>
+                                            <Divider flexItem orientation="vertical" sx={{ mx: 0.5, my: 1 }} />
+                                            <div className={'ColorVariation'} style={{'backgroundColor':'#000000'}}></div>
+                                            <div className={'ColorVariation'} style={{'backgroundColor':'#FCD364'}}></div>
+                                        </div>
+                                        <div className={'colorDropdown'}>
+                                            <button aria-describedby={id} type="button" onClick={handleClick}>
+                                                Auto
+                                            </button>
+                                            <Popover
+                                                id={id}
+                                                open={open}
+                                                anchorEl={anchorEl}
+                                                onClose={handleClose}
+                                                anchorOrigin={{
+                                                    vertical: 'bottom',
+                                                    horizontal: 'center',
+                                                }}
+                                                transformOrigin={{
+                                                    vertical: 'top',
+                                                    horizontal: 'center',
+                                                }}
+                                                style={{height:'auto'}}
+                                            >
+                                                <CustomColorPicker parentCallback = {handleCallback} usedColors={usedColors}></CustomColorPicker>
+                                            </Popover>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className={'rightGrid'}>
+                                    <FormHelperText id="title-text">Gridline width</FormHelperText>
+                                    <div className={'axisbox'}>
+                                        <Typography style={{'color': '#28B5A6','cursor':'pointer'}}>1px</Typography>
+                                        <Divider orientation="vertical" variant="middle" flexItem className={'bgDivider'}/>
+                                        <div className={'widthValue'}>
+                                            <Typography className={'widthDecimal'}>2px</Typography>
+                                            <Typography className={'widthDecimal'}>3px</Typography>
+                                            <Typography className={'widthDecimal'}>4px</Typography>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className={'blankSpace'}></div>
                             </div>
                         </Grid>
                     </Grid>

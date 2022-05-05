@@ -144,18 +144,22 @@ class Data extends Component {
 
   componentDidMount() {
     let projectId = getQueryStringValue()
+    let viewName = getListStringValue();
+    this.props.setViewData(viewName)
+
+    if(localStorage.getItem('allListData')){
+      this.props.setListViewData()
+    }
+
+    this.getprojectDataUpdated(projectId);
+    this.getThemeUpdatedThemeData(projectId)
     // const CancelToken = axios.CancelToken;
     // const source = CancelToken.source();
     // this.setState({
     //   source: source
     // })
-    if(localStorage.getItem('allListData')){
-      this.props.setListViewData()
-    }
-    let viewName = getListStringValue();
-    this.props.setViewData(viewName)
-    this.getprojectDataUpdated(projectId);
-    this.getThemeUpdatedThemeData(projectId)
+
+
 
     this.setState({ projectId: projectId }, () => {
       if (window.location.href.includes('questionId')) {
@@ -463,8 +467,8 @@ class Data extends Component {
     });
   };
 
-  FetchSearchData = async (data, themeList, tagListName, searchText) => {
-    this.setState({ filteredData: data, themeNameList: themeList, tagListName: tagListName, searchText: searchText }, () => {
+  FetchSearchData = async (data, themeList, tagListName, searchText,subThemeName) => {
+    this.setState({ filteredData: data, themeNameList: themeList, tagListName: tagListName, searchText: searchText,subThemeName:subThemeName }, () => {
       this.countTotalFilter()
     })
     data=data.filter(el => Array.isArray(el.filter_request) ? el.filter_request.length > 0 : el)
@@ -524,7 +528,7 @@ class Data extends Component {
           {this.state.projectId &&
             <SearchComponent projectId={this.state.projectId}
               onSearch={(data, searchText, subThemeName, tagListName, themeNameList) => {
-                this.FetchSearchData(data, themeNameList, tagListName, searchText);
+                this.FetchSearchData(data, themeNameList, tagListName, searchText,subThemeName);
                 //  this.handleListAndGrid(data, searchText, subThemeName, tagListName, themeNameList);
               }}
               onClear={(e) => {
@@ -1383,12 +1387,12 @@ class Data extends Component {
                 if (newThemeName.length <= 0) {
                   newThemeName = this.state.subThemeName.filter(el => el.id == item.filter_request);
                 }
-                mainFilterName = newThemeName[0].name
+                mainFilterName = Array.isArray(newThemeName) && newThemeName.length > 0 ? newThemeName[0].name : ''
               }
               if (item.type == "TAGS") {
                 let newThemeName = [];
                 newThemeName = this.state.tagListName.filter(el => el.id == item.filter_request);
-                mainFilterName = newThemeName[0].name
+                mainFilterName = Array.isArray(newThemeName) && newThemeName.length > 0 ? newThemeName[0].name : ''
               }
               return (
                 <>

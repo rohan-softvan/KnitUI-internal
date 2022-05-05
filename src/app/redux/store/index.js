@@ -16,8 +16,8 @@ import thunk from 'redux-thunk';
 
 const saveToLocalStorage = (state) => {
   try {
+    localStorage.removeItem('state');
     localStorage.setItem('state', JSON.stringify(state));
-    // localStorage.removeItem('state');
   } catch (e) {
     console.error(e);
   }

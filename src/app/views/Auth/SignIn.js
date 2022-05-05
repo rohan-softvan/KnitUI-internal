@@ -66,10 +66,6 @@ class SignIn extends Component{
     }
 
     componentDidMount() {
-        //console.log("in 2nd....",this.props.location.state.email)
-        //this.getUserIdByMail(this.props.location.state.email);
-
-
         Hub.listen("auth", ({ payload: { event, data } }) => {
             switch (event) {
                 case "signIn":
@@ -90,62 +86,41 @@ if(isGoogle){
 
         Auth.currentAuthenticatedUser()
             .then(user => this.setState({ user },()=>{
-                // console.log("user...on SignIn.......",user)
-
                 let email = user.signInUserSession.idToken.payload["email"]
                 //let token = user.signInUserSession.idToken.jwtToken
                 this.getUserDetailByAccessToken(email)
-
             }))
             .catch(() => console.log("Not signed in"));
 }
     }
 
     getUserDetailByAccessToken = (token) => {
-        // console.log("in Token Check...");
         if (token !== "") {
             let data = {
                 email: token
             };
             checkEmailExist(data).then((response) => {
-
-                // console.log("in access_token Check...length.....",response.data);
-                if (response.data.length > 0) {
-
-                    // console.log("in EMAIL Check...USERID.....", response.data[0].is_details_acquired);
-
-                    let detail = response.data[0].is_details_acquired;
-                    let email = response.data[0].email;
-
-                    if (response.data[0].is_google_user) {
-
-                    if (detail) {
-                        cookie.set("user_type", roleEnum.KNIT)
-                        cookie.set("user_email", email)
-
-                        window.location.href = "/knit/projects"
-
-                    } else {
-
-                        this.props.history.push({
-                            pathname: "/signUpWithTeam",
-                            state: {email: email},
-                        });
+                if (JSON.stringify(response.data.user_details) !== '{}') {
+                    let detail = response.data.user_details.is_details_acquired;
+                    let email = response.data.user_details.email;
+                    if (response.data.user_details.is_google_user) {
+                        if (detail) {
+                            cookie.set("user_type", roleEnum.KNIT)
+                            cookie.set("user_email", email)
+                            window.location.href = "/knit/projects"
+                        } else {
+                            this.props.history.push({
+                                pathname: "/signUpWithTeam",
+                                state: {email: email},
+                            });
+                        }
                     }
                 }
-
-
-
-                } else {
-                    // console.log("in EMAIL Check...USERID. NA  MDYU....",response.data);
-                }
-
             });
         }
-
     };
+
     handleOnSubmit = async () => {
-        //console.log("IN Submit.....11111.");
         if (this.state.email === "") {
             this.setState({ emailNullError: true });
             return false;
@@ -158,91 +133,52 @@ if(isGoogle){
             this.setState({ emailError: true });
             return false;
         }
-
         if (this.state.password === "") {
             this.setState({ passwordNullError: true });
             return false;
         }
-
         if (this.state.password.length >= 8) {
             this.setState({ passwordError: false });
         } else {
             this.setState({ passwordError: true });
             return false;
         }
-
         this.setState({ loading: true });
-
-        //console.log(`You submitted:\n\n${values.get('email')}`);
-
         const email = this.state.email;
         const password = this.state.password;
-
         try {
-            //  console.log("IN TRY.....11111.",email);
             await Auth.signIn(email, password).then((user) => {
-
-                // console.log("user resonse::::",user);
-                // console.log("before IFFFFF.....45454545454............usertypeee..",user.attributes["custom:user_type"]);
-                // console.log("before IFFFFF.....66666666............usertypeee..",user.signInUserSession.idToken.payload["custom:user_type"]);
-
                 setCookie(
                     user.signInUserSession.idToken.payload["custom:user_type"],
                     user.signInUserSession.idToken.jwtToken
-
                 );
-
                 if (user.attributes["custom:user_type"] == "admin") {
-
-                    // console.log("IN IFFFFFFFF.......",user.attributes["custom:user_type"]);
-
                     this.userHasAuthenticated(true,user.attributes["custom:user_type"]);
-
                 } else {
-                    // console.log("IN Elseeeeeee.......",user.attributes["custom:user_type"]);
                     cookie.set("user_email",user.attributes["email"])
                     this.userHasAuthenticated(true,user.attributes["custom:user_type"]);
                 }
             });
         } catch (e) {
-            // console.log("IN TCATCH.......ERRRORRRR",e);
-            //message.error(e.message);
             this.setState({ loading: false,loginError:true,loginErrorMessage:e.message, });
         }
     };
 
     userHasAuthenticated = (authenticated, userType) => {
-        // console.log("IN Redirection........11111.",authenticated);
-        // console.log("IN Redirection.......userType.......",userType);
-        // console.log('ROLES :::', userType);
         Auth.currentAuthenticatedUser()
             .then((user) => {
-                // console.log('userToken is >> ', user.signInUserSession.idToken.jwtToken);
-                // console.log("IN userHasAuthenticated.........KNIT>>>>>>>>.",user);
                 this.setState({ isAuthenticated: true });
-
                 if (userType === roleEnum.KNIT) {
-
-                    // console.log("IN IFFFF.....USER TYPE.......KNIT>>>>>>>>.");
                     this.setState({ loading: false });
-                    // window.location.href = "/knit/projects"
                     this.props.history.push({
                         pathname: "/redirectURL",
                         state: {email: cookie.get("user_email")},
                     });
-
                 } else if (userType == "admin") {
                     this.setState({ loading: false });
-                    //console.log("In Admin");
-                    // window.location.href = 'http://app.picauso.com:8087/index.html?csrf='+cookie.get('csrf');
-                    // window.location.href = 'http://admin.picauso.com/index.html?csrf='+cookie.get('csrf');
-                   // window.location.href = ADMIN_REDIRECT_URL + cookie.get("csrf");
                 }
                 else {
                     this.setState({ loading: false });
-                    // console.log("IN ELSEEEEE.........");
-
-                   // window.location.href = "/login"
                 }
             })
             .catch((err) => {
@@ -325,7 +261,7 @@ if(isGoogle){
                     <Typography variant={"h6"} component={"h6"} className={"auth-sub-title mb-30"}>
                         Log in or <span onClick={this.handleRedirection}>create an account</span> to start using Knit.
                     </Typography>
-                    
+
                     <div className={"form-group"}>
                         <Typography variant={"h6"} className={"form-label"}>Email</Typography>
                         <Input type={"email"} className={this.state.emailNullError || this.state.emailError ? "form-input errorline" : "form-input"} onChange={(text) => {this.emailValidation(text);}}></Input>
@@ -335,7 +271,7 @@ if(isGoogle){
                                 : this.state.emailError
                                 ? "Please enter a valid email"
                                 : false}</Typography>
-                    </div> 
+                    </div>
 
                     <div className={"form-group"}>
                         <Typography variant={"h6"} className={"form-label password-field"}>Password</Typography>
@@ -362,9 +298,9 @@ if(isGoogle){
 
                     <Typography variant={"h6"} component={"h6"} className={"or-title mt-20"}>
                         <span>OR</span>
-                    </Typography> 
+                    </Typography>
 
-                    <Button                     
+                    <Button
                     className={"signUpGoogle mt-30"}
                     text={"Log in with Google"}
                     disableRipple={true}
@@ -403,7 +339,7 @@ if(isGoogle){
                 </Snackbar>
                 <Snackbar open={this.state.loginError} autoHideDuration={5000} onClose={this.handleClose}>
                     <Alert onClose={this.handleClose} severity="error">
-Oops, {this.state.loginErrorMessage},Please Try Again.
+                            Oops, {this.state.loginErrorMessage},Please Try Again.
                     </Alert>
                 </Snackbar>
                 <div className={"login-box"}>

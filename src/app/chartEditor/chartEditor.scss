@@ -52,21 +52,21 @@
 .chartModal{
     // .MuiDialog-paperFullWidth{
     //     min-height: 500px;
-    // } 
+    // }
     .InnerScrollTab{
         height:700px;
         overflow-y:auto;
         border:1px solid #F3F3F3;
         border-radius: 4px;
         &::-webkit-scrollbar-thumb{
-            background-color: #D8D8D8 !important; 
-            border-radius: 25px;          
-            width:20px;          
+            background-color: #D8D8D8 !important;
+            border-radius: 25px;
+            width:20px;
         }
         &::-webkit-scrollbar-track{
             background-color: #fff !important;
         }
-    } 
+    }
 }
 
 
@@ -83,7 +83,7 @@
         min-width: 74px;
         margin-right: 8px;
         font-weight: 300 !important;
-    } 
+    }
     .Mui-selected{
         border:1px solid #12988A !important;
         background: transparent !important;
@@ -108,7 +108,7 @@
             min-height: 30px;
             padding: 0px;
             .MuiAccordionSummary-content{
-                margin: 0px;                
+                margin: 0px;
             }
             .MuiIconButton-edgeEnd{
                 margin-right: 0px;
@@ -126,10 +126,10 @@
             padding: 8px 5px 16px 38px;
             .selectValue{
                 margin-bottom: 10px;
-                -webkit-transition: height 0.5s; 
-                -moz-transition: height 0.5s; 
-                -ms-transition: height 0.5s; 
-                -o-transition: height 0.5s; 
+                -webkit-transition: height 0.5s;
+                -moz-transition: height 0.5s;
+                -ms-transition: height 0.5s;
+                -o-transition: height 0.5s;
                 transition: height 0.5s;
                 ul{
                     margin: 0px;
@@ -148,13 +148,13 @@
         .MuiIconButton-label{
             path{
                 color: #D6D6D6;
-            }            
+            }
         }
         .Mui-checked{
             .MuiIconButton-label{
                 path{
                     color: #D6D6D6;
-                }            
+                }
             }
         }
         .MuiAccordionSummary-expandIcon.Mui-expanded{
@@ -184,7 +184,7 @@
         border: 1px solid #F1F1F1 !important;
         border-radius: 4px !important;
         margin-bottom: 10px !important;
-        padding: 10px;        
+        //padding: 10px;
         p{
             font-size: 12px;
             color: #585858;
@@ -194,6 +194,7 @@
             }
         }
         .withoutAccordian{
+            padding: 8px 5px 10px 10px;
             ul{
                 margin: 0px;
                 padding: 0px;
@@ -223,13 +224,13 @@
                             path{
                                 color:#585858;
                             }
-                        } 
+                        }
                     }
                 }
-            }        
+            }
         }
     }
-    
+
 }
 
 
@@ -268,7 +269,7 @@
     display: flex;
     justify-content: end;
     .MuiSwitch-colorSecondary.Mui-checked{
-        color: #80DAD6;        
+        color: #80DAD6;
     }
     .Mui-checked{
         .MuiSwitch-thumb{
@@ -282,7 +283,7 @@
         background-color: #80DAD6;
     }
     .MuiSwitch-track{
-        background-color:#EEEEEE;        
+        background-color:#EEEEEE;
     }
 }
 .customGridTitle{
@@ -305,10 +306,10 @@
                 font-size: 14px;
                 height: 32px !important;
                 width: calc(100% - 30px);
-            }  
+            }
             fieldset{
                 display:none;
-            }                      
+            }
         }
     }
     .settingToggle{
@@ -333,7 +334,7 @@
         margin-bottom: 8px;
     }
     .MuiFormControl-root{
-        width: calc(100% - 30px) !important; 
+        width: calc(100% - 30px) !important;
     }
     .leftGrid{
         width:100%;
@@ -345,7 +346,7 @@
             width: auto;
             min-width:auto;
             margin-right: auto;
-            padding: 2px;
+            padding: 1px;
         }
         .MuiToggleButton-root.Mui-selected + .MuiToggleButton-root.Mui-selected{
             margin-left: 4px;
@@ -363,10 +364,10 @@
         width: 30px;
     }
     .MuiOutlinedInput-notchedOutline{
-        border:1px solid #E8E8E8 !important;        
+        border:1px solid #E8E8E8 !important;
     }
     .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline{
-        border:1px solid #E8E8E8 !important;  
+        border:1px solid #E8E8E8 !important;
     }
     .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline{
         border-color: #E8E8E8 !important;
@@ -381,10 +382,10 @@
         margin-bottom: 8px;
     }
     .MuiOutlinedInput-notchedOutline{
-        border:1px solid #E8E8E8 !important;        
+        border:1px solid #E8E8E8 !important;
     }
     .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline{
-        border:1px solid #E8E8E8 !important;  
+        border:1px solid #E8E8E8 !important;
     }
     .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline{
         border-color: #E8E8E8 !important;
@@ -403,10 +404,10 @@
         margin-bottom: 8px;
     }
     .MuiOutlinedInput-notchedOutline{
-        border:1px solid #E8E8E8 !important;        
+        border:1px solid #E8E8E8 !important;
     }
     .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline{
-        border:1px solid #E8E8E8 !important;  
+        border:1px solid #E8E8E8 !important;
     }
     .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline{
         border-color: #E8E8E8 !important;
@@ -437,10 +438,10 @@
         }
     }
     .MuiOutlinedInput-notchedOutline{
-        border:1px solid #E8E8E8 !important;        
+        border:1px solid #E8E8E8 !important;
     }
     .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline{
-        border:1px solid #E8E8E8 !important;  
+        border:1px solid #E8E8E8 !important;
     }
     .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline{
         border-color: #E8E8E8 !important;
@@ -455,6 +456,17 @@
     padding: 15px;
     align-items: center;
     margin-bottom: 10px;
+    position:relative;
+    .colorSelectMenu{
+        border: 0px;
+        background: transparent;
+        cursor: pointer;
+        width: auto;
+        position: absolute;
+        right: 0px;
+        min-width:auto;
+        margin-right:15px;
+    }
     .defaultColor{
         width: 15px;
         height: 16px;
@@ -483,6 +495,7 @@
             color: #484848;
             opacity: 0.12;
             font-size: 12px;
+            cursor: pointer;
         }
     }
 }
@@ -534,6 +547,57 @@
         }
     }
 }
+.axisbox{
+    border: 1px solid #E8E8E8;
+    border-radius: 4px;
+    height: 35px;
+    width: calc(100% - 30px) !important;
+    display: flex;
+    padding: 15px;
+    align-items: center;
+    position:relative;
+    .colorSelectMenu{
+        border: 0px;
+        background: transparent;
+        cursor: pointer;
+        width: auto;
+        position: absolute;
+        right: 0px;
+        min-width:auto;
+        margin-right:15px;
+    }
+    .defaultColor{
+        width: 15px;
+        height: 16px;
+        cursor: pointer;
+    }
+    hr{
+        height: 26px;
+        align-self: center;
+        background-color: #f5f5f5;
+    }
+    .colorSelect{
+        display: flex;
+        .colors{
+            width: 17px;
+            height: 17px;
+            border-radius: 50%;
+            border-color: #fff;
+            margin-right: 5px;
+            cursor: pointer;
+        }
+    }
+    .widthValue{
+        display: flex;
+        .widthDecimal{
+            margin-right: 10px;
+            color: #484848;
+            opacity: 0.12;
+            font-size: 12px;
+            cursor: pointer;
+        }
+    }
+}
 
 /*CustomizeTab Css End*/
 
@@ -564,7 +628,7 @@
 #highchartsContainer {
     width: 100%;
 }
-  
+
 #wdr-pivot-view .wdr-grid-layout div.wdr-row .wdr-filter-header {
     min-width: 50%;
 }
@@ -577,7 +641,7 @@
     bottom: 0;
     cursor: e-resize;
 }
-  
+
 .chartResize .resizer-bottom {
     width: 100%;
     height: 5px;
@@ -587,7 +651,7 @@
     bottom: 0;
     cursor: n-resize;
 }
-  
+
 .chartResize .resizer-both {
     width: 5px;
     height: 5px;
@@ -598,9 +662,9 @@
     bottom: 0;
     cursor: nw-resize;
 }
-  
+
   /*NOSELECT*/
-  
+
 .chartResize {
     border: 2px solid #000;
     background-color: #ccc;
@@ -641,7 +705,7 @@
     font-family: 'Rubik';
     font-weight: 500 !important;
 }
-  
+
 /*Code for keep the modal open everytime START*/
 #wdr-pivot-view{
     height: auto !important;
@@ -679,6 +743,13 @@
     display: var(--displayFlag) !important
     // display: none !important;
 }
+#wdr-pivot-view #wdr-fields-view.wdr-flat-fields {
+    min-width: auto !important;
+    width: 100% !important;
+    left: 0px !important;
+    top: 100px !important;
+    position: relative !important;
+}
 
 // hide button
 //#wdr-pivot-view .wdr-ui-btns-row .wdr-ui-btn:last-child, #wdr-toolbar-wrapper .wdr-ui-btns-row .wdr-ui-btn:last-child {
@@ -699,7 +770,7 @@
 }
 #wdr-pivot-view #wdr-fields-view .wdr-popup-header .wdr-ui-col:first-child{
     display: none;
-} 
+}
 #wdr-pivot-view div.wdr-ui-window .wdr-popup-header .wdr-ui-btns-row{
     right: auto !important;
     left: 0px;
@@ -784,7 +855,7 @@
             background-color: transparent !important;
         }
         .Mui-selected{
-            border: transparent !important;            
+            border: transparent !important;
         }
         button{
             min-height:35px !important;
@@ -845,21 +916,35 @@
 }
 
 /*Export Tab Start*/
-.exportTitle{
-    font-size: 14px;
-    color: #2A2A2A;
-    margin-bottom: 15px !important;
-}
-.exportOptions{
-    padding: 25px;
-    text-align: center;
-    .card-title{
-        color:#C4C4C4;
-        font-size: 10px;
+.exportTab{
+    .MuiPaper-rounded{
+        &:Hover{
+            border:1px solid #12988A !important;
+            .exportOptions{
+                .imgIcon{
+                    filter:none;
+                }
+            }
+        }
+        .exportTitle{
+            font-size: 14px;
+            color: #2A2A2A;
+            margin-bottom: 15px !important;
+        }
+        .exportOptions{
+            padding: 25px;
+            text-align: center;
+            .card-title{
+                color:#C4C4C4;
+                font-size: 10px;
+            }
+            .imgIcon{
+                margin-bottom: 20px;
+                filter:grayscale(1);
+            }
+        }
     }
-    .imgIcon{
-        margin-bottom: 20px;
-    }
+
 }
 /*Export Tab End*/
 
@@ -903,6 +988,7 @@
     .exportOptions{
         img{
             margin-top: 33px;
+            height: 100px;
         }
         .card-title{
             font-size: 12px;
@@ -917,6 +1003,8 @@
     .mostUsedChart{
         display: flex;
         justify-content: end;
+        margin-bottom: 15px;
+        margin-top: 10px;
         .chartIcons{
             margin: 0px 12px;
             img{
@@ -924,5 +1012,130 @@
             }
         }
     }
+    .charResize{
+        border:1px solid #F1F1F1;
+        border-radius: 4px;
+        padding: 30px;
+        resize: both;
+        overflow: auto;
+        background: url("../../assets/images/charteditor/resize.png");
+        background-position: bottom right;
+        background-repeat: no-repeat;
+        margin-bottom: 15px;
+        min-height: 600px;
+    }
+    .downloadPng{
+        display: flex;
+        justify-content: end;
+        button{
+            border:1px solid #8F8F8F;
+            background: transparent;
+            cursor: pointer;
+            padding: 5px 10px;
+            img{
+                width: 16px;
+                height: 16px;
+                margin-right: 5px;
+            }
+            span{
+                color: #000000;
+                font-size: 14px;
+                text-transform: none;
+            }
+        }
+    }
 }
 /*Chart Section End*/
+/* For colorPicker */
+.flexbox-fix{
+    align-items: center !important;
+}
+.flexbox-fix > div > span > div{
+    border-radius: 10px !important;
+}
+.flexbox-fix > div{
+    margin:4px 5px 5px 0px !important;
+}
+.circle-picker {
+    margin-bottom: 0px !important;
+}
+.circle-picker > span > div {
+    margin-right: 7px !important;
+    margin-bottom: 5px !important;
+    width: 17px !important;
+    height: 17px !important;
+}
+.sketch-picker {
+    box-shadow: none !important;
+    padding: 10px 0px 0px !important;
+    width: 160px !important;
+}
+.standard-title{
+    text-align: left;
+    font: normal normal normal 10px/22px Rubik;
+    letter-spacing: 0px;
+    color: #585858;
+    opacity: 1;
+    font-size: 15px !important;
+    margin: 10px 0px !important;
+}
+.auto-btn{
+    background: #D2D2D2 0% 0% no-repeat padding-box;
+    border-radius: 2px;
+    opacity: 1;
+    border: 1px solid transparent;
+    cursor: pointer;
+    color: #fff;
+    font-size: 18px;
+    width: 100%;
+    height: 30px;
+}
+.colorPiker{
+    border:1px solid #E8E8E8;
+    border-radius:4px;
+    display: flex;
+    padding: 4px 12px;
+    justify-content: space-between;
+    .fixColors{
+        display: flex;
+        align-items: center;
+        .MuiDivider-flexItem{
+            height: 26px;
+            align-self: center;
+            margin: 0px 8px;
+        }
+        .ActiveColor{
+            //background-color: #28B5A6;
+            width: 17px;
+            height: 17px;
+            border-radius: 50%;
+        }
+        .ColorVariation{
+            width: 17px;
+            height: 17px;
+            border-radius: 50%;
+            margin-right: 5px;
+        }
+    }
+    .colorDropdown{
+        justify-content: right;
+        display: flex;
+        align-items: center;
+        button{
+            background: transparent;
+            border:0px;
+            color:#313131 !important;
+            text-align: right;
+        }
+    }
+}
+/* Finish color Picker Css */
+
+.rootIcon{
+    width: auto;
+    margin-right: 10px;
+}
+.rootTitle{
+    color:#747474;
+    font-size: 12px;
+}

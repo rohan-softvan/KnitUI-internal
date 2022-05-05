@@ -65,7 +65,7 @@ class MultiHighchartHistogram extends Component {
 
 
     initailChart = () => {
-        console.log('indexc==>',this.props.index)
+        // console.log('indexc==>',this.props.index)
         // if(this.props.index && this.props.data){
         //     Highcharts.chart("multiHighchartHistogram"+this.props.index,this.props.data)
         // }

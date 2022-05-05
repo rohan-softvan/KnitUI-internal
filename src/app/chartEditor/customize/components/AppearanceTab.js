@@ -11,6 +11,11 @@ import Divider from '@material-ui/core/Divider';
 import Slider from '@material-ui/core/Slider';
 import Tooltip from '@material-ui/core/Tooltip';
 import Button from "@material-ui/core/Button";
+import CustomColorPicker from "./CustomColorPicker";
+import Popover from "@material-ui/core/Popover";
+import {setRecentColorsForColorPicker} from "../../../redux/slice/ColorPickerSlice";
+import {useDispatch, useSelector} from "react-redux";
+import {setGraphConfig} from "../../../redux/slice/ChartEditorSlice";
 
 function ValueLabelComponent(props) {
     const {children, open, value} = props;
@@ -23,8 +28,19 @@ function ValueLabelComponent(props) {
 }
 
 export default function AppearanceTab({expanedState, setTabState}) {
+    const dispatch = useDispatch();
+    let graphConfig = useSelector((state) => state.chart.graphConfig);
+    let colorPickerColors = useSelector((state) => state.colorPicker);
+
     const [chartWidth, setChartWidth] = React.useState(500);
     const [chartHeight, setChartHeight] = React.useState(500);
+
+    const [usedColors, setUsedColor] = React.useState([])
+    const [currentColor, setCurrentColor] = React.useState('')
+    const [titleColorPickerAnchorEl, setTitleColorPickerAnchorEl] = React.useState(null);
+    const [subTitleColorPickerAnchorEl, setSubTitleColorPickerAnchorEl] = React.useState(null);
+    const [titleColorPickerOpen, setTitleColorPickerOpen] = React.useState(false)
+    const [subTitleColorPickerOpen, setSubTitleColorPickerOpen] = React.useState(false)
 
     const handleChangeWidth = (event, newValue) => {
         setChartWidth(newValue);
@@ -39,6 +55,48 @@ export default function AppearanceTab({expanedState, setTabState}) {
         if (type === 'height') {
             setChartHeight(500);
         }
+    }
+
+    const handlePopoverClick = (event, component) => {
+        if (component === "title") {
+            setTitleColorPickerAnchorEl(event.currentTarget);
+            setTitleColorPickerOpen(true)
+        }
+        if (component === "subtitle") {
+            setSubTitleColorPickerAnchorEl(event.currentTarget);
+            setSubTitleColorPickerOpen(true)
+        }
+    };
+
+    const titleColorPickerId = 'title-color-picker';
+    const subTitleColorPickerId = 'subtitle-color-picker';
+
+    const setColorForGraph = (component, color) => {
+        let newConfig = JSON.parse(JSON.stringify(graphConfig));
+        let style = newConfig[component]['style'] || {};
+        style["color"] = color;
+        newConfig[component]['style'] = style;
+        dispatch(setGraphConfig(newConfig));
+    }
+
+    const handleClose = (component) => {
+        if (component === "title") {
+            setTitleColorPickerAnchorEl(null);
+            setTitleColorPickerOpen(false)
+        }
+        if (component === "subtitle") {
+            setSubTitleColorPickerAnchorEl(null);
+            setSubTitleColorPickerOpen(false)
+        }
+        usedColors.push(currentColor);
+        console.log("usedColors", usedColors)
+        dispatch(setRecentColorsForColorPicker({type: component, color: currentColor}));
+        setColorForGraph(component, currentColor)
+    };
+
+    const handleCallback = (childData) => {
+        setCurrentColor(childData)
+        console.log("childData: ", childData)
     }
 
     return (
@@ -67,6 +125,30 @@ export default function AppearanceTab({expanedState, setTabState}) {
                                     <div className={'colors'} style={{'backgroundColor': '#E5E8FB'}}></div>
                                     <div className={'colors'} style={{'backgroundColor': '#E5FBF2'}}></div>
                                 </div>
+                                <button type="button" className={'colorSelectMenu'}>
+                                    Auto
+                                </button>
+                                <Popover
+                                    id={titleColorPickerId}
+                                    open={titleColorPickerOpen}
+                                    anchorEl={titleColorPickerAnchorEl}
+                                    onClose={() => handleClose("title")}
+                                    anchorOrigin={{
+                                        vertical: 'bottom',
+                                        horizontal: 'center',
+                                    }}
+                                    transformOrigin={{
+                                        vertical: 'top',
+                                        horizontal: 'center',
+                                    }}
+                                    style={{height: 'auto'}}
+                                >
+                                    <CustomColorPicker
+                                        component={"title"}
+                                        parentCallback={handleCallback}
+                                        usedColors={colorPickerColors["title"]}
+                                    />
+                                </Popover>
                             </div>
                         </div>
                     </Grid>
@@ -87,6 +169,10 @@ export default function AppearanceTab({expanedState, setTabState}) {
                                         <div className={'colors'} style={{'backgroundColor': '#E5E8FB'}}></div>
                                         <div className={'colors'} style={{'backgroundColor': '#E5FBF2'}}></div>
                                     </div>
+                                    <button type="button" className={'colorSelectMenu'}
+                                            onClick={(e) => handlePopoverClick(e, "title")}>
+                                        Auto
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -98,7 +184,7 @@ export default function AppearanceTab({expanedState, setTabState}) {
                             <div className={'seriesValueData'}>
                                 <FormHelperText id="title-text">Border width</FormHelperText>
                                 <div className={'appereanceBox'}>
-                                    <Typography style={{'color': '#28B5A6'}}>1px</Typography>
+                                    <Typography style={{'color': '#28B5A6','cursor':'pointer'}}>1px</Typography>
                                     <Divider orientation="vertical" variant="middle" flexItem className={'bgDivider'}/>
                                     <div className={'widthValue'}>
                                         <Typography className={'widthDecimal'}>2px</Typography>
@@ -116,7 +202,7 @@ export default function AppearanceTab({expanedState, setTabState}) {
                             <div className={'seriesValueData'}>
                                 <FormHelperText>Rounded cornors</FormHelperText>
                                 <div className={'appereanceBox'}>
-                                    <Typography style={{'color': '#28B5A6'}}>1px</Typography>
+                                    <Typography style={{'color': '#28B5A6','cursor':'pointer'}}>1px</Typography>
                                     <Divider orientation="vertical" variant="middle" flexItem className={'bgDivider'}/>
                                     <div className={'widthValue'}>
                                         <Typography className={'widthDecimal'}>2px</Typography>

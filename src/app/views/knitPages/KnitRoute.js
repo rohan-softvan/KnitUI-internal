@@ -95,19 +95,32 @@ const KnitRoutes = [
 
 ];
 //?tab=1
-export default function KnitRoute() {
+export default function KnitRoute(props) {
   return (
     <Switch>
       <Redirect exact={true} from="/knit" to="/knit/projects" />
-      {console.log('knitRouter==>',KnitRoutes)}
-      {KnitRoutes.map(({ path, Component }, key) => (
-        <PrivateRoute
-          key={key}
-          path={path}
-          roles={[roleEnum.KNIT]}
-          component={Component}
-        />
-      ))}
+      {window.location.href.split('/')[5] ?
+          localStorage.getItem("projectIdList").includes(window.location.href.split('/')[5]) ?
+              KnitRoutes.map(({ path, Component }, key) => (
+                  <PrivateRoute
+                      key={key}
+                      path={path}
+                      roles={[roleEnum.KNIT]}
+                      component={Component}
+                  />
+              ))
+              :
+              window.location.href="/knit/projects"
+          :
+                KnitRoutes.map(({ path, Component }, key) => (
+                <PrivateRoute
+                key={key}
+                path={path}
+                roles={[roleEnum.KNIT]}
+                component={Component}
+                />
+                ))
+      }
     </Switch>
   );
 }

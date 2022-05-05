@@ -7,6 +7,11 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Series from '../../../../assets/images/charteditor/Series.png';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import SelectComponent from "../../../components/select/Select";
+import Divider from "@material-ui/core/Divider";
+import Popover from "@material-ui/core/Popover";
+import CustomColorPicker from "./CustomColorPicker";
+import Paper from '@material-ui/core/Paper';
+import { styled } from '@material-ui/core/styles';
 
 let seriesMenu = [
     {
@@ -40,6 +45,27 @@ let legend = [
 ];
 
 export default function SeriesTab({ expanedState, setTabState }) {
+    const [usedColors,setUsedColor] = React.useState([])
+    const [anchorEl, setAnchorEl] = React.useState(null);
+    const [open,setOpen] = React.useState(false)
+    const [currentColor, setCurrentColor]= React.useState('')
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+        setOpen(true)
+    };
+
+    const id = 'transitions-popper';
+
+    const handleClose = () => {
+        setAnchorEl(null);
+        setOpen(false)
+        usedColors.push(currentColor)
+    };
+
+    const handleCallback = (childData) =>{
+        setCurrentColor(childData)
+    }
+
     return (
         <Accordion expanded={expanedState} onChange={(event, expandedState) => setTabState('series', expandedState)}>
             <AccordionSummary
@@ -66,6 +92,39 @@ export default function SeriesTab({ expanedState, setTabState }) {
                         <div className={'datalabelGrid'}>
                             <div className={'leftGrid'}>
                                 <FormHelperText id="title-text">Series color</FormHelperText>
+                                <div className={'colorPiker'}
+                                     style={{
+                                         width: 'calc(100% - 30px)'
+                                     }}>
+                                    <div className={'fixColors'}>
+                                        <div className={'ActiveColor'} style={{'backgroundColor':'#28B5A6'}}></div>
+                                        <Divider flexItem orientation="vertical" sx={{ mx: 0.5, my: 1 }} />
+                                        <div className={'ColorVariation'} style={{'backgroundColor':'#000000'}}></div>
+                                        <div className={'ColorVariation'} style={{'backgroundColor':'#FCD364'}}></div>
+                                    </div>
+                                    <div className={'colorDropdown'}>
+                                        <button aria-describedby={id} type="button" onClick={handleClick}>
+                                            Auto
+                                        </button>
+                                        <Popover
+                                            id={id}
+                                            open={open}
+                                            anchorEl={anchorEl}
+                                            onClose={handleClose}
+                                            anchorOrigin={{
+                                                vertical: 'bottom',
+                                                horizontal: 'center',
+                                            }}
+                                            transformOrigin={{
+                                                vertical: 'top',
+                                                horizontal: 'center',
+                                            }}
+                                            style={{height:'auto'}}
+                                        >
+                                            <CustomColorPicker parentCallback = {handleCallback} usedColors={usedColors}></CustomColorPicker>
+                                        </Popover>
+                                    </div>
+                                </div>
                             </div>
                             <div className={'leftGrid'}>
                                 <FormHelperText id="title-text">Show in legend</FormHelperText>

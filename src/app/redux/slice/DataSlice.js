@@ -7,6 +7,7 @@ import {
   generateGraphData,
   generateMultiBar,
 } from "../actions/DataAction";
+import ThemeColor from "../../config/ThemeColorConfig";
 
 let filterUserList = [];
 let jsonUserResponse = [];
@@ -125,7 +126,7 @@ export const dataSlice = createSlice({
         (el) => el.questionId == action.payload.questionId && el.numericQuestionId == action.payload.numericId
       );
       for(let i in state.questionCardListBox){
-          if(state.questionCardListBox[i].questionId == action.payload.questionId && 
+          if(state.questionCardListBox[i].questionId == action.payload.questionId &&
                 state.questionCardListBox[i].numericQuestionId == action.payload.numericId){
             state.questionCardListBox[i].questionChoice = dataList[0].questionChoice;
           }
@@ -142,12 +143,13 @@ export const dataSlice = createSlice({
       state.originalQuestionData= state.questionCardListBox
       // dataSlice.caseReducers.changeApplyButtonStatus(state,{payload:false})
       ORIGINAL_QUESTION_DATA=state.questionCardListBox
-      // localStorage.setItem('allListData', JSON.stristate.questionCardListBox)
+      // localStorage.removeItem('allListData')
+      // localStorage.setItem('allListData', JSON.stringify(state.questionCardListBox))
       // setTimeout(() => {
       //   state.applyButtonDisabledStatus=false
       // }, 30000);
     },
-    
+
     updateTableData: (state, action) => {
       for(let i in state.tableRowData){
           if(action.payload.id == state.tableRowData[i].id){
@@ -265,35 +267,40 @@ export const dataSlice = createSlice({
       localStorage.setItem('tabularData',JSON.stringify(rowData))
     },
 
- 
+
 
     filterData: (state, action) => {
       let userIdList = [];
       let data = action.payload;
       FILTRED_DATA=[]
       IS_FILTER_APPLIED  = false;
+      localStorage.removeItem("state")
       if(!localStorage.getItem("allListData") && state.dataView === 'list'){
-        localStorage.setItem('allListData',JSON.stringify(state.questionCardListBox))
+        try {
+          localStorage.setItem('allListData',JSON.stringify(state.questionCardListBox))
+        } catch (error) {
+          console.log('Error in local storage', error);
+        }
       }
-   
+
       state.questionCardListBox=JSON.parse(localStorage.getItem("allListData"))
       state.tableRowData=JSON.parse(localStorage.getItem("tabularData"))
       for (let i in data) {
         let keysList = Object.keys(data[i]);
         if(keysList.length > 0 ){
-          
+
           if (keysList.includes("is_favourite")) {
             filterbyFavourite(state, { favouriteValue: data[i]["is_favourite"] });
-   
+
            }
            if (keysList.includes("is_video_themes")) {
-             
+
              if (data[i].type == "THEMES") {
                filterByTheme(state,{
                  themeId: data[i]["filter_request"],
                  type: "THEMES",
                });
-             } 
+             }
              if (data[i].type == "TAGS") {
                filterByTheme(state,{
                  tagId: data[i]["filter_request"],
@@ -324,7 +331,7 @@ export const dataSlice = createSlice({
            }
            IS_FILTER_APPLIED  = true;
         }
-      
+
       }
       dataSlice.caseReducers.setAllData(state, FILTRED_DATA);
     },
@@ -385,7 +392,7 @@ export const dataSlice = createSlice({
       pageNo=action.payload.pageNo
       skip = size * (pageNo - 1)
       next = size * pageNo
-      
+
       for(let i in state.allSearchDataList){
         let filteredList=state.allSearchDataList[i].user_response_dtls.filter(el => el.numeric_question_id == action.payload.numericQuestionId)
         if(filteredList.length > 0){
@@ -548,12 +555,15 @@ const getChildrenUserId = (userIdList, childList) => {
       Array.isArray(childList[i].children) &&
       childList[i].children.length > 0
     ) {
-      getChildrenUserId(userIdList, childList);
+      getChildrenUserId(userIdList, childList[i].children);
     } else {
-      var query =
-        childList[i].userResponseId &&
-        childList[i].userResponseId.filter((c) => userIdList.includes(c));
-      childList[i].userResponseId = query;
+      var query=[];
+      query = childList[i].userResponseId && childList[i].userResponseId.filter((c) => userIdList.includes(c));
+      // childList[i] = childList[i].concat({ userResponseId: query});
+      // childList[i] = childList[i].concat({ loc: query.length : 0 });
+
+      // childList[i]["userResponseId"]=query ? query :[]
+      childList[i].userResponseId = query ? query : [];
       childList[i].loc = Array.isArray(query) ? query.length : 0;
       // return childList;
     }
@@ -564,6 +574,7 @@ const setSunbrustChartData = (userIdList, filterResponseList) => {
   if (filterResponseList.chartData) {
     let childList = [];
     for (let i in filterResponseList.chartData.children) {
+      console.log('childList==>',filterResponseList.chartData.children)
       if (filterResponseList.chartData.children[i].children) {
         getChildrenUserId(
           userIdList,
@@ -728,7 +739,7 @@ function filterByResponseToQuestionDataTable (state, action) {
     for (let i in state.setAllUserResponse.video_dtls) {
       for (let j in action.filter_request) {
         if (action.is_sentiment) {
-          if (!userIdList.includes(state.setAllUserResponse.video_dtls[i]._id.$oid) && 
+          if (!userIdList.includes(state.setAllUserResponse.video_dtls[i]._id.$oid) &&
               state.setAllUserResponse.video_dtls[i].video_feature_id == action.question_id &&
               state.setAllUserResponse.video_dtls[i].sentiment_type == action.filter_request[j]) {
                 userIdList.push(state.setAllUserResponse.video_dtls[i]._id.$oid);
@@ -777,7 +788,7 @@ if(IS_FILTER_APPLIED && FILTRED_DATA_SIZE === 0){
   }else{
     FILTRED_DATA = localUserList;
   }
-  
+
   let updatedList = [];
   state.totalCount = FILTRED_DATA.length;
   //return userList;
@@ -861,7 +872,7 @@ function  filterByResponseToQuestion (state, action){
             newList.push(key1);
           }
         }
-      }  
+      }
       if(IS_FILTER_APPLIED && FILTRED_DATA_SIZE === 0){
         FILTRED_DATA = FILTRED_DATA
       }
@@ -871,7 +882,7 @@ function  filterByResponseToQuestion (state, action){
       }else{
         FILTRED_DATA = newList;
       }
-    
+
     } else {
       let localUserList=[]
       for (let i in filterUserList[0].filterQuestionChoice) {
@@ -932,7 +943,7 @@ function  filterByResponseToQuestion (state, action){
             state.setAllUserResponse.video_dtls[i].sentiment_type ==
               action.filter_request[j]
           ) {
-        
+
             localUserList.push(
               state.setAllUserResponse.video_dtls[i]._id.$oid
             );
