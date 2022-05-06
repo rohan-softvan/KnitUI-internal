@@ -13,7 +13,11 @@ function CustomColorPicker(props) {
   console.log("usedColors: ", props.usedColors)
   const selectedColor = props.component === "legend" ?
       graphConfig[props.component].itemStyle.color :
-      graphConfig[props.component].style.color
+      props.component === "backgroundColor" ?
+          graphConfig["chart"]["backgroundColor"] :
+          props.component === "borderColor" ?
+              graphConfig["chart"]["borderColor"] :
+              graphConfig[props.component].style.color
 
   const [color, setColor] = useState(selectedColor || "#000");
   const hexColor = useMemo(() => {

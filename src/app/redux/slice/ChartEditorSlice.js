@@ -4,7 +4,7 @@ import Highcharts from "highcharts";
 export const chartEditorSlice = createSlice({
   name: 'chartEditorSlice',
   initialState: {
-    graphConfig: {}
+    graphConfig: {},
   },
   reducers: {
     setGraphConfig: (state, action) => {

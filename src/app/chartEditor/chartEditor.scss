@@ -504,6 +504,24 @@
     align-self: center;
     margin: 0px 8px;
 }
+.chartBorderLine{
+    border: 1px solid #E8E8E8;
+    border-radius:4px !important;
+    width:calc(100% - 15px) !important;
+    padding:2px;
+    button{
+        border:0px !important;
+        width:auto !important;
+        min-width:auto !important;
+        text-transform:lowercase;
+        margin:4px 10px !important;
+        font-family: 'Rubik' !important;
+    }
+    .Mui-selected{
+        border: 0px !important;
+        font-weight: 400 !important;
+    }
+}
 .chartSlider{
     .MuiSlider-root{
         width: calc(100% - 20px);
@@ -663,7 +681,7 @@
     cursor: nw-resize;
 }
 
-  /*NOSELECT*/
+/*NOSELECT*/
 
 .chartResize {
     border: 2px solid #000;
@@ -986,13 +1004,15 @@
         }
     }
     .exportOptions{
+        text-align: center;
         img{
-            margin-top: 33px;
+            margin: 33px 0px 10px auto;
             height: 100px;
         }
         .card-title{
             font-size: 12px;
             margin-bottom: 15px;
+            text-align: center;
         }
     }
 }

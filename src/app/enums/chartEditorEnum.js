@@ -5,6 +5,12 @@ export const chartEditorEnum = {
       color: "#ff0000",
     },
   },
+  chartDefaultProps: {
+    backgroundColor: "#ffffff",
+    borderWidth: 1,
+    borderColor: "#000",
+    borderRadius: 3,
+  },
   subtitleDefaultProps: {
     text: 'Chart subtitle',
     style: {

@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo, useRef, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import Highcharts from "highcharts";
 import * as WebDataRocksReact from "react-webdatarocks";
 import 'webdatarocks/webdatarocks.css'
@@ -10,6 +10,8 @@ import OptionsTab from './OptionsTab';
 import {useDispatch, useSelector} from "react-redux";
 import {setGraphConfig} from "../redux/slice/ChartEditorSlice";
 import {chartEditorEnum} from "../enums";
+import {setWebdatarocksRef} from "../redux/slice/webdatarocksSlice";
+import {store} from "../redux/store";
 
 
 const PivotTable = () => {
@@ -74,6 +76,7 @@ const PivotTable = () => {
 
   const reportComplete = () => {
     calculateDynamicWidth();
+
     // setTimeout(() => {
     //myRef && myRef.webdatarocks && createChart();
     // }, 500)
@@ -551,25 +554,26 @@ const PivotTable = () => {
   useEffect(() => {
     myRef && myRef.webdatarocks && myRef.webdatarocks.on("reportcomplete", function () {
       console.log("reportcomplete")
+      dispatch(setWebdatarocksRef({ref: myRef, type: "pie"}));
       // setActiveTab(0)
       myRef && myRef.webdatarocks && handleReportFieldModal(activeTab);
       // setActiveTab(0)
-      myRef && myRef.webdatarocks && createChart();
+      // myRef && myRef.webdatarocks && createChart();
     });
   })
 
-  useEffect(() => {
-    console.log("graphConfig ===>", graphConfig, Highcharts)
-    if (JSON.stringify(graphConfig) != '{}') {
-      // Highcharts.chart("highchartContainer",function (chart) {
-      //     window.charts[chart.options.chart.renderTo] = chart;
-      // });
-      let newGraphConfig = JSON.parse(JSON.stringify(graphConfig));
-      console.log("graphConfig ===> new", newGraphConfig, Highcharts)
-      Highcharts.chart("highchartsContainer", newGraphConfig);
-    }
-
-  }, [graphConfig])
+  // useEffect(() => {
+  //   console.log("graphConfig ===>", graphConfig, Highcharts)
+  //   if (JSON.stringify(graphConfig) != '{}') {
+  //     // Highcharts.chart("highchartContainer",function (chart) {
+  //     //     window.charts[chart.options.chart.renderTo] = chart;
+  //     // });
+  //     let newGraphConfig = JSON.parse(JSON.stringify(graphConfig));
+  //     console.log("graphConfig ===> new", newGraphConfig, Highcharts)
+  //     Highcharts.chart("highchartsContainer", newGraphConfig);
+  //   }
+  //
+  // }, [graphConfig])
 
   useEffect(
       () => {
@@ -605,6 +609,11 @@ const PivotTable = () => {
       }
       // [value]
   );
+  // let webdatarocksUpdated = store.getState().webdatarocks;
+  // console.log("webdatarocksUpdated::: ", webdatarocksUpdated)
+  // useEffect(() => {
+  //   console.log("webdatarocksUpdated in useEffect", webdatarocksUpdated)
+  // }, [webdatarocksUpdated])
 
   const handleReportFieldModal = (activeTab) => {
     console.log('active Tab==>>>', activeTab)

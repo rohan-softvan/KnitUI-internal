@@ -7,6 +7,8 @@ export const ColorPickerSlice = createSlice({
     subtitle: [],
     series: [],
     legend: [],
+    backgroundColor: [],
+    borderColor: []
   },
   reducers: {
     setRecentColorsForColorPicker: (state, {payload}) => {

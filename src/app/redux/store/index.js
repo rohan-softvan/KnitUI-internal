@@ -44,7 +44,7 @@ export const store = createStore(
 );
 
 store.subscribe(() => {
-  saveToLocalStorage(store.getState());
+  // saveToLocalStorage(store.getState());
 });
 
 // export const persistor = persistStore(store);
