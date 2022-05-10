@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from "react";
+import React, {useEffect, useMemo, useRef, useState} from "react";
 import Highcharts from "highcharts";
 import * as WebDataRocksReact from "react-webdatarocks";
 import 'webdatarocks/webdatarocks.css'
@@ -10,8 +10,6 @@ import OptionsTab from './OptionsTab';
 import {useDispatch, useSelector} from "react-redux";
 import {setGraphConfig} from "../redux/slice/ChartEditorSlice";
 import {chartEditorEnum} from "../enums";
-import {setWebdatarocksRef} from "../redux/slice/webdatarocksSlice";
-import {store} from "../redux/store";
 
 
 const PivotTable = () => {
@@ -76,7 +74,6 @@ const PivotTable = () => {
 
   const reportComplete = () => {
     calculateDynamicWidth();
-
     // setTimeout(() => {
     //myRef && myRef.webdatarocks && createChart();
     // }, 500)
@@ -112,8 +109,32 @@ const PivotTable = () => {
       config.subtitle = chartEditorEnum.subtitleDefaultProps
     }
     config.exporting = {enabled: false}
+    config.xAxis = {
+      gridLineColor: chartEditorEnum.xAxisDefaultProps.gridLineColor,
+      gridLineWidth: chartEditorEnum.xAxisDefaultProps.gridLineWidth,
+      labels: chartEditorEnum.xAxisDefaultProps.labels,
+      ...config.xAxis
+    }
+    config.yAxis = {
+      gridLineColor: chartEditorEnum.yAxisDefaultProps.gridLineColor,
+      gridLineWidth: chartEditorEnum.yAxisDefaultProps.gridLineWidth,
+      labels: chartEditorEnum.yAxisDefaultProps.labels,
+      ...config.yAxis
+    }
+    config.xAxis.title = {...chartEditorEnum.xAxisDefaultProps.title, ...config.xAxis.title}
+    config.yAxis.title = {...chartEditorEnum.yAxisDefaultProps.title, ...config.yAxis.title}
+
+    if (!("style" in config.xAxis.title)) {
+      config.xAxis.title.style = chartEditorEnum.xAxisDefaultProps.style
+    }
+    if (!("style" in config.yAxis.title)) {
+      config.yAxis.title.style = chartEditorEnum.yAxisDefaultProps.style
+    }
     if (!("legend" in config)) {
       config.legend = chartEditorEnum.legendsDefaultProps
+    }
+    if (!("plotOptions" in config)) {
+      config.plotOptions = chartEditorEnum.plotOptionsDefaultProps;
     }
     console.log("setDefaultGraphProperties final", config)
     return config;
@@ -129,9 +150,7 @@ const PivotTable = () => {
         function (data) {
           console.log("graph config >>  data:: ", data);
           console.log("graphConfig redux >>  data:: ", graphConfig, Object.values(graphConfig).length);
-          let graphData = Object.values(graphConfig).length !== 0 ? setDefaultGraphProperties(graphConfig) : setDefaultGraphProperties(data);
-          console.log("graphData ", graphData)
-          dispatch(setGraphConfig(graphData))
+
           // data.chart.height = config.height;
           // data.chart.reflow = config.reflow;
 
@@ -236,12 +255,18 @@ const PivotTable = () => {
           //         }
           //     }
           // };
-          console.log('graphConfig==>', graphConfig)
-          Highcharts.chart("highchartsContainer", graphConfig);
+          // let newData=graphData
+          let graphData = Object.values(graphConfig).length !== 0 ? setDefaultGraphProperties(graphConfig) : setDefaultGraphProperties(data);
+          console.log('graphConfig==>', graphData)
+
+          console.log("graphData ", graphData)
+          dispatch(setGraphConfig(graphData))
+          // Highcharts.chart("highchartsContainer", graphData ? graphData : data);
         },
         function (data) {
           console.log('graphConfig==>', graphConfig)
-          Highcharts.chart("highchartsContainer", graphConfig);
+          dispatch(setGraphConfig(data))
+          // Highcharts.chart("highchartsContainer", graphConfig);
           // Highcharts.reflow();
         }
     );
@@ -554,26 +579,25 @@ const PivotTable = () => {
   useEffect(() => {
     myRef && myRef.webdatarocks && myRef.webdatarocks.on("reportcomplete", function () {
       console.log("reportcomplete")
-      dispatch(setWebdatarocksRef({ref: myRef, type: "pie"}));
       // setActiveTab(0)
       myRef && myRef.webdatarocks && handleReportFieldModal(activeTab);
       // setActiveTab(0)
-      // myRef && myRef.webdatarocks && createChart();
+      myRef && myRef.webdatarocks && createChart();
     });
   })
 
-  // useEffect(() => {
-  //   console.log("graphConfig ===>", graphConfig, Highcharts)
-  //   if (JSON.stringify(graphConfig) != '{}') {
-  //     // Highcharts.chart("highchartContainer",function (chart) {
-  //     //     window.charts[chart.options.chart.renderTo] = chart;
-  //     // });
-  //     let newGraphConfig = JSON.parse(JSON.stringify(graphConfig));
-  //     console.log("graphConfig ===> new", newGraphConfig, Highcharts)
-  //     Highcharts.chart("highchartsContainer", newGraphConfig);
-  //   }
-  //
-  // }, [graphConfig])
+  useEffect(() => {
+    console.log("graphConfig ===>", graphConfig, Highcharts)
+    if (JSON.stringify(graphConfig) != '{}') {
+      // Highcharts.chart("highchartContainer",function (chart) {
+      //     window.charts[chart.options.chart.renderTo] = chart;
+      // });
+      let newGraphConfig = JSON.parse(JSON.stringify(graphConfig));
+      console.log("graphConfig ===> new", newGraphConfig, Highcharts)
+      Highcharts.chart("highchartsContainer", newGraphConfig);
+    }
+
+  }, [graphConfig])
 
   useEffect(
       () => {
@@ -609,11 +633,6 @@ const PivotTable = () => {
       }
       // [value]
   );
-  // let webdatarocksUpdated = store.getState().webdatarocks;
-  // console.log("webdatarocksUpdated::: ", webdatarocksUpdated)
-  // useEffect(() => {
-  //   console.log("webdatarocksUpdated in useEffect", webdatarocksUpdated)
-  // }, [webdatarocksUpdated])
 
   const handleReportFieldModal = (activeTab) => {
     console.log('active Tab==>>>', activeTab)

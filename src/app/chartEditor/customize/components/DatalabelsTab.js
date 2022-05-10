@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Grid, Typography } from "@material-ui/core";
+import {Grid, Typography} from "@material-ui/core";
 import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
@@ -13,13 +13,16 @@ import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
 import FormatBoldIcon from '@material-ui/icons/FormatBold';
 import FormatItalicIcon from '@material-ui/icons/FormatItalic';
 import Paper from '@material-ui/core/Paper';
-import { styled } from '@material-ui/core/styles';
+import {styled} from '@material-ui/core/styles';
 import Divider from "@material-ui/core/Divider";
 import FormatAlignLeftIcon from "@material-ui/icons/FormatAlignLeft";
 import FormatAlignCenterIcon from "@material-ui/icons/FormatAlignCenter";
 import FormatAlignRightIcon from "@material-ui/icons/FormatAlignRight";
 import Popover from "@material-ui/core/Popover";
 import CustomColorPicker from "./CustomColorPicker";
+import {setGraphConfig} from "../../../redux/slice/ChartEditorSlice";
+import {useDispatch, useSelector} from "react-redux";
+import {setRecentColorsForColorPicker} from "../../../redux/slice/ColorPickerSlice";
 
 let fontsize = [
     {
@@ -69,23 +72,23 @@ let fontFamily = [
 
 let position = [
     {
-        title: "Top",
-        value: "top",
+        title: "Left",
+        value: "left",
         key: 1,
     },
     {
-        title: "Middle",
-        value: "middle",
+        title: "Center",
+        value: "center",
         key: 2,
     },
     {
-        title: "Bottom",
-        value: "bottom",
+        title: "Right",
+        value: "right",
         key: 3,
     },
 ];
 
-const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
+const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({theme}) => ({
     '& .MuiToggleButtonGroup-grouped': {
         margin: theme.spacing(0.5),
         border: 0,
@@ -102,68 +105,111 @@ const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
 }));
 
 export default function DatalabelsTab({expanedState, setTabState}) {
-
-    const [selectedQuestions, setSelectedQuestions] = React.useState([]);
-    const switchlabel = { inputProps: { 'aria-label': 'Switch demo' } };
-
+    const dispatch = useDispatch();
+    let graphConfig = useSelector((state) => state.chart.graphConfig);
+    let colorPickerColors = useSelector((state) => state.colorPicker);
     const [alignment, setAlignment] = React.useState('center');
-    const [formats, setFormats] = React.useState(() => ['']);
-    const [usedColors,setUsedColor] = React.useState([])
+    const [formats, setFormats] = React.useState(() => ['bold']);
     const [anchorEl, setAnchorEl] = React.useState(null);
-    const [open,setOpen] = React.useState(false)
-    const [currentColor, setCurrentColor]= React.useState('')
-    const handleFormat = (
-        event,
-        newFormats,
-    ) => {
+    const [open, setOpen] = React.useState(false)
+    const [currentColor, setCurrentColor] = React.useState('')
+
+    const [dataLabelPosition, setDataLabelPosition] = React.useState("left")
+    const [selectedFontFamily, setSelectedFontFamily] = React.useState('rubik_default')
+    const [selectedFontSize, setSelectedFontSize] = React.useState('auto')
+
+    const id = 'data-label-color-picker';
+
+    const handleTitleFormatting = (event, newFormats,) => {
+        console.log("newFormats", newFormats);
         setFormats(newFormats);
+        let newConfig = JSON.parse(JSON.stringify(graphConfig));
+        let dataLabelsStyle = newConfig['plotOptions']['series']['dataLabels']['style'];
+        dataLabelsStyle["fontWeight"] = newFormats.includes("bold") ? "bold" : "normal";
+        dataLabelsStyle["fontStyle"] = newFormats.includes("italic") ? "italic" : "normal";
+        newConfig['plotOptions']['series']['dataLabels']['style'] = dataLabelsStyle;
+        dispatch(setGraphConfig(newConfig));
     };
 
-    const handleAlignment = (
-        event,
-        newAlignment,
-    ) => {
+    const handleTitleAlignment = (event, newAlignment) => {
+        console.log("newAlignment", newAlignment);
         setAlignment(newAlignment);
+        let newConfig = JSON.parse(JSON.stringify(graphConfig));
+        let dataLabels = newConfig['plotOptions']['series']['dataLabels'];
+        dataLabels["align"] = newAlignment;
+        newConfig['plotOptions']['series']['dataLabels'] = dataLabels;
+        dispatch(setGraphConfig(newConfig));
     };
-
-    React.useEffect(() => {
-        // console.log("selectedQuestions:: ", selectedQuestions);
-    }, [selectedQuestions])
-
-    const [titleFont, settitleFont] = React.useState('');
-
-    const handleChange = (event) => {
-        settitleFont(event.target.value);
-    };
-
-
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
         setOpen(true)
     };
 
-    const id = 'transitions-popper';
+    const setDataLabelColor = (color) => {
+        let newConfig = JSON.parse(JSON.stringify(graphConfig));
+        newConfig['plotOptions']['series']['dataLabels']['color'] = color;
+        dispatch(setGraphConfig(newConfig));
+    }
 
     const handleClose = () => {
         setAnchorEl(null);
         setOpen(false)
-        usedColors.push(currentColor)
+        dispatch(setRecentColorsForColorPicker({type: "dataLabelsColor", color: currentColor}));
+        setDataLabelColor(currentColor);
     };
 
-    const handleCallback = (childData) =>{
+    const handleCallback = (childData) => {
         setCurrentColor(childData)
-
     }
-    
-    return(
+
+    const handleChartDataLabelVisible = (event) => {
+        const {checked} = event.target;
+        let newConfig = JSON.parse(JSON.stringify(graphConfig));
+        newConfig.plotOptions.series.dataLabels.enabled = checked
+        console.log("Checked Console for datalabel", newConfig)
+        dispatch(setGraphConfig(newConfig));
+    }
+
+    const handleDataLabelPositionChange = (event) => {
+        const {value} = event.target;
+        setDataLabelPosition(value);
+        let newConfig = JSON.parse(JSON.stringify(graphConfig));
+        // if (!("plotOptions" in newConfig)) {
+        //     newConfig['plotOptions'] = {...chartEditorEnum.plotOptionsDefaultProps}
+        // }
+        newConfig.plotOptions.series.dataLabels.align = value
+        dispatch(setGraphConfig(newConfig));
+    }
+
+    const handleTitleFontFamilyChange = (event) => {
+        const {value} = event.target;
+        setSelectedFontFamily(value);
+        let newConfig = JSON.parse(JSON.stringify(graphConfig));
+        let dataLabelsStyle = newConfig['plotOptions']['series']['dataLabels']['style'];
+        dataLabelsStyle["fontFamily"] = fontFamily.find(e => e.value === value).title
+        newConfig['plotOptions']['series']['dataLabels']['style'] = dataLabelsStyle;
+        dispatch(setGraphConfig(newConfig));
+    }
+
+    const handleTitleFontSizeChange = (event) => {
+        const {value} = event.target;
+        setSelectedFontSize(value);
+        let newConfig = JSON.parse(JSON.stringify(graphConfig));
+        let dataLabelsStyle = newConfig['plotOptions']['series']['dataLabels']['style'];
+        dataLabelsStyle["fontSize"] = value === "auto" ? "11px" : value + 'px'
+        newConfig['plotOptions']['series']['dataLabels']['style'] = dataLabelsStyle;
+        dispatch(setGraphConfig(newConfig));
+    }
+
+    return (
         <Accordion expanded={expanedState} onChange={(event, expandedState) => setTabState('dataLables', expandedState)}>
             <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
+                expandIcon={<ExpandMoreIcon/>}
                 aria-controls="panel2a-content"
                 id="panel2a-header"
             >
-                <Typography className='AccordTitle'><img src={Datalabels} />Data labels</Typography>
+                <Typography className='AccordTitle'><img alt={"Data labels"} src={Datalabels}/>Data labels</Typography>
             </AccordionSummary>
             <AccordionDetails>
                 <Grid container spacing={2} className={'alignCenter'}>
@@ -171,7 +217,9 @@ export default function DatalabelsTab({expanedState, setTabState}) {
                         <Typography>Show labels</Typography>
                     </Grid>
                     <Grid item xs={6} className={'SwitchIcon'}>
-                        <Switch {...switchlabel} defaultChecked />
+                        <Switch
+                            checked={graphConfig.plotOptions.series.dataLabels.enabled}
+                            onChange={handleChartDataLabelVisible}/>
                     </Grid>
                 </Grid>
 
@@ -179,8 +227,12 @@ export default function DatalabelsTab({expanedState, setTabState}) {
                     <Grid item xs={12}>
                         <div className={'customGridTitle'}>
                             <div className={'seriesValueData'}>
-                                <FormHelperText id="title-text">Position</FormHelperText>                               
-                                <SelectComponent menu={position} />
+                                <FormHelperText id="title-text">Position</FormHelperText>
+                                <SelectComponent
+                                    menu={position}
+                                    // menuValue={dataLabelPosition}
+                                    // handleChange={handleDataLabelPositionChange}
+                                />
                             </div>
                         </div>
                     </Grid>
@@ -191,13 +243,21 @@ export default function DatalabelsTab({expanedState, setTabState}) {
                         <div className={'datalabelGrid'}>
                             <div className={'leftGrid'}>
                                 <FormHelperText id="title-text">Title Font</FormHelperText>
-                                <SelectComponent menu={fontFamily} />
+                                <SelectComponent
+                                    menu={fontFamily}
+                                    menuValue={selectedFontFamily}
+                                    handleChange={handleTitleFontFamilyChange}
+                                />
                             </div>
                             <div className={'leftGrid'}>
                                 <FormHelperText id="title-text">Title Font size</FormHelperText>
-                                <SelectComponent menu={fontsize} />
+                                <SelectComponent
+                                    menu={fontsize}
+                                    menuValue={selectedFontSize}
+                                    handleChange={handleTitleFontSizeChange}
+                                />
                             </div>
-                            
+
                         </div>
                     </Grid>
                 </Grid>
@@ -218,7 +278,7 @@ export default function DatalabelsTab({expanedState, setTabState}) {
                                     <StyledToggleButtonGroup
                                         size="small"
                                         value={formats}
-                                        onChange={handleFormat}
+                                        onChange={handleTitleFormatting}
                                         aria-label="text formatting"
                                     >
                                         <ToggleButton value="bold" aria-label="bold">
@@ -235,7 +295,7 @@ export default function DatalabelsTab({expanedState, setTabState}) {
                                         size="small"
                                         value={alignment}
                                         exclusive
-                                        onChange={handleAlignment}
+                                        onChange={handleTitleAlignment}
                                         aria-label="text alignment"
                                     >
                                         <ToggleButton value="left" aria-label="left aligned">
@@ -257,10 +317,18 @@ export default function DatalabelsTab({expanedState, setTabState}) {
                                          width: 'calc(100% - 30px)'
                                      }}>
                                     <div className={'fixColors'}>
-                                        <div className={'ActiveColor'}></div>
-                                        <Divider flexItem orientation="vertical" sx={{ mx: 0.5, my: 1 }} />
-                                        <div className={'ColorVariation'} style={{'backgroundColor':'#000000'}}></div>
-                                        <div className={'ColorVariation'} style={{'backgroundColor':'#FCD364'}}></div>
+                                        <div className={'ActiveColor'} style={{
+                                            'backgroundColor': graphConfig['plotOptions']['series']['dataLabels']['color']
+                                        }}/>
+                                        <Divider flexItem orientation="vertical" sx={{mx: 0.5, my: 1}}/>
+                                        <div className={'ColorVariation'}
+                                             style={{'backgroundColor': '#000000'}}
+                                             onClick={() => setDataLabelColor("#000000")}
+                                        />
+                                        <div className={'ColorVariation'}
+                                             style={{'backgroundColor': '#FCD364'}}
+                                             onClick={() => setDataLabelColor("#FCD364")}
+                                        />
                                     </div>
                                     <div className={'colorDropdown'}>
                                         <button aria-describedby={id} type="button" onClick={handleClick}>
@@ -279,9 +347,13 @@ export default function DatalabelsTab({expanedState, setTabState}) {
                                                 vertical: 'top',
                                                 horizontal: 'center',
                                             }}
-                                            style={{height:'auto'}}
+                                            style={{height: 'auto'}}
                                         >
-                                            <CustomColorPicker parentCallback = {handleCallback} usedColors={usedColors}></CustomColorPicker>
+                                            <CustomColorPicker
+                                                component={"dataLabelsColor"}
+                                                parentCallback={handleCallback}
+                                                usedColors={colorPickerColors["dataLabelsColor"]}
+                                            />
                                         </Popover>
                                     </div>
                                 </div>

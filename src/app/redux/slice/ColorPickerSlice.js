@@ -8,15 +8,21 @@ export const ColorPickerSlice = createSlice({
     series: [],
     legend: [],
     backgroundColor: [],
-    borderColor: []
+    borderColor: [],
+    xAxisTextColor: [],
+    xAxisGridLineColor: [],
+    yAxisTextColor: [],
+    yAxisGridLineColor: [],
+    dataLabelsColor: [],
   },
   reducers: {
     setRecentColorsForColorPicker: (state, {payload}) => {
       console.log('setRecentColorsForColorPicker=> payload: ', payload)
       console.log("state[payload.type] ", JSON.stringify(state))
-      // #TODO dont add duplicate colors
-      // if (!state[payload.type].contains(payload.color))
-      state[payload.type].push(payload.color)
+      //if color dose not exists in the array then only push it to recently used colors
+      if (!state[payload.type].includes(payload.color)) {
+        state[payload.type].push(payload.color)
+      }
     },
   },
 })

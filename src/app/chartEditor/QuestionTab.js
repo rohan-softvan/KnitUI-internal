@@ -54,38 +54,21 @@ export default function QuestionTab() {
     return (
         questionData && questionData.map((item,index)=>  item.questionType === 'MC' ? (
             <div  key={index} className={'accordianChart'}>
-                {/*<Accordion style={selectedQuestions.includes(0) ? { backgroundColor: '#12988A' } : {}}>*/}
-                {/*    <AccordionSummary*/}
-                {/*        expandIcon={<ExpandMoreIcon />}*/}
-                {/*        aria-controls="panel2a-content"*/}
-                {/*        id="panel2a-header"*/}
-                {/*    >*/}
-                {/*        <Typography style={selectedQuestions.includes(0) ? { color: '#fff' } : {}}><Checkbox {...label} onClick={(e) => {*/}
-                {/*            e.target.checked ? setSelectedQuestionsState(0) : setSelectedQuestionsState(0, "remove")*/}
-                {/*        }} /><span>Q.1</span> In which city you grew up?</Typography>*/}
-                {/*    </AccordionSummary>*/}
-                {/*    <AccordionDetails>*/}
-                {/*        <Typography style={selectedQuestions.includes(0) ? { color: '#fff' } : {}}>*/}
-                {/*            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse*/}
-                {/*            malesuada lacus ex, sit amet blandit leo lobortis eget.*/}
-                {/*        </Typography>*/}
-                {/*    </AccordionDetails>*/}
-                {/*</Accordion>*/}
-                <Accordion style={selectedQuestions.includes(1) ? { backgroundColor: '#12988A' } : {}}>
+                <Accordion style={selectedQuestions.includes(item.numericQuestionId) ? { backgroundColor: '#12988A' } : {}}>
                     <AccordionSummary
                         expandIcon={<ExpandMoreIcon />}
                         aria-controls="panel2a-content"
                         id="panel2a-header"
                     >
-                        <Typography style={selectedQuestions.includes(1) ? { color: '#fff' } : {}}><Checkbox {...label} onClick={(e) => {
-                            e.target.checked ? setSelectedQuestionsState(1) : setSelectedQuestionsState(1, "remove")
+                        <Typography style={selectedQuestions.includes(item.numericQuestionId) ? { color: '#fff' } : {}}><Checkbox {...label} onClick={(e) => {
+                            e.target.checked ? setSelectedQuestionsState(item.numericQuestionId) : setSelectedQuestionsState(item.numericQuestionId, "remove")
                         }} /><span>{item.questionNumber ? item.questionNumber : "-"}</span> { item.questionText ? item.questionText : "-"}</Typography>
                     </AccordionSummary>
                     <AccordionDetails>
-                        <Typography style={selectedQuestions.includes(1) ? { color: '#fff' } : {}}>
+                        <Typography style={selectedQuestions.includes(item.numericQuestionId) ? { color: '#fff' } : {}}>
                             Select variables to compare:
                         </Typography>
-                        <div className='selectValue' style={selectedQuestions.includes(1) ? { color: '#fff', height: Height, overflow: Show ? 'auto' : 'hidden' } : {}}>
+                        <div className='selectValue' style={selectedQuestions.includes(item.numericQuestionId) ? { color: '#fff', height: Height, overflow: Show ? 'auto' : 'hidden' } : {}}>
                             <ul>
                                 {item.filterQuestionChoice && item.filterQuestionChoice.map(el => (
                                     <li><Checkbox {...el.choiceText} onClick={(e) => {
@@ -95,72 +78,25 @@ export default function QuestionTab() {
                         </div>
                         <Grid container spacing={2} style={{ alignItems: 'center' }}>
                             <Grid item xs={6}>
-                                <Typography onClick={handleClickMenu} style={selectedQuestions.includes(1) ? { color: '#fff', cursor: 'pointer' } : { cursor: 'pointer' }}>
+                                <Typography onClick={handleClickMenu} style={selectedQuestions.includes(item.numericQuestionId) ? { color: '#fff', cursor: 'pointer' } : { cursor: 'pointer' }}>
                                     {Show ? "View less" : "View more"}
                                 </Typography>
                             </Grid>
                             <Grid item xs={6}>
-                                {Show && <div className='selectOption' style={selectedQuestions.includes(1) ? { color: '#fff' } : {}}>
+                                {Show && <div className='selectOption' style={selectedQuestions.includes(item.numericQuestionId) ? { color: '#fff' } : {}}>
                                     <RadioGroup
                                         row
                                         aria-labelledby="demo-row-radio-buttons-group-label"
                                         name="row-radio-buttons-group"
                                     >
                                         <FormControlLabel value="select" control={<Radio />} label="Select all" />
-                                        <FormControlLabel value="deselect" control={<Radio />} label="Deselect all" />
+                                        <FormControlLabel value="deselect" control={<Radio />} label="De-select all" />
                                     </RadioGroup>
                                 </div>}
                             </Grid>
                         </Grid>
                     </AccordionDetails>
                 </Accordion>
-                {/*<Accordion style={selectedQuestions.includes(2) ? { backgroundColor: '#12988A' } : {}}>*/}
-                {/*    <AccordionSummary*/}
-                {/*        expandIcon={<ExpandMoreIcon />}*/}
-                {/*        aria-controls="panel1a-content"*/}
-                {/*        id="panel1a-header"*/}
-                {/*    >*/}
-                {/*        <Typography style={selectedQuestions.includes(2) ? { color: '#fff' } : {}}><Checkbox onClick={(e) => {*/}
-                {/*            e.target.checked ? setSelectedQuestionsState(2) : setSelectedQuestionsState(2, "remove")*/}
-                {/*        }} {...label} /> <span>Q.3</span> Gender</Typography>*/}
-                {/*    </AccordionSummary>*/}
-                {/*    <AccordionDetails>*/}
-                {/*        <Typography style={selectedQuestions.includes(2) ? { color: '#fff' } : {}}>*/}
-                {/*            Select variables to compare:*/}
-                {/*        </Typography>*/}
-                {/*        <div className='select_value' style={selectedQuestions.includes(2) ? { color: '#fff' } : {}}>*/}
-                {/*            <RadioGroup*/}
-                {/*                row*/}
-                {/*                aria-labelledby="demo-row-radio-buttons-group-label"*/}
-                {/*                name="row-radio-buttons-group"*/}
-                {/*            >*/}
-                {/*                <FormControlLabel value="male" control={<Radio />} label="Male" />*/}
-                {/*                <FormControlLabel value="female" control={<Radio />} label="Female" />*/}
-                {/*            </RadioGroup>*/}
-                {/*        </div>*/}
-                {/*    </AccordionDetails>*/}
-                {/*</Accordion>*/}
-
-                {/* <div className={'noAccordian'}>
-                <Typography><span>Q.4</span> Do you follow any sports teams on social media that you are not a fan of?</Typography>
-                <div className='withoutAccordian'>
-                    <div className='select_one_option' style={selectedQuestions.includes(2) ? { color: '#fff' } : {}}>
-                        <RadioGroup
-                            row
-                            aria-labelledby="demo-row-radio-buttons-group-label"
-                            name="row-radio-buttons-group"
-                        >
-                            <FormControlLabel value="option1" control={<Radio />} label="Option 1" />
-                            <FormControlLabel value="option2" control={<Radio />} label="Option 2" />
-                            <FormControlLabel value="option3" control={<Radio />} label="Lorem Ipsum is simply dummy text of the" />
-                            <FormControlLabel value="option4" control={<Radio />} label="Lorem Ipsum is simply dummy text of the" />
-                        </RadioGroup>
-                    </div>
-                </div>
-            </div> */}
-
-
-
             </div>
         ) :
            item.graphType === "stack_bar_chart" || item.graphType === "multi_column_bar_chart" &&
@@ -177,20 +113,6 @@ export default function QuestionTab() {
                     e.target.checked ? setSelectedQuestionsState() : setSelectedQuestionsState()}} /> {key}</li>
                 })
                 }
-
-                {/*{item.filterGraphData && item.filterGraphData.map(el => (*/}
-                {/*    <li><Checkbox {...el.choiceText} onClick={(e) => {*/}
-                {/*        e.target.checked ? setSelectedQuestionsState(item,false,el) : setSelectedQuestionsState(item,false,el,"remove")}} /> {el}</li>*/}
-                {/*))}*/}
-
-                {/*<li><Checkbox {...label} /> Lorem Ipsum</li>*/}
-                {/*<li><Checkbox {...label} /> Lorem Ipsum</li>*/}
-                {/*<li><Checkbox {...label} /> Lorem Ipsum</li>*/}
-                {/*<li><Checkbox {...label} /> Lorem Ipsum</li>*/}
-                {/*<li><Checkbox {...label} /> Lorem Ipsum</li>*/}
-                {/*<li><Checkbox {...label} /> Lorem Ipsum</li>*/}
-                {/*<li><Checkbox {...label} /> Lorem Ipsum</li>*/}
-                {/*<li><Checkbox {...label} /> Lorem Ipsum</li>*/}
             </ul>
         </div>
     </div>

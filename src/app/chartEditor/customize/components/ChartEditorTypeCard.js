@@ -4,7 +4,7 @@ import CardContent from "@material-ui/core/CardContent";
 
 function ChartEditorTypeCard({icon, title, component,handleChartChange}) {
     return (
-        <Card style={{height: 180,display: 'flex',alignItems:'center',justifyContent: 'center'}} onClick={handleChartChange}>
+        <Card style={{height: 180,display: 'flex',alignItems:'center',justifyContent: 'center',cursor:'pointer'}} onClick={handleChartChange}>
             <CardContent className={'exportOptions'}>
                 <img src={icon} alt={title} className={'imgIcon'}/>
                 <div

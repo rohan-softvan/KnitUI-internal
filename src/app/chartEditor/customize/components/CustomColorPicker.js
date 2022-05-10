@@ -17,7 +17,16 @@ function CustomColorPicker(props) {
           graphConfig["chart"]["backgroundColor"] :
           props.component === "borderColor" ?
               graphConfig["chart"]["borderColor"] :
-              graphConfig[props.component].style.color
+              props.component === "xAxisTextColor" ?
+                  graphConfig["xAxis"]["title"].style.color :
+                  props.component === "yAxisTextColor" ?
+                      graphConfig["yAxis"]["title"].style.color :
+                      props.component === "dataLabelsColor" ?
+                          graphConfig['plotOptions']['series']['dataLabels']['color'] :
+                          props.component === "xAxisGridLineColor" ?
+                              graphConfig["xAxis"]["gridLineColor"] : props.component === "yAxisGridLineColor" ?
+                                  graphConfig["yAxis"]["gridLineColor"] :
+                                  graphConfig[props.component].style.color
 
   const [color, setColor] = useState(selectedColor || "#000");
   const hexColor = useMemo(() => {

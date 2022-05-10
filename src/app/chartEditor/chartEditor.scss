@@ -7,6 +7,10 @@
         color: #13988a;
         font-family: Rubik !important;
         font-weight: 500;
+        display: flex;
+        width: 100%;
+        justify-content: space-between;
+        align-items:center;
     }
     .LogoImg{
         height: 30px;
@@ -681,7 +685,7 @@
     cursor: nw-resize;
 }
 
-/*NOSELECT*/
+  /*NOSELECT*/
 
 .chartResize {
     border: 2px solid #000;
@@ -829,12 +833,15 @@
 }
 #wdr-pivot-view #wdr-fields-view .wdr-popup-header #wdr-btn-add-measure{
     font-family: 'Rubik';
-    width: 248px;
+    width: 280px;
     margin-right: 30px !important;
 }
 #wdr-pivot-view .wdr-ui-btns-row .wdr-ui-btn, #wdr-toolbar-wrapper .wdr-ui-btns-row .wdr-ui-btn{
     font-family: 'Rubik';
     font-weight: 400;
+    height: 26px !important;
+    padding: 4px;
+    font-size: 12px;
 }
 #wdr-pivot-view a.wdr-ui-btn-dark:hover, #wdr-toolbar-wrapper a.wdr-ui-btn-dark:hover{
     font-weight: 400 !important;
@@ -1159,3 +1166,17 @@
     color:#747474;
     font-size: 12px;
 }
+#wdr-pivot-view #wdr-fields-view .wdr-popup-header #wdr-btn-add-measure:before{
+    display: none !important;
+}
+#wdr-pivot-view #wdr-fields-view .wdr-popup-header #wdr-btn-add-measure {
+    max-width: 280px !important;
+}
+.wdr-ui-element .wdr-ui .wdr-ui-btn{
+    text-transform: capitalize !important;
+    //background: transparent !important;
+    border: 1px solid black;
+}
+.MuiTab-wrapper {
+    text-transform: capitalize !important;
+ }
