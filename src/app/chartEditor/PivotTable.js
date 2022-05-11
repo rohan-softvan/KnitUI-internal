@@ -8,7 +8,7 @@ import TabPanel from "./TabPanel";
 import {makeStyles, Tab, Tabs} from "@material-ui/core";
 import OptionsTab from './OptionsTab';
 import {useDispatch, useSelector} from "react-redux";
-import {setGraphConfig} from "../redux/slice/ChartEditorSlice";
+import {setGeneralConfig, setGraphConfig, setPieChartConfig} from "../redux/slice/ChartEditorSlice";
 import {chartEditorEnum} from "../enums";
 
 
@@ -71,6 +71,7 @@ const PivotTable = () => {
   ]);
   let graphConfig = useSelector((state) => state.chart.graphConfig);
   let myRef = useRef();
+  let pieRef = useRef();
 
   const reportComplete = () => {
     calculateDynamicWidth();
@@ -140,125 +141,41 @@ const PivotTable = () => {
     return config;
   }
 
+  const getPieConfig = () => {
+    myRef.webdatarocks.highcharts.getData(
+        {
+          type: "pie",
+          styledMode: true
+        },
+        function (data) {
+          console.log("graph config >>  data:: in Pie Chart ", data);
+          console.log("graphConfig redux >>  data:: in pie ", graphConfig, Object.values(graphConfig).length);
+          dispatch(setPieChartConfig(data.series))
+          // dispatch(setGraphConfig(data))
+        }
+    );
+  }
   const createChart = () => {
-    console.log("in createChart::: ", myRef.webdatarocks)
+    console.log("in createChart::: ", myRef)
     myRef.webdatarocks.highcharts.getData(
         {
           type: config.type,
-          styledMode: true
+          "backgroundColor": "#fff",
+          "borderColor": "#EBBA95",
+          "borderRadius": 20,
+          "borderWidth": 2,
+          "events": {
+          },
+          "height": 400,
+          "reflow": true,
         },
         function (data) {
           console.log("graph config >>  data:: ", data);
           console.log("graphConfig redux >>  data:: ", graphConfig, Object.values(graphConfig).length);
 
-          // data.chart.height = config.height;
-          // data.chart.reflow = config.reflow;
-
-          // data.chart.events = {
-          //     load: function () {
-          //         console.log("loaded chart");
-          //         // document
-          //         //   .getElementById("custom-title")
-          //         //   .addEventListener("click", handleTitleClick);
-          //         // document
-          //         //   .getElementById("custom-subtitle")
-          //         //   .addEventListener("click", handleSubTitleClick);
-          //         // document
-          //         //   .getElementById("custom-x-axis-title")
-          //         //   .addEventListener("click", e => handleAxisTitleClick(e, "x"));
-          //         // document
-          //         //   .getElementById("custom-y-axis-title")
-          //         //   .addEventListener("click", e => handleAxisTitleClick(e, "y"));
-          //     },
-          //     click: function () {
-          //         // click event background color graph
-          //     }
-          // };
-          // data.chart.height = config.height
-          // // data.chart.backgroundColor = "#ccc";
-          // data.chart.borderColor = "#EBBA95";
-          // //data.chart.borderRadius = 20;
-          // //data.chart.borderWidth = 2;
-          // data.chart.reflow = config.reflow;
-          // // console.log('newTitle==>', newTitle, fontSize)
-          // data.title = {
-          //     text: `<p style="cursor:pointer;" id="custom-title">` + newTitle ? newTitle : '-' + `</p>`,
-          //     align: 'center',
-          //     floating: false,
-          //     style: {
-          //         color: color,
-          //         fontWeight: "bold",
-          //         fontFamily: fontFamily,
-          //         fontSize: fontSize + 'px',
-          //     }
-          // };
-          // data.legend = {
-          //     backgroundColor: '#fff',
-          //     borderColor: '#B7B7B7',
-          //     borderWidth: 1,
-          //     borderRadius: '4px',
-          //     padding: 10,
-          //     layout: 'vertical',
-          //     verticalAlign: 'top',
-          //     itemMarginTop: 5,
-          //     itemMarginBottom: 5,
-          //     itemStyle: {
-          //         lineHeight: '14px'
-          //     }
-          // };
-          // data.subtitle = {
-          //     text: `<p style="color: blue;cursor:pointer;" id="custom-subtitle"> LOL-subtitle </p>`,
-          //     style: {
-          //         color: "#000",
-          //         fontWeight: "normal"
-          //         // fontFamily: 'Roboto',
-          //         // fontFamily: 'Rubik',
-          //         // fontFamily: 'Roboto slab',
-          //         // fontFamily: 'Script MT',
-          //     }
-          // };
-          // data.credits = {
-          //     enabled: false
-          // };
-          // data.tooltip = {
-          //     enabled: true
-          // };
-          // data.xAxis.title.text = `<p style="cursor:pointer;" id="custom-x-axis-title"> ${
-          //     data.xAxis.title.text
-          // } </p>`;
-          // data.yAxis[0].title.text = `<p style="cursor:pointer;" id="custom-y-axis-title"> ${
-          //     data.yAxis[0].title.text
-          // } </p>`;
-          //
-          // let seriesData = data.series;
-          // seriesData.map(
-          //     e =>
-          //         (e.events = {
-          //             legendItemClick: function () {
-          //                 // console.log("legendItemClick::: ", this);
-          //             }
-          //         })
-          // );
-          // data.series = seriesData;
-          // data.plotOptions = {
-          //     series: {
-          //         cursor: "pointer",
-          //         point: {
-          //             events: {
-          //                 click: function () {
-          //                     // console.log("seriesClick::: ", this);
-          //                 }
-          //             }
-          //         },
-          //         dataLabels: {
-          //             enabled: true
-          //         }
-          //     }
-          // };
-          // let newData=graphData
           let graphData = Object.values(graphConfig).length !== 0 ? setDefaultGraphProperties(graphConfig) : setDefaultGraphProperties(data);
           console.log('graphConfig==>', graphData)
-
+          dispatch(setGeneralConfig(data.series))
           console.log("graphData ", graphData)
           dispatch(setGraphConfig(graphData))
           // Highcharts.chart("highchartsContainer", graphData ? graphData : data);
@@ -577,14 +494,21 @@ const PivotTable = () => {
   };
 
   useEffect(() => {
+
+    pieRef && pieRef.webdatarocks && getPieConfig()
+      // myRef && myRef.webdatarocks &&
+  },[pieRef])
+
+  useEffect(() => {
     myRef && myRef.webdatarocks && myRef.webdatarocks.on("reportcomplete", function () {
       console.log("reportcomplete")
       // setActiveTab(0)
       myRef && myRef.webdatarocks && handleReportFieldModal(activeTab);
       // setActiveTab(0)
-      myRef && myRef.webdatarocks && createChart();
-    });
-  })
+      myRef && myRef.webdatarocks && createChart()
+      // myRef && myRef.webdatarocks &&
+        })
+    })
 
   useEffect(() => {
     console.log("graphConfig ===>", graphConfig, Highcharts)
@@ -661,6 +585,7 @@ const PivotTable = () => {
                   <WebDataRocksReact.Pivot
                       ref={elem => {
                         myRef = elem;
+                        pieRef= elem;
                       }}
                       width={"100%"}
                       height={"100%"}

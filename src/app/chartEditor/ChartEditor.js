@@ -52,12 +52,15 @@ import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Highcharts from "highcharts";
+import highcharts3d from "highcharts/highcharts-3d";
 import HighchartsExporting from "highcharts/modules/exporting";
 import {useDispatch, useSelector} from "react-redux";
 import {setGraphConfig} from "../redux/slice/ChartEditorSlice";
 import CloseIcon from "@material-ui/icons/Close";
 import IconButton from "@material-ui/core/IconButton";
+import {chartEditorEnum} from "../enums";
 HighchartsExporting(Highcharts);
+highcharts3d(Highcharts);
 
 /*Main Tab*/
 function TabPanel(props) {
@@ -118,6 +121,9 @@ function suba11yProps(index) {
 export default function ChartEditor(handleClick) {
   const dispatch = useDispatch();
   let graphConfig = useSelector((state) => state.chart.graphConfig);
+  let pieSeriesConfig = useSelector((state) => state.chart.pieChartConfig);
+  let generalSeriesConfig = useSelector((state) => state.chart.generalConfig);
+
   const [open, setOpen] = React.useState(false);
   const [fullWidth, setFullWidth] = React.useState(true);
   const [value, setValue] = React.useState(0);
@@ -166,6 +172,20 @@ export default function ChartEditor(handleClick) {
     }
   });
 
+  const getPlotOptionsFor3dDonut = () => ({
+    allowPointSelect: true,
+    depth: 35,
+    cursor: "pointer",
+    innerSize: "60%"
+  });
+
+  const getPlotOptionsFor3dPie = () => ({
+    allowPointSelect: true,
+    depth: 35,
+    cursor: "pointer"
+  });
+
+
   const getPlotOptionsForSemicircleDonut = () => ({
     allowPointSelect: false,
     dataLabels: {
@@ -182,29 +202,49 @@ export default function ChartEditor(handleClick) {
     center: ["50%", "75%"]
   });
 
+  const setDefaultGraphProperties = (graphConfig) => {
+    let config = JSON.parse(JSON.stringify(graphConfig));
+    console.log("setDefaultGraphProperties data: ", config)
+    config.chart = {...chartEditorEnum.chartDefaultProps, ...config.chart}
+    config.credits = {enabled: false}
+    if (!config.title || !config.title.text) {
+      config.title = chartEditorEnum.titleDefaultProps
+    }
+    if (!config.subtitle) {
+      config.subtitle = chartEditorEnum.subtitleDefaultProps
+    }
+    config.exporting = {enabled: false}
+    config.xAxis = {
+      gridLineColor: chartEditorEnum.xAxisDefaultProps.gridLineColor,
+      gridLineWidth: chartEditorEnum.xAxisDefaultProps.gridLineWidth,
+      ...config.xAxis
+    }
+    config.yAxis = {
+      gridLineColor: chartEditorEnum.yAxisDefaultProps.gridLineColor,
+      gridLineWidth: chartEditorEnum.yAxisDefaultProps.gridLineWidth,
+      ...config.yAxis
+    }
+    config.xAxis.title = {...chartEditorEnum.xAxisDefaultProps.title, ...config.xAxis.title}
+    config.yAxis.title = {...chartEditorEnum.yAxisDefaultProps.title, ...config.yAxis.title}
+
+    if (!("style" in config.xAxis.title)) {
+      config.xAxis.title.style = chartEditorEnum.xAxisDefaultProps.style
+    }
+    if (!("style" in config.yAxis.title)) {
+      config.yAxis.title.style = chartEditorEnum.yAxisDefaultProps.style
+    }
+    if (!("legend" in config)) {
+      config.legend = chartEditorEnum.legendsDefaultProps
+    }
+    if (!("plotOptions" in config)) {
+      config.plotOptions = chartEditorEnum.plotOptionsDefaultProps;
+    }
+    console.log("setDefaultGraphProperties final", config)
+    return config;
+  }
+
+
   const handleChartChange = type => {
-    console.log('type==>',type)
-    // if (type === "scatter") {
-    //   setMeasures([
-    //     {
-    //       uniqueName:
-    //           "Q20 Would you be interested in ordering from a food locker like this?",
-    //       aggregation: "count"
-    //     },
-    //     {
-    //       uniqueName: "Q8 Do you have a meal plan for on-campus dining?",
-    //       aggregation: "count"
-    //     }
-    //   ]);
-    // } else {
-    //   setMeasures([
-    //     {
-    //       uniqueName:
-    //           "Q20 Would you be interested in ordering from a food locker like this?",
-    //       aggregation: "count"
-    //     }
-    //   ]);
-    // }
     let newConfig = JSON.parse(JSON.stringify(graphConfig));
     let chartType;
     switch (type) {
@@ -235,16 +275,36 @@ export default function ChartEditor(handleClick) {
       default:
         chartType = type
     }
-
     newConfig.chart['type'] = chartType
 
+    //set option for 3d Chart Type
+    if (type === "3d-pie" || type === "3d-donut") {
+      newConfig.chart.options3d = {
+        enabled: true,
+        alpha: 45,
+        beta: 0
+      };
+      newConfig.chart.polar = false;
+    }else{
+     if("options3d" in newConfig.chart){
+       delete newConfig.chart.options3d;
+     }
+    }
 
+    // For set All Types of Pie Chart
     let plotOptions = {
       pie:
           type === "donut"
               ? getPlotOptionsForDonut()
+              : type === "3d-donut"
+                  ? getPlotOptionsFor3dDonut()
+                  : type === "3d-pie"
+                      ? getPlotOptionsFor3dPie()
+                      : type === "semi-circle-donut"
+                          ? getPlotOptionsForSemicircleDonut()
                           : {},
       series: {
+        ...chartEditorEnum.plotOptionsDefaultProps.series,
         cursor: "pointer",
         stacking: getStackingGraphConfig(type),
         },
@@ -253,17 +313,29 @@ export default function ChartEditor(handleClick) {
         }
       }
 
+    // For Multi Color Charts
     if (
        type === "multicolor-bar" ||
         type === "multicolor-column"
     ) {
       plotOptions.series.colorByPoint = true;
     }else{
-      plotOptions.series.colorByPoint = false;
+      delete plotOptions.series.colorByPoint;
     }
     newConfig.plotOptions= plotOptions
-    console.log('graphConfig after', newConfig)
-    dispatch(setGraphConfig(newConfig))
+
+    // To set Pie Chart Config after chart change
+    if(chartType === "pie"){
+      newConfig.series=pieSeriesConfig
+      // if(type === 'pie'){
+      //   newConfig.plotOptions={}
+      // }
+    }else{
+      newConfig.series=generalSeriesConfig
+    }
+
+    let graphData = setDefaultGraphProperties(newConfig );
+    dispatch(setGraphConfig(graphData))
   };
 
   async function downloadPngBtn() {
@@ -457,28 +529,6 @@ export default function ChartEditor(handleClick) {
                               </Grid>
                             </AccordionDetails>
                           </Accordion>
-
-                          {/*<Accordion>*/}
-                          {/*  <AccordionSummary*/}
-                          {/*      expandIcon={<ExpandMoreIcon />}*/}
-                          {/*      aria-controls="panel2a-content"*/}
-                          {/*      id="panel2a-header">*/}
-                          {/*    <Typography className='AccordTitle rootTitle'><img src={LineCharts} />Combination charts</Typography>*/}
-                          {/*  </AccordionSummary>*/}
-                          {/*  <AccordionDetails>*/}
-                          {/*    <Grid container spacing={2}>*/}
-                          {/*      <Grid item lg={6} md={6} sm={12} xs={12}>*/}
-                          {/*        <ChartEditorTypeCard title={"Area Line Chart"} icon={AreaLineChart} component={"export"}/>*/}
-                          {/*      </Grid>*/}
-                          {/*      <Grid item lg={6} md={6} sm={12} xs={12}>*/}
-                          {/*        <ChartEditorTypeCard title={"Line and Column Chart"} icon={LineAndColumnChart} component={"export"}/>*/}
-                          {/*      </Grid>*/}
-                          {/*      <Grid item lg={6} md={6} sm={12} xs={12}>*/}
-                          {/*        <ChartEditorTypeCard title={"Scatter Line Chart"} icon={ScatterLineChart} component={"export"}/>*/}
-                          {/*      </Grid>*/}
-                          {/*    </Grid>*/}
-                          {/*  </AccordionDetails>*/}
-                          {/*</Accordion>*/}
                         </div>
                       </div>
                     </TabPanel>
@@ -492,13 +542,13 @@ export default function ChartEditor(handleClick) {
                           <Typography className={"exportTitle"}>Choose format:</Typography>
                               <Grid container spacing={2}>
                                 <Grid item lg={6} md={6} sm={12} xs={12}>
-                                  <ChartEditorTypeCard title={"Recommended for graphs with logos, illustrations, and charts"} icon={ExportPng} component={"export"}/>
+                                  <ChartEditorTypeCard title={"Recommended for graphs with logos, illustrations, and charts"}  icon={ExportPng} component={"export"}/>
                                 </Grid>
                                 <Grid item lg={6} md={6} sm={12} xs={12}>
                                   <ChartEditorTypeCard title={"Recommended for graphs with photos or mixed media"} icon={ExportJpg} component={"export"}/>
                                 </Grid>
                                 <Grid item lg={6} md={6} sm={12} xs={12}>
-                                  <ChartEditorTypeCard title={"Printer-friendly, use as a document or email to others."} icon={ExportPdf} component={"export"}/>
+                                  <ChartEditorTypeCard title={"Printer-friendly, use as a document or email to others."}  icon={ExportPdf} component={"export"}/>
                                 </Grid>
                               </Grid>
                         </div>
@@ -506,7 +556,7 @@ export default function ChartEditor(handleClick) {
                   </div>
                 </Box>
               </Grid>
-              <Grid item xs={6}>
+              <Grid item xs={6} className={'chartBox'}>
               <div className={'ChartSection'}>
                 <div className={'mostUsedChart'}>
                     <div className={'chartIcons'}>
@@ -516,10 +566,10 @@ export default function ChartEditor(handleClick) {
                       <img src={WaveChartSmall} onClick={() => handleChartChange("area")} />
                     </div>
                     <div className={'chartIcons'}>
-                      <img src={LineCharts} />
+                      <img src={LineCharts} onClick={() => handleChartChange("line")} />
                     </div>
                     <div className={'chartIcons'}>
-                      <img src={DonutChartSmall} />
+                      <img src={DonutChartSmall} onClick={() => handleChartChange("donut")} />
                     </div>
                 </div>
                 <div

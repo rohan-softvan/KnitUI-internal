@@ -4,6 +4,8 @@ export const chartEditorEnum = {
     borderWidth: 1,
     borderColor: "#000",
     borderRadius: 3,
+    width: 800,
+    height: 600,
   },
   titleDefaultProps: {
     text: "Chart Title",

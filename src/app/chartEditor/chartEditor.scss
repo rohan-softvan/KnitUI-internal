@@ -422,6 +422,9 @@
     width: 100%;
     position: relative;
     margin-bottom: 15px;
+    .MuiFormHelperText-root{
+        margin-bottom:8px;
+    }
     .MuiFormControl-root{
         width: calc(100% - 15px) !important;
     }
@@ -439,6 +442,11 @@
         }
         .MuiToggleButton-root.Mui-selected + .MuiToggleButton-root.Mui-selected{
             margin-left: 4px;
+        }
+        .MuiFormControl-root{
+            .MuiOutlinedInput-root{
+                height:40px;
+            }
         }
     }
     .MuiOutlinedInput-notchedOutline{
@@ -1026,6 +1034,17 @@
 /*Chart Type Tab End*/
 
 /*Chart Section Start*/
+//.chartModal{
+//    .MuiDialogContent-root{
+//        overflow:hidden !important;
+//    }
+//}
+.chartBox{
+   #highchartsContainer{
+       overflow:auto !important;
+       height:600px;
+   }
+}
 .ChartSection{
     .mostUsedChart{
         display: flex;

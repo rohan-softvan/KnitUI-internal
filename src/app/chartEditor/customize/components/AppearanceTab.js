@@ -16,10 +16,7 @@ import Popover from "@material-ui/core/Popover";
 import {setRecentColorsForColorPicker} from "../../../redux/slice/ColorPickerSlice";
 import {useDispatch, useSelector} from "react-redux";
 import {setGraphConfig} from "../../../redux/slice/ChartEditorSlice";
-import IconButton from "@material-ui/core/IconButton";
 import ToggleButton from "@material-ui/lab/ToggleButton";
-import FormatBoldIcon from "@material-ui/icons/FormatBold";
-import FormatItalicIcon from "@material-ui/icons/FormatItalic";
 import {styled} from "@material-ui/core/styles";
 import ToggleButtonGroup from "@material-ui/lab/ToggleButtonGroup";
 
@@ -32,7 +29,6 @@ function ValueLabelComponent(props) {
         </Tooltip>
     );
 }
-
 
 const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({theme}) => ({
     '& .MuiToggleButtonGroup-grouped': {
@@ -54,29 +50,30 @@ export default function AppearanceTab({expanedState, setTabState}) {
     const dispatch = useDispatch();
     let graphConfig = useSelector((state) => state.chart.graphConfig);
     let colorPickerColors = useSelector((state) => state.colorPicker);
-
-    const [chartWidth, setChartWidth] = React.useState(500);
-    const [chartHeight, setChartHeight] = React.useState(500);
-
     const [currentColor, setCurrentColor] = React.useState('')
     const [backgroundColorAnchorEl, setBackgroundColorAnchorEl] = React.useState(null);
     const [borderColorAnchorEl, setBorderColorAnchorEl] = React.useState(null);
     const [backgroundColorColorPickerOpen, setBackgroundColorColorPickerOpen] = React.useState(false)
     const [borderColorColorPickerOpen, setBorderColorColorPickerOpen] = React.useState(false)
-    // const [borderWidth, setBorderWidth] = React.useState(graphConfig.chart.borderWidth.toString() + "px");
 
     const handleChangeWidth = (event, newValue) => {
-        setChartWidth(newValue);
+        let newConfig = JSON.parse(JSON.stringify(graphConfig));
+        newConfig["chart"]["width"] = newValue;
+        dispatch(setGraphConfig(newConfig));
     };
+
     const handleChangeHeight = (event, newValue) => {
-        setChartHeight(newValue);
+        let newConfig = JSON.parse(JSON.stringify(graphConfig));
+        newConfig["chart"]["height"] = newValue;
+        dispatch(setGraphConfig(newConfig));
     };
+
     const handleAutoClick = (type) => {
         if (type === 'width') {
-            setChartWidth(500);
+            handleChangeWidth(null, 800);
         }
         if (type === 'height') {
-            setChartHeight(500);
+            handleChangeHeight(null, 600);
         }
     }
 
@@ -93,7 +90,6 @@ export default function AppearanceTab({expanedState, setTabState}) {
 
     const backgroundColorColorPickerId = 'background-color-color-picker';
     const borderColorColorPickerId = 'border-color-color-picker';
-
 
     const handleClose = (component) => {
         if (component === "backgroundColor") {
@@ -128,9 +124,14 @@ export default function AppearanceTab({expanedState, setTabState}) {
     }
 
     const handleBorderWidthChange = (event, newBorderWidth) => {
-        console.log("newBorderWidth:: ", newBorderWidth)
         let newConfig = JSON.parse(JSON.stringify(graphConfig));
         newConfig["chart"]["borderWidth"] = Number(newBorderWidth[0])
+        dispatch(setGraphConfig(newConfig));
+    }
+
+    const handleBorderRadiusChange = (event, newBorderRadius) => {
+        let newConfig = JSON.parse(JSON.stringify(graphConfig));
+        newConfig["chart"]["borderRadius"] = Number(newBorderRadius[0])
         dispatch(setGraphConfig(newConfig));
     }
 
@@ -285,6 +286,9 @@ export default function AppearanceTab({expanedState, setTabState}) {
                                     <ToggleButton value={"3px"} aria-label="3px">
                                         3px
                                     </ToggleButton>
+                                    <ToggleButton value={"4px"} aria-label="4px">
+                                        4px
+                                    </ToggleButton>
                                 </StyledToggleButtonGroup>
                             </div>
                         </div>
@@ -297,8 +301,8 @@ export default function AppearanceTab({expanedState, setTabState}) {
                                 <FormHelperText>Rounded corners</FormHelperText>
                                 <StyledToggleButtonGroup
                                     size="small"
-                                    value={`${graphConfig.chart.borderWidth.toString()}px`}
-                                    onChange={handleBorderWidthChange}
+                                    value={`${graphConfig.chart.borderRadius.toString()}px`}
+                                    onChange={handleBorderRadiusChange}
                                     aria-label="text formatting"
                                     exclusive
                                     className={'chartBorderLine'}
@@ -311,6 +315,9 @@ export default function AppearanceTab({expanedState, setTabState}) {
                                     </ToggleButton>
                                     <ToggleButton value={"3px"} aria-label="3px">
                                         3px
+                                    </ToggleButton>
+                                    <ToggleButton value={"4px"} aria-label="4px">
+                                        4px
                                     </ToggleButton>
                                 </StyledToggleButtonGroup>
                             </div>
@@ -330,7 +337,7 @@ export default function AppearanceTab({expanedState, setTabState}) {
                             <FormHelperText>Chart Width</FormHelperText>
                             <div className={'sliderBox'}>
                                 <div className={'sliderValue'}>
-                                    <Typography>{chartWidth}</Typography>
+                                    <Typography>{graphConfig.chart.width}</Typography>
                                 </div>
                                 <div className={'sliderDefaultValue'}>
                                     <Button onClick={() => handleAutoClick('width')}>Auto</Button>
@@ -339,7 +346,7 @@ export default function AppearanceTab({expanedState, setTabState}) {
                             <Slider
                                 ValueLabelComponent={ValueLabelComponent}
                                 aria-label="custom thumb label"
-                                value={chartWidth}
+                                value={graphConfig.chart.width}
                                 min={50}
                                 max={5000}
                                 onChange={handleChangeWidth}
@@ -351,16 +358,16 @@ export default function AppearanceTab({expanedState, setTabState}) {
                             <FormHelperText>Chart Height</FormHelperText>
                             <div className={'sliderBox'}>
                                 <div className={'sliderValue'}>
-                                    <Typography>{chartHeight}</Typography>
+                                    <Typography>{graphConfig.chart.height}</Typography>
                                 </div>
                                 <div className={'sliderDefaultValue'}>
-                                    <Button onClick={() => handleAutoClick('height')}>Auto</Button>
+                                    <Button>Auto</Button>
                                 </div>
                             </div>
                             <Slider
                                 ValueLabelComponent={ValueLabelComponent}
                                 aria-label="custom thumb label"
-                                value={chartHeight}
+                                value={graphConfig.chart.height}
                                 min={50}
                                 max={5000}
                                 onChange={handleChangeHeight}

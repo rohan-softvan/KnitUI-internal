@@ -218,7 +218,7 @@ export default function DatalabelsTab({expanedState, setTabState}) {
                     </Grid>
                     <Grid item xs={6} className={'SwitchIcon'}>
                         <Switch
-                            checked={graphConfig.plotOptions.series.dataLabels.enabled}
+                            checked={graphConfig.plotOptions.series.dataLabels ? graphConfig.plotOptions.series.dataLabels.enabled : false}
                             onChange={handleChartDataLabelVisible}/>
                     </Grid>
                 </Grid>

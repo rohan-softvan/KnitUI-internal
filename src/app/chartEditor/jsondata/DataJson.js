@@ -1,6 +1,5 @@
 
 export const DataJson = [
-  
     {
       "Q6 We would like to learn a little bit more about how you structure meal time between home, work and school. Which of these best describes you?": "I eat most of my meals at home",
       "Q8 Do you have a meal plan for on-campus dining?": "I don’t have a meal plan",
@@ -446,5 +445,5 @@ export const DataJson = [
       "Q8 Do you have a meal plan for on-campus dining?": "I don’t have a meal plan",
       "Q20 Would you be interested in ordering from a food locker like this?": "Probably not"
     }
-   
+
 ]

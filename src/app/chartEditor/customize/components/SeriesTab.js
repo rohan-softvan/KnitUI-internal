@@ -12,6 +12,8 @@ import Popover from "@material-ui/core/Popover";
 import CustomColorPicker from "./CustomColorPicker";
 import Paper from '@material-ui/core/Paper';
 import { styled } from '@material-ui/core/styles';
+import {useDispatch, useSelector} from "react-redux";
+import {setGraphConfig} from "../../../redux/slice/ChartEditorSlice";
 
 let seriesMenu = [
     {
@@ -45,6 +47,8 @@ let legend = [
 ];
 
 export default function SeriesTab({ expanedState, setTabState }) {
+    const dispatch = useDispatch();
+    let graphConfig = useSelector((state) => state.chart.graphConfig);
     const [usedColors,setUsedColor] = React.useState([])
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [open,setOpen] = React.useState(false)
@@ -53,6 +57,14 @@ export default function SeriesTab({ expanedState, setTabState }) {
         setAnchorEl(event.currentTarget);
         setOpen(true)
     };
+
+    // console.log("Check Series Data:: ", graphConfig.series)
+    const seriesData = [graphConfig.series]
+    // const listSeriesData = seriesData.map()
+    seriesData.map((item, index) => {
+        console.log("Check Series Data:: ", item)
+    })
+
 
     const id = 'transitions-popper';
 
@@ -64,6 +76,13 @@ export default function SeriesTab({ expanedState, setTabState }) {
 
     const handleCallback = (childData) =>{
         setCurrentColor(childData)
+    }
+
+    const handleShowInLegend = (event) => {
+        const {value} = event.target;
+        let newConfig = JSON.parse(JSON.stringify(graphConfig));
+        newConfig["series"][0]["showInLegend"] = value === "on"
+        dispatch(setGraphConfig(newConfig));
     }
 
     return (
@@ -80,8 +99,11 @@ export default function SeriesTab({ expanedState, setTabState }) {
                     <Grid item xs={12}>
                         <div className={'customGridTitle'}>
                             <div className={'seriesValueData'}>
-                                <FormHelperText id="title-text">Series Selector</FormHelperText>                               
-                                <SelectComponent menu={seriesMenu} width={"full"} />
+                                <FormHelperText id="title-text">Series Selector</FormHelperText>
+                                <SelectComponent
+                                    menu={seriesMenu}
+                                    width={"full"}
+                                />
                             </div>
                         </div>
                     </Grid>
@@ -128,7 +150,11 @@ export default function SeriesTab({ expanedState, setTabState }) {
                             </div>
                             <div className={'leftGrid'}>
                                 <FormHelperText id="title-text">Show in legend</FormHelperText>
-                                <SelectComponent menu={legend} />
+                                <SelectComponent
+                                    menu={legend}
+                                    menuValue={graphConfig["series"][0]["showInLegend"] ? "on" : "off"}
+                                    handleChange={handleShowInLegend}
+                                />
                             </div>
                             <div className={'blankSpace'}></div>
                         </div>
