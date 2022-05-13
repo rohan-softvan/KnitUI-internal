@@ -66,11 +66,11 @@ export const chartEditorEnum = {
     series: {
       point: {
         events: {
-          click: function () {
-            console.log("seriesClick::: ", this);
-            updateCustomizeTab("series")
-            // handleChange(3)
-          }
+          // click: function () {
+          //   console.log("seriesClick::: ", this);
+          //   updateCustomizeTab("series");
+          //   // handleChange(3)
+          // }
         }
       },
       dataLabels: {

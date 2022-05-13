@@ -111,7 +111,6 @@ export default function AppearanceTab({expanedState, setTabState}) {
     }
 
     const handleColorChange = (component, color) => {
-        console.log(component, color)
         let newConfig = JSON.parse(JSON.stringify(graphConfig));
         let chart = newConfig["chart"];
         if (color === "transparent") {

@@ -206,6 +206,15 @@ export default function ChartEditor(handleClick) {
     center: ["50%", "75%"]
   });
 
+  const openLegendsTabEvent = (seriesItem) => {
+    seriesItem.events = {
+      legendItemClick: function () {
+        console.log("legendItemClick::: ");
+        updateCustomizeTab("legend");
+      }
+    }
+  }
+
   const setDefaultGraphProperties = (graphConfig) => {
     let config = JSON.parse(JSON.stringify(graphConfig));
     console.log("setDefaultGraphProperties data: ", graphConfig)
@@ -318,6 +327,18 @@ export default function ChartEditor(handleClick) {
       }
     }
 
+    // config.chart.events = {
+    //   load: function () {
+    //     console.log("loaded chart");
+    //   },
+    //   click: function () {
+    //     console.log("chart clicked");
+    //     updateCustomizeTab("appearance");
+    //   }
+    // };
+    //TODO refactor below code and add them into the if else conditions
+    // config.series.map(seriesItem => openLegendsTabEvent(seriesItem));
+
 
     console.log("setDefaultGraphProperties final", config)
     return config;
@@ -387,15 +408,15 @@ export default function ChartEditor(handleClick) {
         ...chartEditorEnum.plotOptionsDefaultProps.series,
         cursor: "pointer",
         stacking: getStackingGraphConfig(type),
-        point: {
-          events: {
-            click: function () {
-              console.log("seriesClick::: ", this);
-              updateCustomizeTab("series")
-              // handleChange(3)
-            }
-          }
-        },
+        // point: {
+        //   events: {
+        //     click: function () {
+        //       console.log("seriesClick::: ", this);
+        //       updateCustomizeTab("series")
+        //       // handleChange(3)
+        //     }
+        //   }
+        // },
       },
       dataLabels: {
         enabled: true

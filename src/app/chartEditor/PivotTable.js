@@ -10,6 +10,7 @@ import OptionsTab from './OptionsTab';
 import {useDispatch, useSelector} from "react-redux";
 import {setGeneralConfig, setGraphConfig, setPieChartConfig} from "../redux/slice/ChartEditorSlice";
 import {chartEditorEnum} from "../enums";
+import {updateCustomizeTab} from "../_helpers/eventHelper";
 
 
 const PivotTable = () => {
@@ -98,6 +99,14 @@ const PivotTable = () => {
     console.log("handleDataLabelClick invoked 😄");
   };
 
+  const openLegendsTabEvent = (seriesItem) => {
+    seriesItem.events = {
+      legendItemClick: function () {
+        console.log("legendItemClick::: ");
+        updateCustomizeTab("legend");
+      }
+    }
+  }
 
   const setDefaultGraphProperties = (graphConfig) => {
     let config = JSON.parse(JSON.stringify(graphConfig));
@@ -210,8 +219,7 @@ const PivotTable = () => {
         });
       }
     }
-
-
+    // config.series.map(seriesItem => openLegendsTabEvent(seriesItem));
     console.log("setDefaultGraphProperties final", config)
     return config;
   }
