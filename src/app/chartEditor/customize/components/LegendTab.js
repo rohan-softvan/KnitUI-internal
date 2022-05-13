@@ -52,7 +52,7 @@ let fontsize = [
 
 let fontFamily = [
   {
-    title: "Rubik Default",
+    title: "Rubik",
     value: "rubik_default",
     key: 1,
   },
@@ -122,7 +122,7 @@ export default function LegendTab({expanedState, setTabState}) {
   const [open, setOpen] = React.useState(false)
   const [currentColor, setCurrentColor] = React.useState('')
 
-  const [selectedFontFamily, setSelectedFontFamily] = React.useState('Rubik Default')
+  const [selectedFontFamily, setSelectedFontFamily] = React.useState('roboto')
   const [legendPosition, setLegendPosition] = React.useState("top")
   const [legendFontSize, setLegendFontSize] = React.useState('auto')
 

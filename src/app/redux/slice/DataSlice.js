@@ -632,6 +632,7 @@ const setAnswerJson = (data) => {
             : "",
           originalVideoDuration: data[j].original_video_duration,
           videoThumbnailUrl: data[j].video_thumbnail_url,
+          numericQuestionId: data[j].numeric_question_id
         });
       } else {
         answerList.push({
@@ -640,6 +641,7 @@ const setAnswerJson = (data) => {
           questionType: data[j].question_type.type,
           originalVideoDuration: data[j].original_video_duration,
           videoThumbnailUrl: data[j].video_thumbnail_url,
+          numericQuestionId: data[j].numeric_question_id
         });
       }
     } else {
@@ -649,6 +651,7 @@ const setAnswerJson = (data) => {
         questionType: "-",
         originalVideoDuration: "-",
         videoThumbnailUrl: "-",
+        numericQuestionId: "-"
       });
     }
   }

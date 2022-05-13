@@ -115,7 +115,7 @@ export default function DatalabelsTab({expanedState, setTabState}) {
     const [currentColor, setCurrentColor] = React.useState('')
 
     const [dataLabelPosition, setDataLabelPosition] = React.useState("left")
-    const [selectedFontFamily, setSelectedFontFamily] = React.useState('rubik_default')
+    const [selectedFontFamily, setSelectedFontFamily] = React.useState('roboto')
     const [selectedFontSize, setSelectedFontSize] = React.useState('auto')
 
     const id = 'data-label-color-picker';

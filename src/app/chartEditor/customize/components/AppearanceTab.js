@@ -361,7 +361,7 @@ export default function AppearanceTab({expanedState, setTabState}) {
                                     <Typography>{graphConfig.chart.height}</Typography>
                                 </div>
                                 <div className={'sliderDefaultValue'}>
-                                    <Button>Auto</Button>
+                                    <Button onClick={() => handleAutoClick('height')}>Auto</Button>
                                 </div>
                             </div>
                             <Slider

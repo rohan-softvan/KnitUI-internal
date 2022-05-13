@@ -1,3 +1,7 @@
+import React, {useState} from 'react';
+
+import {updateCustomizeTab} from "../_helpers/eventHelper"
+
 export const chartEditorEnum = {
   chartDefaultProps: {
     backgroundColor: "#ffffff",
@@ -8,13 +12,13 @@ export const chartEditorEnum = {
     height: 600,
   },
   titleDefaultProps: {
-    text: "Chart Title",
+    text: "",
     style: {
       color: "#ff0000",
     },
   },
   subtitleDefaultProps: {
-    text: 'Chart subtitle',
+    text: '',
     style: {
       color: "blue"
     }
@@ -30,7 +34,7 @@ export const chartEditorEnum = {
       rotation: 0
     },
     style: {
-      fontFamily: 'Rubik Default',
+      fontFamily: 'Roboto',
       color: '#ff00ff'
     }
   },
@@ -45,7 +49,7 @@ export const chartEditorEnum = {
       rotation: 0
     },
     style: {
-      fontFamily: 'Rubik Default',
+      fontFamily: 'Roboto',
       color: '#ff00ff'
     }
   },
@@ -54,23 +58,37 @@ export const chartEditorEnum = {
     layout: 'vertical',
     verticalAlign: 'top',
     itemStyle: {
-      fontFamily: 'Rubik Default',
+      fontFamily: 'Roboto',
       color: '#000'
     }
   },
   plotOptionsDefaultProps: {
     series: {
+      point: {
+        events: {
+          click: function () {
+            console.log("seriesClick::: ", this);
+            updateCustomizeTab("series")
+            // handleChange(3)
+          }
+        }
+      },
       dataLabels: {
         enabled: true,
         color: 'red',
         align: 'center',
         style: {
           fontWeight: 'bold',
-          fontFamily: 'Rubik Default',
+          fontFamily: 'Roboto',
           fontSize: "11px",
         }
       }
     }
   },
-  exportingDefaultProps: {enabled: false}
+  exportingDefaultProps: {enabled: false},
+  defaultSeriesColors: {
+    general: ["#12284c", "#12988a", "#6f7271", "#F6f3e6", "#f4a000", "#E2dccf", "#Cccac2"],
+    fivePoint: ["#12284c", "#12988a", "#6f7271", "#F6f3e6", "#f4a000"],
+    threePoint: ["#12284c", "#6f7271", "#f4a000"]
+  }
 }

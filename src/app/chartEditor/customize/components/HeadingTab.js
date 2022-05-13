@@ -100,7 +100,7 @@ export default function Heading({expanedState, setTabState}) {
 
     const [Height, setHeight] = React.useState('0px');
     const [Show, setShow] = React.useState(false);
-    const [headingVisible, setHeadingVisible] = React.useState(true);
+    const [headingVisible, setHeadingVisible] = React.useState(false);
     const [headingText, setHeadingText] = useState(graphConfig.title.text)
     const [alignment, setAlignment] = React.useState('center');
     const [formats, setFormats] = React.useState(() => ['']);
@@ -109,12 +109,12 @@ export default function Heading({expanedState, setTabState}) {
     const [open, setOpen] = React.useState(false)
     const [currentColor, setCurrentColor] = React.useState('')
     const [selectedFontSize, setSelectedFontSize] = React.useState('auto')
-    const [selectedFontFamily, setSelectedFontFamily] = React.useState('rubik_default')
+    const [selectedFontFamily, setSelectedFontFamily] = React.useState('roboto')
     const [titleColorPickerAnchorEl, setTitleColorPickerAnchorEl] = React.useState(null);
     const [subTitleColorPickerAnchorEl, setSubTitleColorPickerAnchorEl] = React.useState(null);
     const [titleColorPickerOpen, setTitleColorPickerOpen] = React.useState(false)
     const [subTitleColorPickerOpen, setSubTitleColorPickerOpen] = React.useState(false)
-    const [selectedSubFontFamily, setSelectedSubFontFamily] = React.useState('rubik_default')
+    const [selectedSubFontFamily, setSelectedSubFontFamily] = React.useState('roboto')
     const [subTitleSelectedFontSize, setsubTitleSelectedFontSize] = React.useState('auto')
 
     const [titleFont, settitleFont] = React.useState('');
@@ -235,8 +235,10 @@ export default function Heading({expanedState, setTabState}) {
         let newConfig = JSON.parse(JSON.stringify(graphConfig));
         if (event.target.checked) {
             newConfig['title']['text'] = headingText ? headingText : 'Chart Title';
+            newConfig['subtitle']['text'] = headingText ? headingText : 'Chart Subtitle';
         } else {
             newConfig['title']['text'] = "";
+            newConfig['subtitle']['text'] = "";
         }
         dispatch(setGraphConfig(newConfig));
     }
@@ -349,6 +351,7 @@ export default function Heading({expanedState, setTabState}) {
                             <div className={'LeftTitle'}>
                                 <FormHelperText id="title-text">Title text</FormHelperText>
                                 <OutlinedInput
+                                    placeholder="Enter your title text..."
                                     id="titleText"
                                     aria-describedby="title-text"
                                     inputProps={{
@@ -540,6 +543,7 @@ export default function Heading({expanedState, setTabState}) {
                             <div className={'LeftTitle'}>
                                 <FormHelperText id="title-text">Subtitle text</FormHelperText>
                                 <OutlinedInput
+                                    placeholder="Enter your subtitle text..."
                                     id="subtitleText"
                                     aria-describedby="subtitle-text"
                                     inputProps={{

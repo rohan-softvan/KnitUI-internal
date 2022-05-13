@@ -32,9 +32,9 @@
 }
 .charEditorTabs{
     button{
-        border:1px solid #F1F1F1;
+        border:1px solid #dedede;
         border-radius: 4px !important;
-        color: #D6D6D6 !important;
+        color: #acacac !important;
         font-size: 14px;;
         font-family: Rubik !important;
         text-transform: capitalize;
@@ -72,19 +72,17 @@
         }
     }
 }
-
-
 .subTabs{
     margin: 22px 15px 0px;
     button{
         border-radius: 2px !important;
         color: #D6D6D6 !important;
-        font-size: 12px !important;
+        font-size: 14px !important;
         padding: 0px;
-        height: 20px;
-        min-height: 20px;
-        width: 74px;
-        min-width: 74px;
+        height: 25px;
+        min-height: 25px;
+        width: 90px;
+        min-width: 90px;
         margin-right: 8px;
         font-weight: 300 !important;
     }
@@ -98,6 +96,12 @@
         font-size: 14px;
         font-weight: 300 !important;
         margin-bottom: 15px;
+    }
+}
+.questionCardBox{
+    p{
+        display:flex;
+        align-items:baseline;
     }
 }
 .accordianChart{
@@ -120,9 +124,16 @@
         }
         p{
             color: #585858;
-            font-size: 12px;
+            font-size: 14px;
+            //display: table;
             span{
                 font-weight: 500;
+                //&:first-child{
+                //    display:inline-flex;
+                //}
+            }
+            div{
+                height: 100%;
             }
         }
         .MuiAccordionDetails-root{
@@ -141,7 +152,10 @@
                     column-count: 4;
                     li{
                         display: block;
-                        font-size: 12px;
+                        font-size: 14px;
+                        white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
                         span{
                             padding:2px 0;
                         }
@@ -170,6 +184,7 @@
     .selectOption{
         display: flex;
         justify-content: right;
+        padding-right: 15px;
         label{
             span{
                 font-size: 12px;
@@ -190,9 +205,9 @@
         margin-bottom: 10px !important;
         //padding: 10px;
         p{
-            font-size: 12px;
+            font-size: 14px;
             color: #585858;
-            margin-bottom: 10px;
+            margin-bottom: 0px;
             span{
                 font-weight: 500;
             }
@@ -205,7 +220,10 @@
                 column-count: 4;
                 li{
                     display: block;
-                    font-size: 12px;
+                    font-size: 14px;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
                     span{
                         padding:2px 0;
                         svg{
@@ -245,7 +263,7 @@
     }
     .Mui-expanded.MuiAccordion-rounded{
         border:1px solid #F1F1F1 !important;
-        background: #EFEFEF26 !important;
+        background: #f5f5f5 !important;
         .AccordTitle{
             color: #28B5A6;
             opacity: 1;
@@ -308,8 +326,9 @@
                 padding: 0px 12px !important;
                 color: #313131;
                 font-size: 14px;
-                height: 32px !important;
-                width: calc(100% - 30px);
+                height: 38px !important;
+                width: calc(100% - 25px);
+                background:#fff;
             }
             fieldset{
                 display:none;
@@ -318,12 +337,13 @@
     }
     .settingToggle{
         position: absolute;
-        top: 35px;
+        top: 42px;
         right: 15px;
         cursor: pointer;
     }
     .MuiOutlinedInput-root{
-        height: 34px;
+        height: 40px;
+        background:#fff;
     }
 }
 .customGridhalf{
@@ -332,7 +352,8 @@
     position: relative;
     margin-bottom: 15px;
     .MuiOutlinedInput-root{
-        height: 34px;
+        height: 40px;
+        background:#fff;
     }
     .MuiFormHelperText-root{
         margin-bottom: 8px;
@@ -351,6 +372,10 @@
             min-width:auto;
             margin-right: auto;
             padding: 1px;
+        }
+        .MuiPaper-rounded{
+            border-radius:4px !important;
+            height:40px;
         }
         .MuiToggleButton-root.Mui-selected + .MuiToggleButton-root.Mui-selected{
             margin-left: 4px;
@@ -446,6 +471,7 @@
         .MuiFormControl-root{
             .MuiOutlinedInput-root{
                 height:40px;
+                background:#fff;
             }
         }
     }
@@ -461,8 +487,9 @@
 }
 .appereanceBox{
     border: 1px solid #E8E8E8;
+    background:#fff;
     border-radius: 4px;
-    height: 34px;
+    height: 40px;
     width: calc(100% - 15px) !important;
     display: flex;
     padding: 15px;
@@ -518,6 +545,7 @@
 }
 .chartBorderLine{
     border: 1px solid #E8E8E8;
+    background:#fff;
     border-radius:4px !important;
     width:calc(100% - 15px) !important;
     padding:2px;
@@ -540,7 +568,7 @@
     }
     p{
         color: #A5A5A5 !important;
-        font-size: 10px !important;
+        font-size: 14px !important;
         margin-top: 10px;
         font-weight: 300 !important;
         margin-bottom: 8px;
@@ -550,10 +578,11 @@
         justify-content: space-between;
         border: 1px solid #E8E8E8;
         border-radius: 4px;
-        height: 34px;
+        height: 40px;
         width: calc(100% - 15px);
         margin-bottom: 15px;
         padding: 10px;
+        background:#fff;
         .sliderValue{
             p{
                 margin:0px;
@@ -969,7 +998,7 @@
             text-align: center;
             .card-title{
                 color:#C4C4C4;
-                font-size: 10px;
+                font-size: 14px;
             }
             .imgIcon{
                 margin-bottom: 20px;
@@ -1012,7 +1041,7 @@
     }
     .AccordTitle{
         color: #747474;
-        font-size: 12px;
+        font-size: 14px;
         img{
             margin-right: 7px;
             width: 13px;
@@ -1025,7 +1054,7 @@
             height: 100px;
         }
         .card-title{
-            font-size: 12px;
+            font-size: 14px;
             margin-bottom: 15px;
             text-align: center;
         }
@@ -1052,7 +1081,15 @@
         margin-bottom: 15px;
         margin-top: 10px;
         .chartIcons{
-            margin: 0px 12px;
+            margin: 0px 3px;
+            border: 1px solid #F9F9F9;
+            padding: 5px 10px;
+            border-radius: 5px;
+            width:38px;
+            height:38px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             img{
                 cursor: pointer;
             }
@@ -1138,9 +1175,10 @@
 }
 .colorPiker{
     border:1px solid #E8E8E8;
+    background:#fff;
     border-radius:4px;
     display: flex;
-    padding: 4px 12px;
+    padding: 6px 12px;
     justify-content: space-between;
     .fixColors{
         display: flex;
@@ -1199,3 +1237,16 @@
 .MuiTab-wrapper {
     text-transform: capitalize !important;
  }
+
+.subTabs input::placeholder {
+    color: #a4a4a4;
+    opacity: 1; /* Firefox */
+}
+
+.subTabs input::-ms-input-placeholder { /* Internet Explorer 10-11 */
+    color: #a4a4a4;
+}
+
+.subTabs input::-ms-input-placeholder { /* Microsoft Edge */
+    color: #a4a4a4;
+}

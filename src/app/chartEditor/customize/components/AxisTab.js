@@ -173,7 +173,7 @@ export default function LegendTab({expanedState, setTabState}) {
 
   const [invertAxis, setInvertAxis] = React.useState(graphConfig.chart.inverted);
   const [xAxisTitle, setXAxisTitle] = React.useState(graphConfig.xAxis.title.text);
-  const [selectedFontFamily, setSelectedFontFamily] = React.useState('rubik_default')
+  const [selectedFontFamily, setSelectedFontFamily] = React.useState('roboto')
   const [xAxisFontSize, setxAxisFontSize] = React.useState('auto')
   const [xAxisTitleName, setXAxisTitleName] = React.useState('on')
   const [selectedAngleOfLabel, setSelectedAngleOfLabel] = React.useState('0')
@@ -324,7 +324,7 @@ export default function LegendTab({expanedState, setTabState}) {
   const [yAxisTitle, setYAxisTitle] = React.useState(graphConfig.yAxis[0].title.text);
 
   // const [selectedAngleOfLabel, setSelectedAngleOfLabel] = React.useState('horizontal')
-  const [selectedYAxisFontFamily, setSelectedYAxisFontFamily] = React.useState('rubik_default')
+  const [selectedYAxisFontFamily, setSelectedYAxisFontFamily] = React.useState('roboto')
   const [yAxisFontSize, setYAxisFontSize] = React.useState('auto')
   const [yAxisFormats, setYAxisFormats] = React.useState(() => ['']);
   const [selectedYAngleOfLabel, setSelectedYAngleOfLabel] = React.useState('0')
@@ -442,6 +442,7 @@ export default function LegendTab({expanedState, setTabState}) {
                   <FormHelperText id="title-text">Axis X</FormHelperText>
                   {/*<SelectComponent menu={position} />*/}
                   <OutlinedInput
+                      placeholder="Enter your Axis X..."
                       id="titleText"
                       aria-describedby="axisx-title-text"
                       inputProps={{
@@ -697,6 +698,7 @@ export default function LegendTab({expanedState, setTabState}) {
                 <div className={'LeftTitle'}>
                   <FormHelperText id="title-text">Axis Y</FormHelperText>
                   <OutlinedInput
+                      placeholder="Enter your Axis Y..."
                       id="titleText"
                       aria-describedby="axisy-title-text"
                       inputProps={{

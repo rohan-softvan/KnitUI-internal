@@ -15,13 +15,14 @@ import {chartEditorEnum} from "../enums";
 const PivotTable = () => {
   const dispatch = useDispatch();
   const [activeTab, setActiveTab] = useState(0);
+  let dataJSON = useSelector((state) => state.chart.dataJSON);
   const [optionsConfig, setOptionsConfig] = useState({
     grandTotal: "on",
     subTotals: "on",
     layout: "compact"
   });
   const [color, setColor] = useState("#4E4E4E");
-  const [data, setData] = useState(DataJson);
+  const [data, setData] = useState([]);
   const [config, setConfig] = useState({
     type: "column",
     title: "My Graph Title",
@@ -137,6 +138,80 @@ const PivotTable = () => {
     if (!("plotOptions" in config)) {
       config.plotOptions = chartEditorEnum.plotOptionsDefaultProps;
     }
+
+
+    //setting the colors for multicolor graphs
+    if ((config.chart.type === "bar" || config.chart.type === "column") && config.plotOptions.series.colorByPoint) {
+      console.log("its a multicolor graph 🙃");
+      // config.legend = {...chartEditorEnum.legendsDefaultProps, enabled: false};
+      // if (config.series.length === 3) {
+      //   config.colors = chartEditorEnum.defaultSeriesColors["threePoint"];
+      //   // if series is exactly 5
+      // } else if (config.series.length === 5) {
+      //   config.colors = chartEditorEnum.defaultSeriesColors["fivePoint"];
+      //   // if series is greater than 5 and less than 3 (generalize)
+      // } else {
+      //   config.colors = chartEditorEnum.defaultSeriesColors["general"];
+      // }
+      //setting the colors for  general graphs
+    } else if (config.chart.type === "pie") {
+      console.log("its a pie graph 😉", config.chart.type);
+
+      // if series is exactly 3
+      if (config.series[0].data.length === 3) {
+        config.series[0].data.forEach((seriesItem, index) => {
+          seriesItem.color = chartEditorEnum.defaultSeriesColors["threePoint"][index]
+          // seriesItem.showInLegend = true
+        });
+        // if series is exactly 5
+      } else if (config.series[0].data.length === 5) {
+        config.series[0].data.forEach((seriesItem, index) => {
+          seriesItem.color = chartEditorEnum.defaultSeriesColors["fivePoint"][index]
+          // seriesItem.showInLegend = true
+        });
+        // if series is greater than 5 and less than 3 (generalize)
+      } else {
+        config.series[0].data.forEach((seriesItem, index) => {
+          if (index < 6) {
+            seriesItem.color = chartEditorEnum.defaultSeriesColors["general"][index]
+          } else {
+            seriesItem.color = chartEditorEnum.defaultSeriesColors["general"][index - 6]
+          }
+          // seriesItem.showInLegend = true
+        });
+      }
+
+    } else {
+      config.legend = {...chartEditorEnum.legendsDefaultProps};
+      if ("colors" in config) {
+        delete config.colors;
+      }
+      // if series is exactly 3
+      if (config.series.length === 3) {
+        config.series.forEach((seriesItem, index) => {
+          seriesItem.color = chartEditorEnum.defaultSeriesColors["threePoint"][index]
+          seriesItem.showInLegend = true
+        });
+        // if series is exactly 5
+      } else if (config.series.length === 5) {
+        config.series.forEach((seriesItem, index) => {
+          seriesItem.color = chartEditorEnum.defaultSeriesColors["fivePoint"][index]
+          seriesItem.showInLegend = true
+        });
+        // if series is greater than 5 and less than 3 (generalize)
+      } else {
+        config.series.forEach((seriesItem, index) => {
+          if (index < 6) {
+            seriesItem.color = chartEditorEnum.defaultSeriesColors["general"][index]
+          } else {
+            seriesItem.color = chartEditorEnum.defaultSeriesColors["general"][index - 6]
+          }
+          seriesItem.showInLegend = true
+        });
+      }
+    }
+
+
     console.log("setDefaultGraphProperties final", config)
     return config;
   }
@@ -164,8 +239,7 @@ const PivotTable = () => {
           "borderColor": "#EBBA95",
           "borderRadius": 20,
           "borderWidth": 2,
-          "events": {
-          },
+          "events": {},
           "height": 400,
           "reflow": true,
         },
@@ -192,7 +266,15 @@ const PivotTable = () => {
 
   const report = {
     dataSource: {
-      data: data
+      data: JSON.parse(JSON.stringify(dataJSON))
+    },
+    tableSizes: {
+      columns: [
+        {
+          idx: 0,
+          width: 200
+        }
+      ]
     },
 
     // tableSizes: {
@@ -496,8 +578,8 @@ const PivotTable = () => {
   useEffect(() => {
 
     pieRef && pieRef.webdatarocks && getPieConfig()
-      // myRef && myRef.webdatarocks &&
-  },[pieRef])
+    // myRef && myRef.webdatarocks &&
+  }, [pieRef])
 
   useEffect(() => {
     myRef && myRef.webdatarocks && myRef.webdatarocks.on("reportcomplete", function () {
@@ -507,8 +589,8 @@ const PivotTable = () => {
       // setActiveTab(0)
       myRef && myRef.webdatarocks && createChart()
       // myRef && myRef.webdatarocks &&
-        })
     })
+  })
 
   useEffect(() => {
     console.log("graphConfig ===>", graphConfig, Highcharts)
@@ -518,7 +600,7 @@ const PivotTable = () => {
       // });
       let newGraphConfig = JSON.parse(JSON.stringify(graphConfig));
       console.log("graphConfig ===> new", newGraphConfig, Highcharts)
-      Highcharts.chart("highchartsContainer", newGraphConfig);
+      Highcharts.chart("highchartsContainer", graphConfig);
     }
 
   }, [graphConfig])
@@ -585,7 +667,7 @@ const PivotTable = () => {
                   <WebDataRocksReact.Pivot
                       ref={elem => {
                         myRef = elem;
-                        pieRef= elem;
+                        pieRef = elem;
                       }}
                       width={"100%"}
                       height={"100%"}
