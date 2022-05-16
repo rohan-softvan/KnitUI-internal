@@ -1,7 +1,6 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 
-import {updateCustomizeTab} from "../_helpers/eventHelper"
-
+import { updateCustomizeTab } from "../_helpers/eventHelper"
 export const chartEditorEnum = {
   chartDefaultProps: {
     backgroundColor: "#ffffff",
@@ -66,11 +65,11 @@ export const chartEditorEnum = {
     series: {
       point: {
         events: {
-          // click: function () {
-          //   console.log("seriesClick::: ", this);
-          //   updateCustomizeTab("series");
-          //   // handleChange(3)
-          // }
+          click: function() {
+            console.log("seriesClick::: ", this);
+            updateCustomizeTab("series")
+            // handleChange(3)
+          }
         }
       },
       dataLabels: {

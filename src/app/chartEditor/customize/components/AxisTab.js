@@ -496,8 +496,8 @@ export default function LegendTab({expanedState, setTabState}) {
                         elevation={0}
                         style={{
                           display: 'flex',
-                          border: '1px solid #E8E8E8',
-                          width: 'calc(100% - 30px)'
+                          border: '1px solid #dedede',
+                          width: 'calc(100% - 15px)'
                         }}
                     >
                       <StyledToggleButtonGroup
@@ -520,7 +520,7 @@ export default function LegendTab({expanedState, setTabState}) {
                     <FormHelperText id="title-text">Axis X text color</FormHelperText>
                     <div className={'colorPiker'}
                          style={{
-                           width: 'calc(100% - 30px)'
+                           width: 'calc(100% - 15px)'
                          }}>
                       <div className={'fixColors'}>
                         <div className={'ActiveColor'} style={{
@@ -616,7 +616,7 @@ export default function LegendTab({expanedState, setTabState}) {
                     <FormHelperText id="title-text">Gridline color</FormHelperText>
                     <div className={'colorPiker'}
                          style={{
-                           width: 'calc(100% - 30px)'
+                           width: 'calc(100% - 15px)'
                          }}>
                       <div className={'fixColors'}>
                         <div
@@ -751,8 +751,8 @@ export default function LegendTab({expanedState, setTabState}) {
                         elevation={0}
                         style={{
                           display: 'flex',
-                          border: '1px solid #E8E8E8',
-                          width: 'calc(100% - 30px)'
+                          border: '1px solid #dedede',
+                          width: 'calc(100% - 15px)'
                         }}
                     >
                       <StyledToggleButtonGroup
@@ -775,7 +775,7 @@ export default function LegendTab({expanedState, setTabState}) {
                     <FormHelperText id="title-text">Axis Y text color</FormHelperText>
                     <div className={'colorPiker'}
                          style={{
-                           width: 'calc(100% - 30px)'
+                           width: 'calc(100% - 15px)'
                          }}>
                       <div className={'fixColors'}>
                         {console.log("graphConfig:: ", graphConfig)}
@@ -872,7 +872,7 @@ export default function LegendTab({expanedState, setTabState}) {
                     <FormHelperText id="title-text">Gridline color</FormHelperText>
                     <div className={'colorPiker'}
                          style={{
-                           width: 'calc(100% - 30px)'
+                           width: 'calc(100% - 15px)'
                          }}>
                       <div className={'fixColors'}>
                         <div

@@ -10,22 +10,26 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { useDispatch,useSelector } from "react-redux";
 import {useEffect} from "react";
-import { setDataJSONConfig } from '../redux/slice/ChartEditorSlice';
+import { setDataJSONConfig,setSelectedQuestion } from '../redux/slice/ChartEditorSlice';
 
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 
 export default function QuestionTab() {
-
-    const [selectedQuestions, setSelectedQuestions] = React.useState([]);
     const dispatch= useDispatch()
     const questionData = useSelector(store => store.data.questionCardListBox);
-    const [dataJSON,setDataJSON] = React.useState([])
+    const selectedQuestionList = useSelector(store => store.chart.selectedQuestionList);
 
+    const [selectedQuestions, setSelectedQuestions] = React.useState([]);
+    const [subOptionSelected, setSubOptionSelected] = React.useState([]);
+    const [dataJSON,setDataJSON] = React.useState([])
     const [expand, setExpand] = React.useState(false);
     const toggleAcordion = () => {
         setExpand((prev) => !prev);
     };
 
+    // useEffect(()=>{
+    //     setSelectedQuestionsState(selectedQuestionList)
+    // })
     // const [isReadMore, setIsReadMore] = React.useState(true);
     // const toggleReadMore = () => {
     //     setIsReadMore(!isReadMore);
@@ -45,25 +49,34 @@ export default function QuestionTab() {
 
    const setSelectedQuestionsState = (value,isQuestion,subOption, type) => {
         console.log('value=>',value)
+
         let questionName = value.questionNumber + " " +value.questionName
          let dataJson=JSON.parse(JSON.stringify(dataJSON))
         //let dataJson = [];
+       let newSelectedQuestionList=selectedQuestions;
         if(isQuestion){
             console.log("removing ",isQuestion, value)
             if (type && type === "remove") {
-                let selectedQuestionsUpdated = selectedQuestions.filter(e => e !== value.questionId);
+                let selectedQuestionsUpdated = selectedQuestions.filter(e => e !== value.numericQuestionId);
                 setSelectedQuestions([...selectedQuestionsUpdated])
                 let updatedNewJson=dataJSON.filter(function(item){
                     console.log("QUestio nRemove",item[questionName] == questionName)
                     return item[questionName] == questionName;
                 })
                 setDataJSON(updatedNewJson);
+                newSelectedQuestionList=selectedQuestionsUpdated
                 dispatch(setDataJSONConfig(updatedNewJson))
             }
             else {
-                selectedQuestions.push(value.questionId);
-                setSelectedQuestions([...selectedQuestions])
+                if(!selectedQuestions.includes(value.numericQuestionId)){
+                    selectedQuestions.push(value.numericQuestionId);
+                    setSelectedQuestions([...selectedQuestions])
+                    newSelectedQuestionList=selectedQuestions
+                }
             }
+            // dispatch(setSelectedQuestion([...selectedQuestions]))
+            console.log('setSelectedQuestion==>',newSelectedQuestionList)
+            dispatch(setSelectedQuestion({questionList:newSelectedQuestionList, text: questionName}))
         }else{
             console.log("QuestionAns",value,selectedQuestions,"type",type)
             if (type && type === "remove") {
@@ -72,7 +85,7 @@ export default function QuestionTab() {
                 setDataJSON(updatedNewJson)
                 dispatch(setDataJSONConfig(updatedNewJson))
             }else{
-                if(dataJSON.length <= 0 || selectedQuestions.includes(value.questionId)){
+                if(dataJSON.length <= 0 || selectedQuestions.includes(value.numericQuestionId)){
                     for(let i=0;i<subOption.total;i++){
                         let QuestionAns = subOption.description
                         dataJSON.push({[questionName]:QuestionAns})
@@ -85,10 +98,10 @@ export default function QuestionTab() {
                     }else{
                         totalLength=subOption.total
                     }
-                    console.log('data.length==> after',totalLength)
+                    console.log('data.length==> after',totalLength,subOptionSelected)
                     let QuestionAns = subOption.description
                     // dataJSON[questionName]=QuestionAns
-                    dataJSON.map(i=>i[questionName]=QuestionAns)
+                    // dataJSON.map(i=>i[questionName]=QuestionAns)
                     // }
                     for(let i=0;i<totalLength;i++){
                         dataJSON.push({[questionName]:QuestionAns})
@@ -96,16 +109,22 @@ export default function QuestionTab() {
                 }
                 setDataJSON(dataJSON)
                 dispatch(setDataJSONConfig(dataJson))
-                selectedQuestions.push(value.questionId);
-                setSelectedQuestions([...selectedQuestions])
-            }
-            // for (const questionChoice in value.total) {
-            //     let QuestionAns = value.filterQuestionChoice[questionChoice].description
-            //     dataJSON.push({[questionName]:QuestionAns})
-            // }
-        }
+                console.log('subOptionSelected==>',subOptionSelected)
+                if(!subOptionSelected.includes(value.numericQuestionId)){
+                    subOptionSelected.push(value.numericQuestionId)
+                    setSubOptionSelected([...subOptionSelected])
+                }
+                if(!selectedQuestions.includes(value.numericQuestionId)){
 
-        console.log("dataJSON <<< ",dataJSON)
+                    selectedQuestions.push(value.numericQuestionId);
+                    setSelectedQuestions([...selectedQuestions])
+
+                    newSelectedQuestionList=selectedQuestions
+                    dispatch(setSelectedQuestion({questionList:newSelectedQuestionList, text: questionName}))
+                }
+            }
+        }
+        console.log("dataJSON <<< ",dataJSON,selectedQuestions)
     }
 
     const setSelectedQuestionsStateForGraphType = (item,subOption,key,isQuestion, type) => {
@@ -169,6 +188,8 @@ export default function QuestionTab() {
             //     dataJSON.push({[questionName]:QuestionAns})
             // }
         }
+        dispatch(setSelectedQuestion(selectedQuestions))
+
         console.log("dataJSON <<< ",dataJSON)
     }
 
@@ -179,7 +200,7 @@ export default function QuestionTab() {
     return (
         questionData && questionData.map((item,index)=>  item.questionType === 'MC' ? (
             <div  key={index} className={'accordianChart'}>
-                <Accordion style={selectedQuestions.includes(item.questionId) ? { backgroundColor: '#12988A' } : {}}>
+                <Accordion expanded={expand} style={selectedQuestions.includes(item.numericQuestionId) ? { backgroundColor: '#12988A' } : {}}>
                     <AccordionSummary
                         expandIcon={<ExpandMoreIcon />}
                         aria-controls="panel2a-content"
@@ -189,15 +210,15 @@ export default function QuestionTab() {
                         }}
                         className={'questionCardBox'}
                     >
-                        <Typography style={selectedQuestions.includes(item.questionId) ? { color: '#fff' } : {}}><div><Checkbox {...label} onClick={(e) => {
-                            e.target.checked ? setSelectedQuestionsState(item.questionId,true) : setSelectedQuestionsState(item.questionId,true, "remove")
+                        <Typography style={selectedQuestions.includes(item.numericQuestionId) ? { color: '#fff' } : {}}><div><Checkbox {...label} onClick={(e) => {
+                            e.target.checked ? setSelectedQuestionsState(item,true) : setSelectedQuestionsState(item,true, "remove")
                         }} /></div><div style={{display:'flex'}}><span style={{paddingRight:'5px'}}>{item.questionNumber ? item.questionNumber : "-"}</span> { item.questionText ? item.questionText : "-"}</div></Typography>
                     </AccordionSummary>
                     <AccordionDetails>
-                        <Typography style={selectedQuestions.includes(item.questionId) ? { color: '#fff' } : {}}>
+                        <Typography style={selectedQuestions.includes(item.numericQuestionId) ? { color: '#fff' } : {}}>
                             Select variables to compare:
                         </Typography>
-                        <div className='selectValue' style={selectedQuestions.includes(item.questionId) ? { color: '#fff', height: Height, overflow: Show ? 'auto' : 'hidden' } : {}}>
+                        <div className='selectValue' style={selectedQuestions.includes(item.numericQuestionId) ? { color: '#fff', height: Height, overflow: Show ? 'auto' : 'hidden' } : {}}>
                             <ul>
                                 {/*{console.log("Checked List Length",item.filterQuestionChoice.length >= 9)}*/}
                                 {item.filterQuestionChoice && item.filterQuestionChoice.map(el => (
@@ -208,12 +229,12 @@ export default function QuestionTab() {
                         </div>
                         <Grid container spacing={2} style={{ alignItems: 'center' }}>
                             <Grid item xs={6}>
-                                <Typography onClick={handleClickMenu} style={selectedQuestions.includes(item.questionId) ? { color: '#fff', cursor: 'pointer' } : { cursor: 'pointer' }}>
+                                <Typography onClick={handleClickMenu} style={selectedQuestions.includes(item.numericQuestionId) ? { color: '#fff', cursor: 'pointer' } : { cursor: 'pointer' }}>
                                     {Show ? "View less" : "View more"}
                                 </Typography>
                             </Grid>
                             <Grid item xs={6}>
-                                {Show && <div className='selectOption' style={selectedQuestions.includes(item.questionId) ? { color: '#fff' } : {}}>
+                                {Show && <div className='selectOption' style={selectedQuestions.includes(item.numericQuestionId) ? { color: '#fff' } : {}}>
                                     <RadioGroup
                                         row
                                         aria-labelledby="demo-row-radio-buttons-group-label"

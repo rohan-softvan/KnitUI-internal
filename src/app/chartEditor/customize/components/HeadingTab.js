@@ -404,8 +404,8 @@ export default function Heading({expanedState, setTabState}) {
                                         elevation={0}
                                         style={{
                                             display: 'flex',
-                                            border: '1px solid #E8E8E8',
-                                            width: 'calc(100% - 30px)'
+                                            border: '1px solid #dedede',
+                                            width: 'calc(100% - 15px)'
                                         }}
                                     >
                                         <StyledToggleButtonGroup
@@ -486,7 +486,7 @@ export default function Heading({expanedState, setTabState}) {
                                     <FormHelperText id="title-text">Title text color</FormHelperText>
                                     <div className={'colorPiker'}
                                          style={{
-                                             width: 'calc(100% - 30px)'
+                                             width: 'calc(100% - 15px)'
                                          }}>
                                         <div className={'fixColors'}>
                                             <div className={'ActiveColor'} style={{
@@ -597,8 +597,8 @@ export default function Heading({expanedState, setTabState}) {
                                         elevation={0}
                                         style={{
                                             display: 'flex',
-                                            border: '1px solid #E8E8E8',
-                                            width: 'calc(100% - 30px)'
+                                            border: '1px solid #dedede',
+                                            width: 'calc(100% - 15px)'
                                         }}
                                     >
                                         <StyledToggleButtonGroup
@@ -679,7 +679,7 @@ export default function Heading({expanedState, setTabState}) {
                                     <FormHelperText id="title-text">Subtitle text color</FormHelperText>
                                     <div className={'colorPiker'}
                                          style={{
-                                             width: 'calc(100% - 30px)'
+                                             width: 'calc(100% - 15px)'
                                          }}>
                                         <div className={'fixColors'}>
                                             <div className={'ActiveColor'} style={{

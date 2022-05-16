@@ -39,7 +39,9 @@ export const dataSlice = createSlice({
     questionData: [],
     dataView: "",
     allSearchDataList:[],
-    applyButtonDisabledStatus:false
+    applyButtonDisabledStatus:false,
+    videoQuestionIds:[],
+    videoQuestionList:[]
   },
   reducers: {
     resetProjectStoreData: (state,action) => {
@@ -246,6 +248,8 @@ export const dataSlice = createSlice({
         mainQuestionList.push({ [action.payload[i].question_text]: "" });
       }
       state.tabularData = tableData;
+      state.videoQuestionIds=videoQuestionIds
+      state.videoQuestionList=videoQuestionList
     },
 
     fetchTableRowData: (state, action) => {

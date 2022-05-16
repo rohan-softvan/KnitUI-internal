@@ -10,13 +10,14 @@ import OptionsTab from './OptionsTab';
 import {useDispatch, useSelector} from "react-redux";
 import {setGeneralConfig, setGraphConfig, setPieChartConfig} from "../redux/slice/ChartEditorSlice";
 import {chartEditorEnum} from "../enums";
-import {updateCustomizeTab} from "../_helpers/eventHelper";
 
 
 const PivotTable = () => {
   const dispatch = useDispatch();
   const [activeTab, setActiveTab] = useState(0);
-  let dataJSON = useSelector((state) => state.chart.dataJSON);
+  let dataJSONConfig = useSelector((state) => state.chart.dataJSON);
+  console.log('dataJSONConfig==>',dataJSONConfig)
+  let selectedQuestion = useSelector((state) => state.chart.selectedItems);
   const [optionsConfig, setOptionsConfig] = useState({
     grandTotal: "on",
     subTotals: "on",
@@ -38,39 +39,11 @@ const PivotTable = () => {
   const [display, setDisplay] = useState(true);
   const [fontSize, setFontSize] = useState(14);
   const [fontFamily, setFontFamily] = useState('Roboto');
-  const [rows, setRows] = useState([
-    {
-      uniqueName: "Q8 Do you have a meal plan for on-campus dining?",
-      sort: "asc"
-    }
-    // {
-    //   "uniqueName": "Q6 We would like to learn a little bit more about how you structure meal time between home, work and school. Which of these best describes you?",
-    //   "sort": "asc"
-    // },
-  ]);
+  console.log('selectedQuestion==>',selectedQuestion)
+  const [rows, setRows] = useState(selectedQuestion[0].rows);
 
-  const [columns, setColumns] = useState([
-    {
-      uniqueName:
-          "Q20 Would you be interested in ordering from a food locker like this?",
-      sort: "asc"
-    }
-  ]);
-  const [measures, setMeasures] = useState([
-    {
-      uniqueName:
-          "Q20 Would you be interested in ordering from a food locker like this?",
-      aggregation: "sum"
-    }
-    // {
-    //   uniqueName: "Q8 Do you have a meal plan for on-campus dining?",
-    //   aggregation: "sum",
-    // },
-    // {
-    //   "uniqueName": "Q6 We would like to learn a little bit more about how you structure meal time between home, work and school. Which of these best describes you?",
-    //   "aggregation": "sum"
-    // },
-  ]);
+  const [columns, setColumns] = useState(selectedQuestion[0].columns);
+  const [measures, setMeasures] = useState(selectedQuestion[0].measures);
   let graphConfig = useSelector((state) => state.chart.graphConfig);
   let myRef = useRef();
   let pieRef = useRef();
@@ -99,14 +72,6 @@ const PivotTable = () => {
     console.log("handleDataLabelClick invoked 😄");
   };
 
-  const openLegendsTabEvent = (seriesItem) => {
-    seriesItem.events = {
-      legendItemClick: function () {
-        console.log("legendItemClick::: ");
-        updateCustomizeTab("legend");
-      }
-    }
-  }
 
   const setDefaultGraphProperties = (graphConfig) => {
     let config = JSON.parse(JSON.stringify(graphConfig));
@@ -153,15 +118,15 @@ const PivotTable = () => {
     if ((config.chart.type === "bar" || config.chart.type === "column") && config.plotOptions.series.colorByPoint) {
       console.log("its a multicolor graph 🙃");
       // config.legend = {...chartEditorEnum.legendsDefaultProps, enabled: false};
-      // if (config.series.length === 3) {
-      //   config.colors = chartEditorEnum.defaultSeriesColors["threePoint"];
-      //   // if series is exactly 5
-      // } else if (config.series.length === 5) {
-      //   config.colors = chartEditorEnum.defaultSeriesColors["fivePoint"];
-      //   // if series is greater than 5 and less than 3 (generalize)
-      // } else {
-      //   config.colors = chartEditorEnum.defaultSeriesColors["general"];
-      // }
+      if (config.series.length === 3) {
+        config.colors = chartEditorEnum.defaultSeriesColors["threePoint"];
+        // if series is exactly 5
+      } else if (config.series.length === 5) {
+        config.colors = chartEditorEnum.defaultSeriesColors["fivePoint"];
+        // if series is greater than 5 and less than 3 (generalize)
+      } else {
+        config.colors = chartEditorEnum.defaultSeriesColors["general"];
+      }
       //setting the colors for  general graphs
     } else if (config.chart.type === "pie") {
       console.log("its a pie graph 😉", config.chart.type);
@@ -219,7 +184,8 @@ const PivotTable = () => {
         });
       }
     }
-    // config.series.map(seriesItem => openLegendsTabEvent(seriesItem));
+
+
     console.log("setDefaultGraphProperties final", config)
     return config;
   }
@@ -247,7 +213,8 @@ const PivotTable = () => {
           "borderColor": "#EBBA95",
           "borderRadius": 20,
           "borderWidth": 2,
-          "events": {},
+          "events": {
+          },
           "height": 400,
           "reflow": true,
         },
@@ -271,10 +238,9 @@ const PivotTable = () => {
     );
   };
 
-
   const report = {
     dataSource: {
-      data: JSON.parse(JSON.stringify(dataJSON))
+      data: dataJSONConfig
     },
     tableSizes: {
       columns: [
@@ -586,8 +552,8 @@ const PivotTable = () => {
   useEffect(() => {
 
     pieRef && pieRef.webdatarocks && getPieConfig()
-    // myRef && myRef.webdatarocks &&
-  }, [pieRef])
+      // myRef && myRef.webdatarocks &&
+  },[pieRef])
 
   useEffect(() => {
     myRef && myRef.webdatarocks && myRef.webdatarocks.on("reportcomplete", function () {
@@ -597,8 +563,8 @@ const PivotTable = () => {
       // setActiveTab(0)
       myRef && myRef.webdatarocks && createChart()
       // myRef && myRef.webdatarocks &&
+        })
     })
-  })
 
   useEffect(() => {
     console.log("graphConfig ===>", graphConfig, Highcharts)
@@ -608,7 +574,7 @@ const PivotTable = () => {
       // });
       let newGraphConfig = JSON.parse(JSON.stringify(graphConfig));
       console.log("graphConfig ===> new", newGraphConfig, Highcharts)
-      Highcharts.chart("highchartsContainer", graphConfig);
+      Highcharts.chart("highchartsContainer", newGraphConfig);
     }
 
   }, [graphConfig])
@@ -664,6 +630,8 @@ const PivotTable = () => {
       document.getElementsByClassName("wdr-ui-element wdr-ui wdr-fields-view-wrap")[0].style.display = "none"
     }
   }
+
+  console.log('report===>',report)
   return (
       // style={{ display: 'flex', justifyContent: 'center', marginTop: '15px' }}
       display && (
@@ -675,7 +643,7 @@ const PivotTable = () => {
                   <WebDataRocksReact.Pivot
                       ref={elem => {
                         myRef = elem;
-                        pieRef = elem;
+                        pieRef= elem;
                       }}
                       width={"100%"}
                       height={"100%"}

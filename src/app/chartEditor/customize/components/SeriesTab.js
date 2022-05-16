@@ -28,7 +28,7 @@ let legend = [
 ];
 
 const renderSeriesMenuItem = (title, color) => (
-    <div style={{display: 'flex', alignItems: 'center'}}><span style={{
+    <div style={{display: 'flex',alignItems:'center'}}><span style={{
       backgroundColor: color,
       width: '16px',
       height: '16px',
@@ -150,7 +150,7 @@ export default function SeriesTab({expanedState, setTabState}) {
                   <FormHelperText id="title-text">Series color</FormHelperText>
                   <div className={'colorPiker'}
                        style={{
-                         width: 'calc(100% - 30px)'
+                         width: 'calc(100% - 15px)'
                        }}>
                     <div className={'fixColors'}>
                       <div className={'ActiveColor'}

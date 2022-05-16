@@ -294,8 +294,8 @@ export default function LegendTab({expanedState, setTabState}) {
                         elevation={0}
                         style={{
                           display: 'flex',
-                          border: '1px solid #E8E8E8',
-                          width: 'calc(100% - 30px)'
+                          border: '1px solid #dedede',
+                          width: 'calc(100% - 15px)'
                         }}
                     >
                       <StyledToggleButtonGroup
@@ -337,7 +337,7 @@ export default function LegendTab({expanedState, setTabState}) {
                     <FormHelperText id="title-text">Legend text color</FormHelperText>
                     <div className={'colorPiker'}
                          style={{
-                           width: 'calc(100% - 30px)'
+                           width: 'calc(100% - 15px)'
                          }}>
                       <div className={'fixColors'}>
                         <div className={'ActiveColor'} style={{

@@ -79,8 +79,8 @@
         color: #D6D6D6 !important;
         font-size: 14px !important;
         padding: 0px;
-        height: 25px;
-        min-height: 25px;
+        height: 26px;
+        min-height: 26px;
         width: 90px;
         min-width: 90px;
         margin-right: 8px;
@@ -211,6 +211,11 @@
             span{
                 font-weight: 500;
             }
+            svg{
+                path{
+                    color: #D6D6D6;
+                }
+            }
         }
         .withoutAccordian{
             padding: 8px 5px 10px 10px;
@@ -260,10 +265,17 @@
 .customizeTab{
     .MuiAccordion-rounded{
         border:1px solid #fff!important;
+        -webkit-transition: height 0.5s linear;
+        -o-transition: height 0.5s linear;
+        transition: height 0.5s linear;
     }
     .Mui-expanded.MuiAccordion-rounded{
         border:1px solid #F1F1F1 !important;
         background: #f5f5f5 !important;
+        -webkit-transition: height 0.5s linear;
+        -o-transition: height 0.5s linear;
+        transition: height 0.5s linear;
+        height:auto;
         .AccordTitle{
             color: #28B5A6;
             opacity: 1;
@@ -321,7 +333,7 @@
         .MuiOutlinedInput-root{
             display: block;
             input{
-                border: 1px solid #E8E8E8;
+                border: 1px solid #dedede;
                 border-radius: 4px;
                 padding: 0px 12px !important;
                 color: #313131;
@@ -359,7 +371,8 @@
         margin-bottom: 8px;
     }
     .MuiFormControl-root{
-        width: calc(100% - 30px) !important;
+        width: calc(100% - 15px) !important;
+        height:40px !important;
     }
     .leftGrid{
         width:100%;
@@ -376,6 +389,7 @@
         .MuiPaper-rounded{
             border-radius:4px !important;
             height:40px;
+            border:1px solid #dedede !important;
         }
         .MuiToggleButton-root.Mui-selected + .MuiToggleButton-root.Mui-selected{
             margin-left: 4px;
@@ -390,34 +404,35 @@
         width: 100%;
     }
     .blankSpace{
-        width: 30px;
+        width: 56px;
     }
     .MuiOutlinedInput-notchedOutline{
-        border:1px solid #E8E8E8 !important;
+        border:1px solid #dedede !important;
     }
     .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline{
-        border:1px solid #E8E8E8 !important;
+        border:1px solid #dedede !important;
     }
     .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline{
-        border-color: #E8E8E8 !important;
+        border-color: #dedede !important;
     }
 }
 .selectFullDropdown{
     width: calc(100% - 30px) !important;
     .MuiFormControl-root{
         width: calc(100% - 15px) !important;
+        height:40px !important;
     }
     .MuiFormHelperText-root{
         margin-bottom: 8px;
     }
     .MuiOutlinedInput-notchedOutline{
-        border:1px solid #E8E8E8 !important;
+        border:1px solid #dedede !important;
     }
     .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline{
-        border:1px solid #E8E8E8 !important;
+        border:1px solid #dedede !important;
     }
     .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline{
-        border-color: #E8E8E8 !important;
+        border-color: #dedede !important;
     }
 }
 .MuiPopover-root .MuiMenu-paper{
@@ -428,18 +443,19 @@
     width:100% !important;
     .MuiFormControl-root{
         width: calc(100% - 15px) !important;
+        height:40px !important;
     }
     .MuiFormHelperText-root{
         margin-bottom: 8px;
     }
     .MuiOutlinedInput-notchedOutline{
-        border:1px solid #E8E8E8 !important;
+        border:1px solid #dedede !important;
     }
     .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline{
-        border:1px solid #E8E8E8 !important;
+        border:1px solid #dedede !important;
     }
     .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline{
-        border-color: #E8E8E8 !important;
+        border-color: #dedede !important;
     }
 }
 .datalabelGrid{
@@ -452,6 +468,7 @@
     }
     .MuiFormControl-root{
         width: calc(100% - 15px) !important;
+        height:40px !important;
     }
     .leftGrid {
         width: 100%;
@@ -476,17 +493,17 @@
         }
     }
     .MuiOutlinedInput-notchedOutline{
-        border:1px solid #E8E8E8 !important;
+        border:1px solid #dedede !important;
     }
     .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline{
-        border:1px solid #E8E8E8 !important;
+        border:1px solid #dedede !important;
     }
     .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline{
-        border-color: #E8E8E8 !important;
+        border-color: #dedede !important;
     }
 }
 .appereanceBox{
-    border: 1px solid #E8E8E8;
+    border: 1px solid #dedede;
     background:#fff;
     border-radius: 4px;
     height: 40px;
@@ -544,7 +561,7 @@
     margin: 0px 8px;
 }
 .chartBorderLine{
-    border: 1px solid #E8E8E8;
+    border: 1px solid #dedede;
     background:#fff;
     border-radius:4px !important;
     width:calc(100% - 15px) !important;
@@ -576,7 +593,7 @@
     .sliderBox{
         display: flex;
         justify-content: space-between;
-        border: 1px solid #E8E8E8;
+        border: 1px solid #dedede;
         border-radius: 4px;
         height: 40px;
         width: calc(100% - 15px);
@@ -607,7 +624,7 @@
     }
 }
 .axisbox{
-    border: 1px solid #E8E8E8;
+    border: 1px solid #dedede;
     border-radius: 4px;
     height: 35px;
     width: calc(100% - 30px) !important;
@@ -1174,7 +1191,7 @@
     height: 30px;
 }
 .colorPiker{
-    border:1px solid #E8E8E8;
+    border:1px solid #dedede;
     background:#fff;
     border-radius:4px;
     display: flex;

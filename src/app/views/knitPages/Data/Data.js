@@ -309,10 +309,10 @@ class Data extends Component {
 
   selectAll = () => {
     let selectedList = []
-    let { mainList } = this.state;
+    let { mainList } = this.props;
     if (!this.state.allChecked) {
       this.props.handleAllSelect(true)
-      this.setState({ totalChecked: this.props.TableData.length })
+      this.setState({ totalChecked: this.props.mainList.length })
     } else {
       this.props.handleAllSelect(false)
       this.setState({ totalChecked: [] })
@@ -323,9 +323,9 @@ class Data extends Component {
   };
 
   getCSVDetails = (pageSize, projectId) => {
-    let { questionCardListBox } = this.state;
+    let { questionCardListBox } = this.props;
     let questionsList = questionCardListBox;
-    let mainList = this.state.mainList;
+    let mainList = this.props.mainList;
     let csvDetailsData = [];
     let questionsData = [];
     let output;
@@ -355,7 +355,7 @@ class Data extends Component {
                   userResponseData.question_answer !== null &&
                   'question_file_link' in userResponseData.question_answer) {
                   output = userResponseData.question_answer.question_file_link;
-                  if (this.state.videoQuestionIds.includes(userResponseData.question_id)) {
+                  if (this.props.videoQuestionIds.includes(userResponseData.question_id)) {
                     videoTranscript.push({
                       "transcript": userResponseData.video_transcription ? userResponseData.video_transcription : '-',
                       questionName: userResponseData.question_text + "-Transcript",
@@ -367,7 +367,7 @@ class Data extends Component {
                   output = userResponseData.question_answer;
                 } else {
                   output = "-";
-                  if (this.state.videoQuestionIds.includes(userResponseData.question_id)) {
+                  if (this.props.videoQuestionIds.includes(userResponseData.question_id)) {
                     videoTranscript.push({
                       "transcript": "-",
                       questionName: userResponseData.question_text + "-Transcript",
@@ -393,16 +393,17 @@ class Data extends Component {
             questionName = questionDetail.questionName ? questionDetail.questionName : "";
             questionsData.push(questionNumber + " " + questionName);
           });
-          if (Array.isArray(this.state.videoQuestionList) && this.state.videoQuestionList.length > 0) {
-            for (let i in this.state.videoQuestionList) {
-              let questionNumber = this.state.videoQuestionList[i].questionNumber ? this.state.videoQuestionList[i].questionNumber : ""
-              let questionName = this.state.videoQuestionList[i].questionName ? this.state.videoQuestionList[i].questionName : "";
+          if (Array.isArray(this.props.videoQuestionList) && this.props.videoQuestionList.length > 0) {
+            for (let i in this.props.videoQuestionList) {
+              let questionNumber = this.props.videoQuestionList[i].questionNumber ? this.props.videoQuestionList[i].questionNumber : ""
+              let questionName = this.props.videoQuestionList[i].questionName ? this.props.videoQuestionList[i].questionName : "";
               questionsData.push(questionNumber + " " + questionName);
             }
           }
           mainList = mainList.map(data => {
-            data.isChecked = false;
-            return data;
+            // data.isChecked = false;
+            // return data;
+            this.props.handleCheckboxChecked(data)
           });
           csvDetailsData = [questionsData, ...csvDetailsData];
           let outerThis = this;
@@ -445,7 +446,7 @@ class Data extends Component {
       } else if (e == "is_deleted") {
         this.setState({ deleteModalOpen: true })
       } else if (e == "export_csv") {
-        this.getCSVDetails(this.state.totalRecord, this.state.projectId);
+        this.getCSVDetails(this.props.totalCount, this.state.projectId);
       }
       this.setState({ menuValue: e });
     }
@@ -1546,7 +1547,9 @@ const mapStateToProps = (state) => {
     tableData: state.data.tabularData,
     count: store.getState().data.value,
     totalCount: store.getState().data.totalCount,
-    setAllUserResponse: state.data.setAllUserResponse
+    setAllUserResponse: state.data.setAllUserResponse,
+    videoQuestionIds:state.data.videoQuestionIds,
+    videoQuestionList:state.data.videoQuestionList
   };
 };
 

@@ -1,5 +1,5 @@
-import React, {Component} from "react";
-import {Grid, Typography} from "@material-ui/core";
+import React, { Component } from "react";
+import { Grid, Typography } from "@material-ui/core";
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -55,51 +55,51 @@ import Highcharts from "highcharts";
 import highcharts3d from "highcharts/highcharts-3d";
 import HighchartsExporting from "highcharts/modules/exporting";
 import {useDispatch, useSelector} from "react-redux";
-import {setGraphConfig, setTabValueConfig} from "../redux/slice/ChartEditorSlice";
+import {setGraphConfig,setTabValueConfig} from "../redux/slice/ChartEditorSlice";
 import CloseIcon from "@material-ui/icons/Close";
 import IconButton from "@material-ui/core/IconButton";
 import {chartEditorEnum} from "../enums";
-import {updateCustomizeTab} from "../_helpers/eventHelper"
+import { updateCustomizeTab } from "../_helpers/eventHelper"
 
 HighchartsExporting(Highcharts);
 highcharts3d(Highcharts);
 
 /*Main Tab*/
 function TabPanel(props) {
-  const {children, value, index, ...other} = props;
+  const { children, value, index, ...other } = props;
 
   return (
-      <div
-          role="tabpanel"
-          hidden={value !== index}
-          id={`simple-tabpanel-${index}`}
-          aria-labelledby={`simple-tab-${index}`}
-          {...other}
-      >
-        {value === index && (
-            <Typography>{children}</Typography>
-        )}
-      </div>
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <Typography>{children}</Typography>
+      )}
+    </div>
   );
 
 }
 
 /*Sub Tab*/
 function SubTabPanel(props) {
-  const {children, value, index, ...other} = props;
+  const { children, value, index, ...other } = props;
 
   return (
-      <div
-          role="tabpanel"
-          hidden={value !== index}
-          id={`subsimple-tabpanel-${index}`}
-          aria-labelledby={`subsimple-tab-${index}`}
-          {...other}
-      >
-        {value === index && (
-            <Typography>{children}</Typography>
-        )}
-      </div>
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`subsimple-tabpanel-${index}`}
+      aria-labelledby={`subsimple-tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <Typography>{children}</Typography>
+      )}
+    </div>
   );
 
 }
@@ -139,7 +139,7 @@ export default function ChartEditor(handleClick) {
   };
 
   /*Sub Tab*/
-  const subHandleChange = (event, newValue) => {
+  const subHandleChange = (event , newValue) => {
     subsetValue(newValue);
   };
 
@@ -206,15 +206,6 @@ export default function ChartEditor(handleClick) {
     center: ["50%", "75%"]
   });
 
-  const openLegendsTabEvent = (seriesItem) => {
-    seriesItem.events = {
-      legendItemClick: function () {
-        console.log("legendItemClick::: ");
-        updateCustomizeTab("legend");
-      }
-    }
-  }
-
   const setDefaultGraphProperties = (graphConfig) => {
     let config = JSON.parse(JSON.stringify(graphConfig));
     console.log("setDefaultGraphProperties data: ", graphConfig)
@@ -251,24 +242,25 @@ export default function ChartEditor(handleClick) {
     }
     if (!("plotOptions" in config)) {
       config.plotOptions = chartEditorEnum.plotOptionsDefaultProps;
-    } else {
+    }else{
       config.plotOptions = graphConfig.plotOptions
     }
+
 
 
     //setting the colors for multicolor graphs
     if ((config.chart.type === "bar" || config.chart.type === "column") && config.plotOptions.series.colorByPoint) {
       console.log("its a multicolor graph 🙃");
       // config.legend = {...chartEditorEnum.legendsDefaultProps, enabled: false};
-      // if (config.series.length === 3) {
-      //   config.colors = chartEditorEnum.defaultSeriesColors["threePoint"];
-      //   // if series is exactly 5
-      // } else if (config.series.length === 5) {
-      //   config.colors = chartEditorEnum.defaultSeriesColors["fivePoint"];
-      //   // if series is greater than 5 and less than 3 (generalize)
-      // } else {
-      //   config.colors = chartEditorEnum.defaultSeriesColors["general"];
-      // }
+      if (config.series.length === 3) {
+        config.colors = chartEditorEnum.defaultSeriesColors["threePoint"];
+        // if series is exactly 5
+      } else if (config.series.length === 5) {
+        config.colors = chartEditorEnum.defaultSeriesColors["fivePoint"];
+        // if series is greater than 5 and less than 3 (generalize)
+      } else {
+        config.colors = chartEditorEnum.defaultSeriesColors["general"];
+      }
       //setting the colors for  general graphs
     } else if (config.chart.type === "pie") {
       console.log("its a pie graph 😉", config.chart.type);
@@ -327,18 +319,6 @@ export default function ChartEditor(handleClick) {
       }
     }
 
-    // config.chart.events = {
-    //   load: function () {
-    //     console.log("loaded chart");
-    //   },
-    //   click: function () {
-    //     console.log("chart clicked");
-    //     updateCustomizeTab("appearance");
-    //   }
-    // };
-    //TODO refactor below code and add them into the if else conditions
-    // config.series.map(seriesItem => openLegendsTabEvent(seriesItem));
-
 
     console.log("setDefaultGraphProperties final", config)
     return config;
@@ -386,10 +366,10 @@ export default function ChartEditor(handleClick) {
         beta: 0
       };
       newConfig.chart.polar = false;
-    } else {
-      if ("options3d" in newConfig.chart) {
-        delete newConfig.chart.options3d;
-      }
+    }else{
+     if("options3d" in newConfig.chart){
+       delete newConfig.chart.options3d;
+     }
     }
 
     // For set All Types of Pie Chart
@@ -408,48 +388,48 @@ export default function ChartEditor(handleClick) {
         ...chartEditorEnum.plotOptionsDefaultProps.series,
         cursor: "pointer",
         stacking: getStackingGraphConfig(type),
-        // point: {
-        //   events: {
-        //     click: function () {
-        //       console.log("seriesClick::: ", this);
-        //       updateCustomizeTab("series")
-        //       // handleChange(3)
-        //     }
-        //   }
-        // },
-      },
-      dataLabels: {
-        enabled: true
+        point: {
+          events: {
+            click: function() {
+              console.log("seriesClick::: ", this);
+              updateCustomizeTab("series")
+              // handleChange(3)
+            }
+          }
+        },
+        },
+        dataLabels: {
+          enabled: true
+        }
       }
-    }
 
     // For Multi Color Charts
     if (
-        type === "multicolor-bar" ||
+       type === "multicolor-bar" ||
         type === "multicolor-column"
     ) {
       plotOptions.series.colorByPoint = true;
-    } else {
+    }else{
       delete plotOptions.series.colorByPoint;
     }
-    newConfig.plotOptions = plotOptions
+    newConfig.plotOptions= plotOptions
 
     // To set Pie Chart Config after chart change
-    if (chartType === "pie") {
-      newConfig.series = pieSeriesConfig
+    if(chartType === "pie"){
+      newConfig.series=pieSeriesConfig
       // if(type === 'pie'){
       //   newConfig.plotOptions={}
       // }
-    } else {
-      newConfig.series = generalSeriesConfig
+    }else{
+      newConfig.series=generalSeriesConfig
     }
-    console.log('config==>', newConfig)
+    console.log('config==>',newConfig)
     let graphData = setDefaultGraphProperties(newConfig);
     dispatch(setGraphConfig(graphData))
   };
 
   async function downloadPngBtn() {
-    Highcharts.charts.forEach(function (chart, index) {
+    Highcharts.charts.forEach(function(chart, index) {
       if (chart) {
         if (chart.renderTo.id === "highchartsContainer") {
           chart.exportChart({
@@ -462,7 +442,7 @@ export default function ChartEditor(handleClick) {
 
 
   async function exportPDF() {
-    Highcharts.charts.forEach(function (chart, index) {
+    Highcharts.charts.forEach(function(chart, index) {
       if (chart) {
         if (chart.renderTo.id === "highchartsContainer") {
           chart.exportChart({
@@ -474,7 +454,7 @@ export default function ChartEditor(handleClick) {
   }
 
   async function exportJPG() {
-    Highcharts.charts.forEach(function (chart, index) {
+    Highcharts.charts.forEach(function(chart, index) {
       if (chart) {
         if (chart.renderTo.id === "highchartsContainer") {
           chart.exportChart({
@@ -486,302 +466,256 @@ export default function ChartEditor(handleClick) {
   }
 
 
+
   return (
-      <React.Fragment>
-        <ButtonComponent
-            iconPosition={"left"}
-            fontSize={13}
-            width={"120px"}
-            margin={"0px 15px 0px 0px"}
-            text={"Chart Editor"}
-            onClick={handleClickOpen}
-        ></ButtonComponent>
+    <React.Fragment>
+      <ButtonComponent
+        iconPosition={"left"}
+        fontSize={13}
+        width={"120px"}
+        margin={"0px 15px 0px 0px"}
+        text={"Chart Editor"}
+        onClick={handleClickOpen}
+      ></ButtonComponent>
 
 
-        <Dialog
-            fullWidth={true}
-            maxWidth={'xl'}
-            open={open}
-            onClose={handleClose}
-            className={"chartModal"}
-        >
-          <DialogTitle className={"chartEditorTitle"}>
-            <div>
-              <img src={LogoImage} className="LogoImg"/> <img src={GraphEditorIcon} className="barIcon"/> Graph Editor
-            </div>
-            <IconButton onClick={handleClose}>
-              <CloseIcon style={{width: 18}}/><Typography style={{fontSize: 18}}></Typography>
-            </IconButton>
-          </DialogTitle>
-          <DialogContent className={"padd-LR-10"}>
-            <DialogContentText>
-              <Grid container spacing={2}>
-                <Grid item xs={6}>
-                  <Box sx={{width: '100%'}}>
-                    <Box sx={{borderBottom: 1, borderColor: 'divider'}}>
-                      <Tabs value={tabValue} onChange={handleChange} aria-label="basic tabs example"
-                            className="charEditorTabs">
-                        <Tab label="Data" {...a11yProps(0)} />
-                        <Tab label="Chart Type" {...a11yProps(1)} />
-                        <Tab label="Customize" {...a11yProps(2)} />
-                        <Tab label="Export" {...a11yProps(3)} />
-                      </Tabs>
-                    </Box>
+      <Dialog
+        fullWidth={true}
+        maxWidth={'xl'}
+        open={open}
+        onClose={handleClose}
+        className={"chartModal"}
+      >
+        <DialogTitle className={"chartEditorTitle"}>
+          <div>
+            <img src={LogoImage} className="LogoImg" /> <img src={GraphEditorIcon} className="barIcon" /> Graph Editor
+          </div>
+          <IconButton onClick={handleClose}>
+            <CloseIcon style={{width:18}}/><Typography style={{fontSize:18}}></Typography>
+          </IconButton>
+        </DialogTitle>
+        <DialogContent className={"padd-LR-10"}>
+          <DialogContentText>
+            <Grid container spacing={2}>
+              <Grid item xs={6}>
+                <Box sx={{ width: '100%' }}>
+                  <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                    <Tabs value={tabValue} onChange={handleChange} aria-label="basic tabs example" className="charEditorTabs">
+                      <Tab label="Data" {...a11yProps(0)} />
+                      <Tab label="Chart Type" {...a11yProps(1)} />
+                      <Tab label="Customize" {...a11yProps(2)} />
+                      <Tab label="Export" {...a11yProps(3)} />
+                    </Tabs>
+                  </Box>
 
-                    <div className={'InnerScrollTab'}>
-                      <TabPanel value={tabValue} index={0}>
-                        <div className="subTabs">
-                          <Tabs value={subvalue} onChange={subHandleChange} aria-label="basic tabs example"
-                                className="charEditorTabs">
+                  <div className={'InnerScrollTab'}>
+                    <TabPanel value={tabValue} index={0}>
+                      <div className="subTabs">
+                          <Tabs value={subvalue} onChange={subHandleChange} aria-label="basic tabs example" className="charEditorTabs">
                             <Tab label="Questions" {...suba11yProps(0)} />
                             <Tab label="Edit Data" {...suba11yProps(1)} />
                           </Tabs>
                           <TabPanel value={subvalue} index={0}>
                             <Typography className="questiontitle">Questions:</Typography>
-                            <QuestionTab/>
+                            <QuestionTab />
                           </TabPanel>
                           <TabPanel value={subvalue} index={1}>
-                            <PivotTable/>
+                            <PivotTable />
                           </TabPanel>
+                      </div>
+                    </TabPanel>
+                    <TabPanel value={tabValue} index={1}>
+                      <div className="subTabs">
+                        <Typography className={"chooseChartTitle"}><img src={Appearance} /> Choose chart</Typography>
+                        <div className={'chartTypes'}>
+                          <Accordion>
+                            <AccordionSummary
+                                expandIcon={<ExpandMoreIcon />}
+                                aria-controls="panel2a-content"
+                                id="panel2a-header">
+                              <Typography className='AccordTitle rootTitle'><img src={LineCharts} />Bar charts</Typography>
+                            </AccordionSummary>
+                            <AccordionDetails>
+                              <Grid container spacing={2}>
+                                <Grid item lg={6} md={6} sm={12} xs={12}>
+                                  <ChartEditorTypeCard title={"Basic Bar Chart"} handleChartChange={() => handleChartChange("bar")} icon={Barchart} component={"export"}/>
+                                </Grid>
+                                <Grid item lg={6} md={6} sm={12} xs={12}>
+                                  <ChartEditorTypeCard title={"Multicolor Bar Chart"} handleChartChange={() => handleChartChange("multicolor-bar")} icon={MulticolorBar} component={"export"}/>
+                                </Grid>
+                                <Grid item lg={6} md={6} sm={12} xs={12}>
+                                  <ChartEditorTypeCard title={"Stacked Bar Chart"} handleChartChange={() => handleChartChange("stacked-bar")}  icon={StackedBarCharts} component={"export"}/>
+                                </Grid>
+                                <Grid item lg={6} md={6} sm={12} xs={12}>
+                                  <ChartEditorTypeCard title={"Stacked Percent Bar Chart"} handleChartChange={() => handleChartChange("stacked-percent-bar")}  icon={PercentStackedBarChart} component={"export"}/>
+                                </Grid>
+                              </Grid>
+                            </AccordionDetails>
+                          </Accordion>
+
+                          <Accordion>
+                            <AccordionSummary
+                                expandIcon={<ExpandMoreIcon />}
+                                aria-controls="panel2a-content"
+                                id="panel2a-header">
+                              <Typography className='AccordTitle rootTitle'><img src={PieChartSmall} />Pie charts</Typography>
+                            </AccordionSummary>
+                            <AccordionDetails>
+                              <Grid container spacing={2}>
+                                <Grid item lg={6} md={6} sm={12} xs={12}>
+                                  <ChartEditorTypeCard title={"Pie Chart"} handleChartChange={() => handleChartChange("pie")} icon={PieChart} component={"export"}/>
+                                </Grid>
+                                <Grid item lg={6} md={6} sm={12} xs={12}>
+                                  <ChartEditorTypeCard title={"Donut Chart"} handleChartChange={() => handleChartChange("donut")} icon={DonutChart} component={"export"}/>
+                                </Grid>
+                                <Grid item lg={6} md={6} sm={12} xs={12}>
+                                  <ChartEditorTypeCard title={"3D Pie Chart"}  handleChartChange={() => handleChartChange("3d-pie")}   icon={ThreeDPieChart} component={"export"}/>
+                                </Grid>
+                                <Grid item lg={6} md={6} sm={12} xs={12}>
+                                  <ChartEditorTypeCard title={"3D Donut Chart"}  handleChartChange={() => handleChartChange("3d-donut")}  icon={ThreeDDonutChart} component={"export"}/>
+                                </Grid>
+                                <Grid item lg={6} md={6} sm={12} xs={12}>
+                                  <ChartEditorTypeCard title={"Semi-circle Donut Chart"}  handleChartChange={() => handleChartChange("semi-circle-donut")}  icon={ThreeDDonutChart} component={"export"}/>
+                                </Grid>
+                              </Grid>
+                            </AccordionDetails>
+                          </Accordion>
+
+                          <Accordion>
+                            <AccordionSummary
+                                expandIcon={<ExpandMoreIcon />}
+                                aria-controls="panel2a-content"
+                                id="panel2a-header">
+                              <Typography className='AccordTitle rootTitle'><img src={DataLabelsIcon} />Column charts</Typography>
+                            </AccordionSummary>
+                            <AccordionDetails>
+                              <Grid container spacing={2}>
+                                <Grid item lg={6} md={6} sm={12} xs={12}>
+                                  <ChartEditorTypeCard title={"Basic Column"} handleChartChange={() => handleChartChange("column")}  icon={BasicColumn} component={"export"}/>
+                                </Grid>
+                                <Grid item lg={6} md={6} sm={12} xs={12}>
+                                  <ChartEditorTypeCard title={"Multi-color Column"} handleChartChange={() => handleChartChange("multicolor-column")} icon={MultiColorColumn} component={"export"}/>
+                                </Grid>
+                                <Grid item lg={6} md={6} sm={12} xs={12}>
+                                  <ChartEditorTypeCard title={"Stacked Column"} handleChartChange={() => handleChartChange("stacked-column")} icon={StackedColumn} component={"export"}/>
+                                </Grid>
+                                <Grid item lg={6} md={6} sm={12} xs={12}>
+                                  <ChartEditorTypeCard title={"Stacked Percent Column"} handleChartChange={() => handleChartChange("stacked-percent-column")} icon={StackedPercentColumn} component={"export"}/>
+                                </Grid>
+                              </Grid>
+                            </AccordionDetails>
+                          </Accordion>
+
+                          <Accordion>
+                            <AccordionSummary
+                                expandIcon={<ExpandMoreIcon />}
+                                aria-controls="panel2a-content"
+                                id="panel2a-header">
+                              <Typography className='AccordTitle rootTitle'><img src={LineCharts} />Line charts</Typography>
+                            </AccordionSummary>
+                            <AccordionDetails>
+                              <Grid container spacing={2}>
+                                <Grid item lg={6} md={6} sm={12} xs={12}>
+                                  <ChartEditorTypeCard title={"Line Chart"} handleChartChange={() => handleChartChange("line")}  icon={LineChart} component={"export"}/>
+                                </Grid>
+                                <Grid item lg={6} md={6} sm={12} xs={12}>
+                                  <ChartEditorTypeCard title={"Scatter Chart"} handleChartChange={() => handleChartChange("scatter")} icon={ScatterChart} component={"export"}/>
+                                </Grid>
+                              </Grid>
+                            </AccordionDetails>
+                          </Accordion>
+
+                          <Accordion>
+                            <AccordionSummary
+                                expandIcon={<ExpandMoreIcon />}
+                                aria-controls="panel2a-content"
+                                id="panel2a-header">
+                              <Typography className='AccordTitle rootTitle'><img src={WaveChartSmall} />Area charts</Typography>
+                            </AccordionSummary>
+                            <AccordionDetails>
+                              <Grid container spacing={2}>
+                                <Grid item lg={6} md={6} sm={12} xs={12}>
+                                  <ChartEditorTypeCard title={"Basic Area Chart"} handleChartChange={() => handleChartChange("area")}  icon={BasicArea} component={"export"}/>
+                                </Grid>
+                                <Grid item lg={6} md={6} sm={12} xs={12}>
+                                  <ChartEditorTypeCard title={"Stacked Area Chart"}  handleChartChange={() => handleChartChange("stacked-area")} icon={StackedArea} component={"export"}/>
+                                </Grid>
+                                <Grid item lg={6} md={6} sm={12} xs={12}>
+                                  <ChartEditorTypeCard title={"Stacked Percentage Area Chart"}  handleChartChange={() => handleChartChange("stacked-percent-area")} icon={StackedPercentageArea} component={"export"}/>
+                                </Grid>
+                              </Grid>
+                            </AccordionDetails>
+                          </Accordion>
                         </div>
-                      </TabPanel>
-                      <TabPanel value={tabValue} index={1}>
-                        <div className="subTabs">
-                          <Typography className={"chooseChartTitle"}><img src={Appearance}/> Choose chart</Typography>
-                          <div className={'chartTypes'}>
-                            <Accordion>
-                              <AccordionSummary
-                                  expandIcon={<ExpandMoreIcon/>}
-                                  aria-controls="panel2a-content"
-                                  id="panel2a-header">
-                                <Typography className='AccordTitle rootTitle'><img src={LineCharts}/>Bar
-                                  charts</Typography>
-                              </AccordionSummary>
-                              <AccordionDetails>
-                                <Grid container spacing={2}>
-                                  <Grid item lg={6} md={6} sm={12} xs={12}>
-                                    <ChartEditorTypeCard title={"Basic Bar Chart"}
-                                                         handleChartChange={() => handleChartChange("bar")}
-                                                         icon={Barchart} component={"export"}/>
-                                  </Grid>
-                                  <Grid item lg={6} md={6} sm={12} xs={12}>
-                                    <ChartEditorTypeCard title={"Multicolor Bar Chart"}
-                                                         handleChartChange={() => handleChartChange("multicolor-bar")}
-                                                         icon={MulticolorBar} component={"export"}/>
-                                  </Grid>
-                                  <Grid item lg={6} md={6} sm={12} xs={12}>
-                                    <ChartEditorTypeCard title={"Stacked Bar Chart"}
-                                                         handleChartChange={() => handleChartChange("stacked-bar")}
-                                                         icon={StackedBarCharts} component={"export"}/>
-                                  </Grid>
-                                  <Grid item lg={6} md={6} sm={12} xs={12}>
-                                    <ChartEditorTypeCard title={"Stacked Percent Bar Chart"}
-                                                         handleChartChange={() => handleChartChange("stacked-percent-bar")}
-                                                         icon={PercentStackedBarChart} component={"export"}/>
-                                  </Grid>
-                                </Grid>
-                              </AccordionDetails>
-                            </Accordion>
-
-                            <Accordion>
-                              <AccordionSummary
-                                  expandIcon={<ExpandMoreIcon/>}
-                                  aria-controls="panel2a-content"
-                                  id="panel2a-header">
-                                <Typography className='AccordTitle rootTitle'><img src={PieChartSmall}/>Pie
-                                  charts</Typography>
-                              </AccordionSummary>
-                              <AccordionDetails>
-                                <Grid container spacing={2}>
-                                  <Grid item lg={6} md={6} sm={12} xs={12}>
-                                    <ChartEditorTypeCard title={"Pie Chart"}
-                                                         handleChartChange={() => handleChartChange("pie")}
-                                                         icon={PieChart} component={"export"}/>
-                                  </Grid>
-                                  <Grid item lg={6} md={6} sm={12} xs={12}>
-                                    <ChartEditorTypeCard title={"Donut Chart"}
-                                                         handleChartChange={() => handleChartChange("donut")}
-                                                         icon={DonutChart} component={"export"}/>
-                                  </Grid>
-                                  <Grid item lg={6} md={6} sm={12} xs={12}>
-                                    <ChartEditorTypeCard title={"3D Pie Chart"}
-                                                         handleChartChange={() => handleChartChange("3d-pie")}
-                                                         icon={ThreeDPieChart} component={"export"}/>
-                                  </Grid>
-                                  <Grid item lg={6} md={6} sm={12} xs={12}>
-                                    <ChartEditorTypeCard title={"3D Donut Chart"}
-                                                         handleChartChange={() => handleChartChange("3d-donut")}
-                                                         icon={ThreeDDonutChart} component={"export"}/>
-                                  </Grid>
-                                  <Grid item lg={6} md={6} sm={12} xs={12}>
-                                    <ChartEditorTypeCard title={"Semi-circle Donut Chart"}
-                                                         handleChartChange={() => handleChartChange("semi-circle-donut")}
-                                                         icon={ThreeDDonutChart} component={"export"}/>
-                                  </Grid>
-                                </Grid>
-                              </AccordionDetails>
-                            </Accordion>
-
-                            <Accordion>
-                              <AccordionSummary
-                                  expandIcon={<ExpandMoreIcon/>}
-                                  aria-controls="panel2a-content"
-                                  id="panel2a-header">
-                                <Typography className='AccordTitle rootTitle'><img src={DataLabelsIcon}/>Column
-                                  charts</Typography>
-                              </AccordionSummary>
-                              <AccordionDetails>
-                                <Grid container spacing={2}>
-                                  <Grid item lg={6} md={6} sm={12} xs={12}>
-                                    <ChartEditorTypeCard title={"Basic Column"}
-                                                         handleChartChange={() => handleChartChange("column")}
-                                                         icon={BasicColumn} component={"export"}/>
-                                  </Grid>
-                                  <Grid item lg={6} md={6} sm={12} xs={12}>
-                                    <ChartEditorTypeCard title={"Multi-color Column"}
-                                                         handleChartChange={() => handleChartChange("multicolor-column")}
-                                                         icon={MultiColorColumn} component={"export"}/>
-                                  </Grid>
-                                  <Grid item lg={6} md={6} sm={12} xs={12}>
-                                    <ChartEditorTypeCard title={"Stacked Column"}
-                                                         handleChartChange={() => handleChartChange("stacked-column")}
-                                                         icon={StackedColumn} component={"export"}/>
-                                  </Grid>
-                                  <Grid item lg={6} md={6} sm={12} xs={12}>
-                                    <ChartEditorTypeCard title={"Stacked Percent Column"}
-                                                         handleChartChange={() => handleChartChange("stacked-percent-column")}
-                                                         icon={StackedPercentColumn} component={"export"}/>
-                                  </Grid>
-                                </Grid>
-                              </AccordionDetails>
-                            </Accordion>
-
-                            <Accordion>
-                              <AccordionSummary
-                                  expandIcon={<ExpandMoreIcon/>}
-                                  aria-controls="panel2a-content"
-                                  id="panel2a-header">
-                                <Typography className='AccordTitle rootTitle'><img src={LineCharts}/>Line
-                                  charts</Typography>
-                              </AccordionSummary>
-                              <AccordionDetails>
-                                <Grid container spacing={2}>
-                                  <Grid item lg={6} md={6} sm={12} xs={12}>
-                                    <ChartEditorTypeCard title={"Line Chart"}
-                                                         handleChartChange={() => handleChartChange("line")}
-                                                         icon={LineChart} component={"export"}/>
-                                  </Grid>
-                                  <Grid item lg={6} md={6} sm={12} xs={12}>
-                                    <ChartEditorTypeCard title={"Scatter Chart"}
-                                                         handleChartChange={() => handleChartChange("scatter")}
-                                                         icon={ScatterChart} component={"export"}/>
-                                  </Grid>
-                                </Grid>
-                              </AccordionDetails>
-                            </Accordion>
-
-                            <Accordion>
-                              <AccordionSummary
-                                  expandIcon={<ExpandMoreIcon/>}
-                                  aria-controls="panel2a-content"
-                                  id="panel2a-header">
-                                <Typography className='AccordTitle rootTitle'><img src={WaveChartSmall}/>Area
-                                  charts</Typography>
-                              </AccordionSummary>
-                              <AccordionDetails>
-                                <Grid container spacing={2}>
-                                  <Grid item lg={6} md={6} sm={12} xs={12}>
-                                    <ChartEditorTypeCard title={"Basic Area Chart"}
-                                                         handleChartChange={() => handleChartChange("area")}
-                                                         icon={BasicArea} component={"export"}/>
-                                  </Grid>
-                                  <Grid item lg={6} md={6} sm={12} xs={12}>
-                                    <ChartEditorTypeCard title={"Stacked Area Chart"}
-                                                         handleChartChange={() => handleChartChange("stacked-area")}
-                                                         icon={StackedArea} component={"export"}/>
-                                  </Grid>
-                                  <Grid item lg={6} md={6} sm={12} xs={12}>
-                                    <ChartEditorTypeCard title={"Stacked Percentage Area Chart"}
-                                                         handleChartChange={() => handleChartChange("stacked-percent-area")}
-                                                         icon={StackedPercentageArea} component={"export"}/>
-                                  </Grid>
-                                </Grid>
-                              </AccordionDetails>
-                            </Accordion>
-                          </div>
-                        </div>
-                      </TabPanel>
-                      <TabPanel value={tabValue} index={2}>
-                        <div className="subTabs">
-                          <CustomizeTab/>
-                        </div>
-                      </TabPanel>
-                      <TabPanel value={tabValue} index={3}>
+                      </div>
+                    </TabPanel>
+                    <TabPanel value={tabValue} index={2}>
+                      <div className="subTabs">
+                        <CustomizeTab />
+                      </div>
+                    </TabPanel>
+                    <TabPanel value={tabValue} index={3}>
                         <div className="subTabs exportTab">
                           <Typography className={"exportTitle"}>Choose format:</Typography>
-                          <Grid container spacing={2}>
-                            <Grid item lg={6} md={6} sm={12} xs={12}>
-                              <ChartEditorTypeCard
-                                  title={"Recommended for graphs with logos, illustrations, and charts"}
-                                  handleChartChange={downloadPngBtn} icon={ExportPng} component={"export"}/>
-                            </Grid>
-                            <Grid item lg={6} md={6} sm={12} xs={12}>
-                              <ChartEditorTypeCard title={"Recommended for graphs with photos or mixed media"}
-                                                   handleChartChange={exportJPG} icon={ExportJpg} component={"export"}/>
-                            </Grid>
-                            <Grid item lg={6} md={6} sm={12} xs={12}>
-                              <ChartEditorTypeCard title={"Printer-friendly, use as a document or email to others."}
-                                                   handleChartChange={exportPDF} icon={ExportPdf} component={"export"}/>
-                            </Grid>
-                          </Grid>
+                              <Grid container spacing={2}>
+                                <Grid item lg={6} md={6} sm={12} xs={12}>
+                                  <ChartEditorTypeCard title={"Recommended for graphs with logos, illustrations, and charts"}  handleChartChange={downloadPngBtn}  icon={ExportPng} component={"export"}/>
+                                </Grid>
+                                <Grid item lg={6} md={6} sm={12} xs={12}>
+                                  <ChartEditorTypeCard title={"Recommended for graphs with photos or mixed media"} handleChartChange={exportJPG} icon={ExportJpg} component={"export"}/>
+                                </Grid>
+                                <Grid item lg={6} md={6} sm={12} xs={12}>
+                                  <ChartEditorTypeCard title={"Printer-friendly, use as a document or email to others."}  handleChartChange={exportPDF} icon={ExportPdf} component={"export"}/>
+                                </Grid>
+                              </Grid>
                         </div>
-                      </TabPanel>
-                    </div>
-                  </Box>
-                </Grid>
-                <Grid item xs={6} className={'chartBox'}>
-                  <div className={'ChartSection'}>
-                    <div className={'mostUsedChart'}>
-                      <div className={'chartIcons'}>
-                        <img src={PieChartSmall} onClick={() => handleChartChange("pie")}/>
-                      </div>
-                      <div className={'chartIcons'}>
-                        <img src={WaveChartSmall} onClick={() => handleChartChange("area")}/>
-                      </div>
-                      <div className={'chartIcons'}>
-                        <img src={LineCharts} onClick={() => handleChartChange("line")}/>
-                      </div>
-                      <div className={'chartIcons'}>
-                        <img src={DonutChartSmall} onClick={() => handleChartChange("donut")}/>
-                      </div>
-                    </div>
-                    <div
-                        className="charResize"
-                        onMouseUpCapture={() => {
-                          Highcharts.charts.forEach(function (chart, index) {
-                            if (chart) {
-                              if (chart.renderTo.id === "highchartsContainer") {
-                                chart.reflow();
-                              }
-                            }
-                          });
-                        }}
-                    >
-                      <div id="highchartsContainer"/>
-                    </div>
-                    <div className={'downloadPng'}>
-                      <Button onClick={downloadPngBtn}><img src={ExportPng}/>Download in PNG</Button>
-                    </div>
+                    </TabPanel>
                   </div>
-                </Grid>
+                </Box>
               </Grid>
-            </DialogContentText>
-          </DialogContent>
-          {/* <DialogActions>
+              <Grid item xs={6} className={'chartBox'}>
+              <div className={'ChartSection'}>
+                <div className={'mostUsedChart'}>
+                    <div className={'chartIcons'}>
+                      <img src={PieChartSmall} onClick={() => handleChartChange("pie")}/>
+                    </div>
+                    <div className={'chartIcons'}>
+                      <img src={WaveChartSmall} onClick={() => handleChartChange("area")} />
+                    </div>
+                    <div className={'chartIcons'}>
+                      <img src={LineCharts} onClick={() => handleChartChange("line")} />
+                    </div>
+                    <div className={'chartIcons'}>
+                      <img src={DonutChartSmall} onClick={() => handleChartChange("donut")} />
+                    </div>
+                </div>
+                <div
+                    className="charResize"
+                    onMouseUpCapture={() => {
+                      Highcharts.charts.forEach(function (chart, index) {
+                        if (chart) {
+                          if (chart.renderTo.id === "highchartsContainer") {
+                            chart.reflow();
+                          }
+                        }
+                      });
+                    }}
+                >
+                  <div id="highchartsContainer"/>
+                </div>
+                <div className={'downloadPng'}>
+                  <Button onClick={downloadPngBtn}><img src={ExportPng} />Download in PNG</Button>
+                </div>
+              </div>
+              </Grid>
+            </Grid>
+          </DialogContentText>
+        </DialogContent>
+        {/* <DialogActions>
           <Button onClick={handleClose}>Close</Button>
         </DialogActions> */}
-        </Dialog>
-      </React.Fragment>
+      </Dialog>
+    </React.Fragment>
   );
 
 

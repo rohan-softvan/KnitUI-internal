@@ -25,11 +25,11 @@ function CustomColorPicker(props) {
                           graphConfig['plotOptions']['series']['dataLabels']['color'] :
                           props.component === "xAxisGridLineColor" ?
                               graphConfig["xAxis"]["gridLineColor"] :
-                              props.component === "yAxisGridLineColor" ?
+                                props.component === "yAxisGridLineColor" ?
                                   graphConfig["yAxis"]["gridLineColor"] :
-                                  props.component === "series" ?
-                                      props.selectedColor :
-                                      graphConfig[props.component].style.color
+                                    props.component === "series" ?
+                                        props.selectedColor :
+                                  graphConfig[props.component].style.color
 
   const [color, setColor] = useState(selectedColor || "#000");
   const hexColor = useMemo(() => {
