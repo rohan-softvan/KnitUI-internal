@@ -16,7 +16,6 @@ const PivotTable = () => {
   const dispatch = useDispatch();
   const [activeTab, setActiveTab] = useState(0);
   let dataJSONConfig = useSelector((state) => state.chart.dataJSON);
-  console.log('dataJSONConfig==>',dataJSONConfig)
   let selectedQuestion = useSelector((state) => state.chart.selectedItems);
   const [optionsConfig, setOptionsConfig] = useState({
     grandTotal: "on",
@@ -39,7 +38,6 @@ const PivotTable = () => {
   const [display, setDisplay] = useState(true);
   const [fontSize, setFontSize] = useState(14);
   const [fontFamily, setFontFamily] = useState('Roboto');
-  console.log('selectedQuestion==>',selectedQuestion)
   const [rows, setRows] = useState(selectedQuestion[0].rows);
 
   const [columns, setColumns] = useState(selectedQuestion[0].columns);
@@ -56,26 +54,8 @@ const PivotTable = () => {
 
   };
 
-  const handleTitleClick = event => {
-    console.log("handleTitleClick invoked 😁");
-  };
-
-  const handleSubTitleClick = event => {
-    console.log("handleSubTitleClick invoked 😄");
-  };
-
-  const handleAxisTitleClick = (event, axisType) => {
-    console.log("handleAxisTitleClick invoked 😄", axisType);
-  };
-
-  const handleDataLabelClick = event => {
-    console.log("handleDataLabelClick invoked 😄");
-  };
-
-
   const setDefaultGraphProperties = (graphConfig) => {
     let config = JSON.parse(JSON.stringify(graphConfig));
-    console.log("setDefaultGraphProperties data: ", config)
     config.chart = {...chartEditorEnum.chartDefaultProps, ...config.chart}
     config.credits = {enabled: false}
     if (!config.title || !config.title.text) {
@@ -86,6 +66,7 @@ const PivotTable = () => {
     }
     config.exporting = {enabled: false}
     config.xAxis = {
+      // title: chartEditorEnum.xAxisDefaultProps.title,
       gridLineColor: chartEditorEnum.xAxisDefaultProps.gridLineColor,
       gridLineWidth: chartEditorEnum.xAxisDefaultProps.gridLineWidth,
       labels: chartEditorEnum.xAxisDefaultProps.labels,
@@ -97,14 +78,15 @@ const PivotTable = () => {
       labels: chartEditorEnum.yAxisDefaultProps.labels,
       ...config.yAxis
     }
-    config.xAxis.title = {...chartEditorEnum.xAxisDefaultProps.title, ...config.xAxis.title}
-    config.yAxis.title = {...chartEditorEnum.yAxisDefaultProps.title, ...config.yAxis.title}
+    config.xAxis.title = chartEditorEnum.xAxisDefaultProps.title
+    config.yAxis[0].title = chartEditorEnum.yAxisDefaultProps.title
+    // config.yAxis.title = {...chartEditorEnum.yAxisDefaultProps.title, ...config.yAxis.title}
 
     if (!("style" in config.xAxis.title)) {
       config.xAxis.title.style = chartEditorEnum.xAxisDefaultProps.style
     }
-    if (!("style" in config.yAxis.title)) {
-      config.yAxis.title.style = chartEditorEnum.yAxisDefaultProps.style
+    if (!("style" in config.yAxis[0].title)) {
+      config.yAxis[0].title.style = chartEditorEnum.yAxisDefaultProps.style
     }
     if (!("legend" in config)) {
       config.legend = chartEditorEnum.legendsDefaultProps
@@ -113,10 +95,8 @@ const PivotTable = () => {
       config.plotOptions = chartEditorEnum.plotOptionsDefaultProps;
     }
 
-
     //setting the colors for multicolor graphs
     if ((config.chart.type === "bar" || config.chart.type === "column") && config.plotOptions.series.colorByPoint) {
-      console.log("its a multicolor graph 🙃");
       // config.legend = {...chartEditorEnum.legendsDefaultProps, enabled: false};
       if (config.series.length === 3) {
         config.colors = chartEditorEnum.defaultSeriesColors["threePoint"];
@@ -129,8 +109,6 @@ const PivotTable = () => {
       }
       //setting the colors for  general graphs
     } else if (config.chart.type === "pie") {
-      console.log("its a pie graph 😉", config.chart.type);
-
       // if series is exactly 3
       if (config.series[0].data.length === 3) {
         config.series[0].data.forEach((seriesItem, index) => {
@@ -184,9 +162,6 @@ const PivotTable = () => {
         });
       }
     }
-
-
-    console.log("setDefaultGraphProperties final", config)
     return config;
   }
 
@@ -197,40 +172,25 @@ const PivotTable = () => {
           styledMode: true
         },
         function (data) {
-          console.log("graph config >>  data:: in Pie Chart ", data);
-          console.log("graphConfig redux >>  data:: in pie ", graphConfig, Object.values(graphConfig).length);
           dispatch(setPieChartConfig(data.series))
           // dispatch(setGraphConfig(data))
         }
     );
   }
   const createChart = () => {
-    console.log("in createChart::: ", myRef)
     myRef.webdatarocks.highcharts.getData(
         {
           type: config.type,
-          "backgroundColor": "#fff",
-          "borderColor": "#EBBA95",
-          "borderRadius": 20,
-          "borderWidth": 2,
-          "events": {
-          },
-          "height": 400,
-          "reflow": true,
         },
         function (data) {
-          console.log("graph config >>  data:: ", data);
-          console.log("graphConfig redux >>  data:: ", graphConfig, Object.values(graphConfig).length);
-
           let graphData = Object.values(graphConfig).length !== 0 ? setDefaultGraphProperties(graphConfig) : setDefaultGraphProperties(data);
-          console.log('graphConfig==>', graphData)
+          graphData.xAxis.title.text=`<span style="cursor:pointer;" id="custom-x-axis-title"> ${data.xAxis.title.text}</span>`
+          graphData.yAxis[0].title.text=`<span style="cursor:pointer;" id="custom-y-axis-title"> ${data.yAxis[0].title.text}</span>`
           dispatch(setGeneralConfig(data.series))
-          console.log("graphData ", graphData)
           dispatch(setGraphConfig(graphData))
           // Highcharts.chart("highchartsContainer", graphData ? graphData : data);
         },
         function (data) {
-          console.log('graphConfig==>', graphConfig)
           dispatch(setGraphConfig(data))
           // Highcharts.chart("highchartsContainer", graphConfig);
           // Highcharts.reflow();
@@ -359,76 +319,6 @@ const PivotTable = () => {
     ]
   };
 
-  // const handleChangeData = () => {
-  //     console.log("changed data");
-  //     // setData(DataJson2);
-  //     // setMeasures([
-  //     //   {
-  //     //     uniqueName:
-  //     //       "Q11 Please explain why you would probably not or not be interested in ordering from a food locker like this.",
-  //     //     aggregation: "sum",
-  //     //   },
-  //     //   {
-  //     //     uniqueName: "Q14 Click to write the question text",
-  //     //     aggregation: "sum",
-  //     //   },
-  //     // ]);
-  //     // setRows([
-  //     //   {
-  //     //     uniqueName: "Q14 Click to write the question text",
-  //     //     sort: "asc",
-  //     //   },
-  //     // ]);
-  //     // setColumns([
-  //     //   {
-  //     //     uniqueName:
-  //     //       "Q11 Please explain why you would probably not or not be interested in ordering from a food locker like this.Q20 Would you be interested in ordering from a food locker like this?",
-  //     //     sort: "asc",
-  //     //   },
-  //     // ]);
-  //
-  //     setData(DataJson);
-  //     setMeasures([
-  //         {
-  //             uniqueName:
-  //                 "Q6 We would like to learn a little bit more about how you structure meal time between home, work and school. Which of these best describes you?",
-  //             sort: "asc",
-  //             aggregation: "sum"
-  //         }
-  //     ]);
-  //     setRows([
-  //         {
-  //             uniqueName: "Q8 Do you have a meal plan for on-campus dining?",
-  //             sort: "asc",
-  //             aggregation: "sum"
-  //         },
-  //         {
-  //             uniqueName:
-  //                 "Q20 Would you be interested in ordering from a food locker like this?",
-  //             sort: "asc",
-  //             aggregation: "sum"
-  //         }
-  //     ]);
-  //     setRows([
-  //         {
-  //             uniqueName: "Q8 Do you have a meal plan for on-campus dining?",
-  //             sort: "asc"
-  //         }
-  //     ]);
-  //     setColumns([
-  //         {
-  //             uniqueName:
-  //                 "Q20 Would you be interested in ordering from a food locker like this?",
-  //             sort: "asc"
-  //         },
-  //         {
-  //             uniqueName:
-  //                 "Q6 We would like to learn a little bit more about how you structure meal time between home, work and school. Which of these best describes you?",
-  //             sort: "asc"
-  //         }
-  //     ]);
-  // };
-
   const calculateDynamicHeight = () => {
     // let finalHeight = (metaData.totalRows + 1) * 30 + 2 + 70 + "px";
     // let wdrGridView = document.getElementById("wdr-grid-view");
@@ -439,13 +329,7 @@ const PivotTable = () => {
     //     document.getElementById("wdr-pivot-view").style.height = finalHeight;
     // wdrPivotView.parentElement.style.height = finalHeight;
   };
-  const applyButtonStyle = () => {
-    // let applyButton = document.getElementsByClassName(
-    //     "wdr-ui-element wdr-ui wdr-ui-btn wdr-ui-btn-dark"
-    // );
-    // console.log("applyButton ", applyButton);
-    // applyButton[0] && applyButton[0].classList.add("wdr-ui-disabled");
-  };
+
   const calculateDynamicWidth = () => {
     // let finalWidth =
     //     (metaData.totalColumns + 1) * 113.2 + metaData.totalColumns + 3.5;
@@ -456,7 +340,6 @@ const PivotTable = () => {
   };
 
   const handleChartChange = type => {
-    // console.log("type: ", type);
     config.type = type;
     setConfig({...config});
     // createChart();
@@ -479,7 +362,6 @@ const PivotTable = () => {
     // };
     setFontSize(e.target.value)
     // config.title.style.color = color;
-    // console.log('config size==>', config, e.target.value)
     // setConfig({ ...config });
     // setTimeout(() => {
 
@@ -488,7 +370,6 @@ const PivotTable = () => {
 
   const handleChangeFamily = (e) => {
     setFontFamily(e.target.value)
-    // console.log('config size==>', config, e.target.value)
   }
 
   const handleTitleSave = () => {
@@ -523,13 +404,11 @@ const PivotTable = () => {
 
   };
   const handleResize = () => {
-    // console.log("Checked Resieze Event");
     // this.chart.reflow();
     document.getElementById("#highchartsContainer").chart.reflow();
   };
 
   const handleSaveClick = () => {
-    // console.log('config==>', config)
     config.title = {
       // text: `<p style="cursor:pointer;" id="custom-title">`+ newTitle?newTitle : '-' +`</p>`,
       style: {
@@ -544,7 +423,6 @@ const PivotTable = () => {
   }
 
   const handleOptionsConfigChange = (type, value) => {
-    console.log("type, value: ", type, value);
     optionsConfig[type] = value;
     setOptionsConfig({...optionsConfig});
   };
@@ -557,24 +435,15 @@ const PivotTable = () => {
 
   useEffect(() => {
     myRef && myRef.webdatarocks && myRef.webdatarocks.on("reportcomplete", function () {
-      console.log("reportcomplete")
-      // setActiveTab(0)
       myRef && myRef.webdatarocks && handleReportFieldModal(activeTab);
-      // setActiveTab(0)
       myRef && myRef.webdatarocks && createChart()
-      // myRef && myRef.webdatarocks &&
         })
     })
 
   useEffect(() => {
-    console.log("graphConfig ===>", graphConfig, Highcharts)
     if (JSON.stringify(graphConfig) != '{}') {
-      // Highcharts.chart("highchartContainer",function (chart) {
-      //     window.charts[chart.options.chart.renderTo] = chart;
-      // });
       let newGraphConfig = JSON.parse(JSON.stringify(graphConfig));
-      console.log("graphConfig ===> new", newGraphConfig, Highcharts)
-      Highcharts.chart("highchartsContainer", newGraphConfig);
+      Highcharts.chart("highchartsContainer", graphConfig);
     }
 
   }, [graphConfig])
@@ -582,7 +451,6 @@ const PivotTable = () => {
   useEffect(
       () => {
         return () => {
-          // console.log("in use effect");
           setDisplay(false);
           setTimeout(() => {
             setMetaData({totalRows: null, totalColumns: null});
@@ -599,10 +467,8 @@ const PivotTable = () => {
           if (myRef && myRef.webdatarocks && activeTab === 0) {
             myRef &&
             myRef.webdatarocks.on("reportchange", function () {
-              // console.log('report Change==>',activeTab)
               // let bodyStyles = document.body.style;
               // bodyStyles.setProperty('--displayFlag', 'block');
-              // // console.log("Field list is opened!", document.getElementsByClassName("wdr-ui-element wdr-ui wdr-fields-view-wrap"));
               // document.getElementById("wdr-fields-view").style.display = "block !important"
               // document.getElementsByClassName("wdr-ui-element wdr-ui wdr-fields-view-wrap")[0].style.display = "block"
               handleReportFieldModal(activeTab);
@@ -615,23 +481,18 @@ const PivotTable = () => {
   );
 
   const handleReportFieldModal = (activeTab) => {
-    console.log('active Tab==>>>', activeTab)
     if (activeTab === 0) {
       let bodyStyles = document.body.style;
       bodyStyles.setProperty('--displayFlag', 'block');
-      // console.log("Field list is opened!", document.getElementsByClassName("wdr-ui-element wdr-ui wdr-fields-view-wrap"));
       document.getElementById("wdr-fields-view").style.display = "block !important"
       document.getElementsByClassName("wdr-ui-element wdr-ui wdr-fields-view-wrap")[0].style.display = "block"
     } else {
       let bodyStyles = document.body.style;
       bodyStyles.setProperty('--displayFlag', 'none');
-      // console.log("Field list is opened!", document.getElementsByClassName("wdr-ui-element wdr-ui wdr-fields-view-wrap"));
       document.getElementById("wdr-fields-view").style.display = "none !important"
       document.getElementsByClassName("wdr-ui-element wdr-ui wdr-fields-view-wrap")[0].style.display = "none"
     }
   }
-
-  console.log('report===>',report)
   return (
       // style={{ display: 'flex', justifyContent: 'center', marginTop: '15px' }}
       display && (

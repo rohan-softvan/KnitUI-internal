@@ -23,6 +23,7 @@ import OutlinedInput from "@material-ui/core/OutlinedInput";
 import {setGraphConfig} from "../../../redux/slice/ChartEditorSlice";
 import {useDispatch, useSelector} from "react-redux";
 import {setRecentColorsForColorPicker} from "../../../redux/slice/ColorPickerSlice";
+import {removeHTML} from '../../../_helpers/eventHelper'
 
 let fontsize = [
   {
@@ -171,8 +172,8 @@ export default function LegendTab({expanedState, setTabState}) {
   })
   const [currentColor, setCurrentColor] = React.useState('')
 
-  const [invertAxis, setInvertAxis] = React.useState(graphConfig.chart.inverted);
-  const [xAxisTitle, setXAxisTitle] = React.useState(graphConfig.xAxis.title.text);
+  const [invertAxis, setInvertAxis] = React.useState(graphConfig.chart && graphConfig.chart.inverted);
+  const [xAxisTitle, setXAxisTitle] = React.useState(removeHTML(graphConfig && graphConfig.xAxis && graphConfig.xAxis.title.text));
   const [selectedFontFamily, setSelectedFontFamily] = React.useState('roboto')
   const [xAxisFontSize, setxAxisFontSize] = React.useState('auto')
   const [xAxisTitleName, setXAxisTitleName] = React.useState('on')
@@ -208,7 +209,6 @@ export default function LegendTab({expanedState, setTabState}) {
     colorPickerOpen[component] = false
     setColorPickerAnchorEl({...colorPickerAnchorEl});
     setColorPickerOpen({...colorPickerOpen})
-    // console.log(" component + \"Color\":: ", component + "Color")
     dispatch(setRecentColorsForColorPicker({type: component + "Color", color: currentColor}));
     component === "xAxisText" && setXAxisColor(currentColor);
     component === "xAxisGridLine" && setGridLineColor("x", currentColor);
@@ -231,7 +231,7 @@ export default function LegendTab({expanedState, setTabState}) {
   const handleXAxisTitleSave = (event) => {
     setXAxisTitle(event.target.value);
     let newConfig = JSON.parse(JSON.stringify(graphConfig));
-    newConfig['xAxis']['title']["text"] = event.target.value
+    newConfig['xAxis']['title']["text"] = '<p style="cursor:pointer;" id="custom-x-axis-title">'+ event.target.value +'</p>'
     dispatch(setGraphConfig(newConfig))
   };
 
@@ -293,7 +293,6 @@ export default function LegendTab({expanedState, setTabState}) {
 
   const handleXAxisTitleName = (event) => {
     const {value} = event.target;
-    // console.log("value:: ", value)
     // setXAxisTitleName(value);
     let newConfig = JSON.parse(JSON.stringify(graphConfig));
     newConfig["xAxis"]["title"]["enabled"] = value === "on"
@@ -314,14 +313,13 @@ export default function LegendTab({expanedState, setTabState}) {
     let xAxisAngel = newConfig['xAxis']['labels']['rotation'] || {};
     xAxisAngel = value === "horizontal" ? Number("0") : Number(value);
     newConfig['xAxis']['labels']['rotation'] = xAxisAngel;
-    console.log("checked angle value", newConfig['xAxis']['labels']['rotation'])
     dispatch(setGraphConfig(newConfig));
   }
 
   /*Y Axis*/
   const [YHeight, setYHeight] = React.useState('0px');
   const [YShow, setYShow] = React.useState(false);
-  const [yAxisTitle, setYAxisTitle] = React.useState(graphConfig.yAxis[0].title.text);
+  const [yAxisTitle, setYAxisTitle] = React.useState(removeHTML(graphConfig && graphConfig.yAxis && graphConfig.yAxis[0].title.text));
 
   // const [selectedAngleOfLabel, setSelectedAngleOfLabel] = React.useState('horizontal')
   const [selectedYAxisFontFamily, setSelectedYAxisFontFamily] = React.useState('roboto')
@@ -337,8 +335,7 @@ export default function LegendTab({expanedState, setTabState}) {
   const handleYAxisTitleSave = (event) => {
     setYAxisTitle(event.target.value);
     let newConfig = JSON.parse(JSON.stringify(graphConfig));
-    newConfig['yAxis']['title']["text"] = event.target.value
-    console.log('checked New Y Axis Value', newConfig)
+    newConfig['yAxis'][0]['title']["text"] = `<span style="cursor:pointer;" id="custom-y-axis-title"> ${event.target.value} </span>`
     dispatch(setGraphConfig(newConfig))
   };
 
@@ -410,7 +407,6 @@ export default function LegendTab({expanedState, setTabState}) {
     let yAxisAngel = newConfig['yAxis']['labels']['rotation'] || {};
     yAxisAngel = value === "horizontal" ? Number("0") : Number(value);
     newConfig['yAxis']['labels']['rotation'] = yAxisAngel;
-    console.log("checked angle value", newConfig['xAxis']['labels']['rotation'])
     dispatch(setGraphConfig(newConfig));
   }
   return (
@@ -524,7 +520,7 @@ export default function LegendTab({expanedState, setTabState}) {
                          }}>
                       <div className={'fixColors'}>
                         <div className={'ActiveColor'} style={{
-                          'backgroundColor': graphConfig.xAxis.title.style.color
+                          'backgroundColor': graphConfig && graphConfig.xAxis && graphConfig.xAxis.title.style.color
                         }}/>
                         <Divider flexItem orientation="vertical" sx={{mx: 0.5, my: 1}}/>
                         <div className={'ColorVariation'}
@@ -577,7 +573,7 @@ export default function LegendTab({expanedState, setTabState}) {
                     <FormHelperText id="title-text">Axis name</FormHelperText>
                     <SelectComponent
                         menu={axisValue}
-                        menuValue={graphConfig["xAxis"]["title"]["enabled"] ? "on" : "off"}
+                        menuValue={graphConfig["xAxis"] && graphConfig["xAxis"]["title"]["enabled"] ? "on" : "off"}
                         handleChange={handleXAxisTitleName}
                     />
                   </div>
@@ -601,7 +597,7 @@ export default function LegendTab({expanedState, setTabState}) {
                     <FormHelperText id="title-text">Gridline</FormHelperText>
                     <SelectComponent
                         menu={axisValue}
-                        menuValue={graphConfig["xAxis"]["gridLineWidth"] ? "1" : "0"}
+                        menuValue={graphConfig["xAxis"] &&  graphConfig["xAxis"]["gridLineWidth"] ? "1" : "0"}
                         handleChange={handleXAxisGridLine}
                     />
                   </div>
@@ -620,7 +616,7 @@ export default function LegendTab({expanedState, setTabState}) {
                          }}>
                       <div className={'fixColors'}>
                         <div
-                            className={'ActiveColor'} style={{'backgroundColor': graphConfig.xAxis.gridLineColor}}
+                            className={'ActiveColor'} style={{'backgroundColor': graphConfig && graphConfig.xAxis && graphConfig.xAxis.gridLineColor}}
 
                         />
                         <Divider flexItem orientation="vertical" sx={{mx: 0.5, my: 1}}/>
@@ -666,7 +662,7 @@ export default function LegendTab({expanedState, setTabState}) {
                     <FormHelperText id="title-text">Gridline width</FormHelperText>
                     <StyledToggleButtonGroup
                         size="small"
-                        value={`${graphConfig.xAxis.gridLineWidth}px`}
+                        value={`${graphConfig && graphConfig.xAxis && graphConfig.xAxis.gridLineWidth}px`}
                         onChange={handleGridLineWidthForXAxis}
                         aria-label="gridLine width"
                         exclusive
@@ -778,9 +774,8 @@ export default function LegendTab({expanedState, setTabState}) {
                            width: 'calc(100% - 15px)'
                          }}>
                       <div className={'fixColors'}>
-                        {console.log("graphConfig:: ", graphConfig)}
                         <div className={'ActiveColor'} style={{
-                          'backgroundColor': graphConfig.yAxis.title.style.color
+                          'backgroundColor': graphConfig && graphConfig.yAxis && graphConfig.yAxis[0].title.style.color
                         }}/>
                         <Divider flexItem orientation="vertical" sx={{mx: 0.5, my: 1}}/>
                         <div className={'ColorVariation'}
@@ -833,7 +828,7 @@ export default function LegendTab({expanedState, setTabState}) {
                     <FormHelperText id="title-text">Axis name</FormHelperText>
                     <SelectComponent
                         menu={axisValue}
-                        menuValue={graphConfig["yAxis"]["title"]["enabled"] ? "on" : "off"}
+                        menuValue={graphConfig && graphConfig["yAxis"] && graphConfig["yAxis"][0]["title"]["enabled"] ? "on" : "off"}
                         handleChange={handleYAxisTitleName}
                     />
                   </div>
@@ -857,7 +852,7 @@ export default function LegendTab({expanedState, setTabState}) {
                     <FormHelperText id="title-text">Major Gridline</FormHelperText>
                     <SelectComponent
                         menu={axisValue}
-                        menuValue={graphConfig["yAxis"]["gridLineWidth"] ? "1" : "0"}
+                        menuValue={graphConfig && graphConfig["yAxis"] && graphConfig["yAxis"]["gridLineWidth"] ? "1" : "0"}
                         handleChange={handleYAxisGridLine}
                     />
                   </div>
@@ -876,7 +871,7 @@ export default function LegendTab({expanedState, setTabState}) {
                          }}>
                       <div className={'fixColors'}>
                         <div
-                            className={'ActiveColor'} style={{'backgroundColor': graphConfig.yAxis.gridLineColor}}
+                            className={'ActiveColor'} style={{'backgroundColor': graphConfig && graphConfig.yAxis && graphConfig.yAxis.gridLineColor}}
 
                         />
                         <Divider flexItem orientation="vertical" sx={{mx: 0.5, my: 1}}/>
@@ -922,7 +917,7 @@ export default function LegendTab({expanedState, setTabState}) {
                     <FormHelperText id="title-text">Gridline width</FormHelperText>
                     <StyledToggleButtonGroup
                         size="small"
-                        value={`${graphConfig.yAxis.gridLineWidth}px`}
+                        value={`${graphConfig && graphConfig.yAxis && graphConfig.yAxis.gridLineWidth}px`}
                         onChange={handleGridLineWidthForYAxis}
                         aria-label="gridLine width"
                         exclusive

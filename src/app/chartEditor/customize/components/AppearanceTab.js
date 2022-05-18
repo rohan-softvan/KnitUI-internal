@@ -271,7 +271,7 @@ export default function AppearanceTab({expanedState, setTabState}) {
                                 <FormHelperText id="title-text">Border width</FormHelperText>
                                 <StyledToggleButtonGroup
                                     size="small"
-                                    value={`${graphConfig.chart.borderWidth.toString()}px`}
+                                    value={`${graphConfig.chart && graphConfig.chart.borderWidth.toString()}px`}
                                     onChange={handleBorderWidthChange}
                                     aria-label="border width"
                                     exclusive
@@ -301,7 +301,7 @@ export default function AppearanceTab({expanedState, setTabState}) {
                                 <FormHelperText>Rounded corners</FormHelperText>
                                 <StyledToggleButtonGroup
                                     size="small"
-                                    value={`${graphConfig.chart.borderRadius.toString()}px`}
+                                    value={`${graphConfig.chart && graphConfig.chart.borderRadius.toString()}px`}
                                     onChange={handleBorderRadiusChange}
                                     aria-label="text formatting"
                                     exclusive
@@ -337,7 +337,7 @@ export default function AppearanceTab({expanedState, setTabState}) {
                             <FormHelperText>Chart Width</FormHelperText>
                             <div className={'sliderBox'}>
                                 <div className={'sliderValue'}>
-                                    <Typography>{graphConfig.chart.width}</Typography>
+                                    <Typography>{graphConfig.chart && graphConfig.chart.width}</Typography>
                                 </div>
                                 <div className={'sliderDefaultValue'}>
                                     <Button onClick={() => handleAutoClick('width')}>Auto</Button>
@@ -346,7 +346,7 @@ export default function AppearanceTab({expanedState, setTabState}) {
                             <Slider
                                 ValueLabelComponent={ValueLabelComponent}
                                 aria-label="custom thumb label"
-                                value={graphConfig.chart.width}
+                                value={graphConfig.chart && graphConfig.chart.width}
                                 min={50}
                                 max={5000}
                                 onChange={handleChangeWidth}
@@ -358,7 +358,7 @@ export default function AppearanceTab({expanedState, setTabState}) {
                             <FormHelperText>Chart Height</FormHelperText>
                             <div className={'sliderBox'}>
                                 <div className={'sliderValue'}>
-                                    <Typography>{graphConfig.chart.height}</Typography>
+                                    <Typography>{graphConfig.chart && graphConfig.chart.height}</Typography>
                                 </div>
                                 <div className={'sliderDefaultValue'}>
                                     <Button onClick={() => handleAutoClick('height')}>Auto</Button>
@@ -367,7 +367,7 @@ export default function AppearanceTab({expanedState, setTabState}) {
                             <Slider
                                 ValueLabelComponent={ValueLabelComponent}
                                 aria-label="custom thumb label"
-                                value={graphConfig.chart.height}
+                                value={graphConfig.chart && graphConfig.chart.height}
                                 min={50}
                                 max={5000}
                                 onChange={handleChangeHeight}

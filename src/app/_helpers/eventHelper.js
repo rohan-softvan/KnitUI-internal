@@ -12,3 +12,8 @@ export function updateCustomizeTab(tabName){
     store.dispatch(setExpandedStateConfig(updatedExpandedState))
 }
 
+export const removeHTML=(str)=>{
+    var tmp = document.createElement("DIV");
+    tmp.innerHTML = str;
+    return tmp.textContent || tmp.innerText || "";
+}

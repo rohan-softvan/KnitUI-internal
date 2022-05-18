@@ -341,7 +341,7 @@ export default function LegendTab({expanedState, setTabState}) {
                          }}>
                       <div className={'fixColors'}>
                         <div className={'ActiveColor'} style={{
-                          'backgroundColor': graphConfig.legend.itemStyle.color
+                          'backgroundColor':  graphConfig && graphConfig.legend &&  graphConfig.legend.itemStyle.color
                         }}/>
                         <Divider flexItem orientation="vertical" sx={{mx: 0.5, my: 1}}/>
                         <div className={'ColorVariation'}

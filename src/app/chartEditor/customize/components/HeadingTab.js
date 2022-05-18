@@ -27,6 +27,7 @@ import Popover from '@material-ui/core/Popover';
 import {useDispatch, useSelector} from "react-redux";
 import {setGraphConfig} from "../../../redux/slice/ChartEditorSlice";
 import {setRecentColorsForColorPicker} from "../../../redux/slice/ColorPickerSlice";
+import {updateCustomizeTab,removeHTML} from "../../../_helpers/eventHelper";
 
 
 let fontsize = [
@@ -92,16 +93,17 @@ const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({theme}) => ({
 }));
 
 export default function Heading({expanedState, setTabState}) {
+
+
     const dispatch = useDispatch();
     let graphConfig = useSelector((state) => state.chart.graphConfig);
     let colorPickerColors = useSelector((state) => state.colorPicker);
-    console.log("colorPickerColors:: ", colorPickerColors)
     const [selectedQuestions, setSelectedQuestions] = React.useState([]);
 
     const [Height, setHeight] = React.useState('0px');
     const [Show, setShow] = React.useState(false);
     const [headingVisible, setHeadingVisible] = React.useState(false);
-    const [headingText, setHeadingText] = useState(graphConfig.title.text)
+    const [headingText, setHeadingText] = useState(removeHTML(graphConfig && graphConfig.title && graphConfig.title.text))
     const [alignment, setAlignment] = React.useState('center');
     const [formats, setFormats] = React.useState(() => ['']);
     const [usedColors, setUsedColor] = React.useState([])
@@ -135,17 +137,17 @@ export default function Heading({expanedState, setTabState}) {
 
     const [subAlignment, subSetAlignment] = React.useState('center');
     const [subformats, subsetFormats] = React.useState(() => ['']);
-    const [subHeadingText, setSubHeadingText] = useState(graphConfig.subtitle.text)
+    const [subHeadingText, setSubHeadingText] = useState(removeHTML(graphConfig && graphConfig.subtitle && graphConfig.subtitle.text))
     const subhandleFormat = (
-        event: React.MouseEvent<HTMLElement>,
-        newSubFormats: string[],
+        event,
+        newSubFormats,
     ) => {
         subsetFormats(newSubFormats);
     };
 
     const subhandleAlignment = (
-        event: React.MouseEvent<HTMLElement>,
-        newSubAlignment: string,
+        event,
+        newSubAlignment,
     ) => {
         subSetAlignment(newSubAlignment);
     };
@@ -188,27 +190,28 @@ export default function Heading({expanedState, setTabState}) {
             setSubTitleColorPickerOpen(false)
         }
         usedColors.push(currentColor);
-        console.log("usedColors", usedColors)
         dispatch(setRecentColorsForColorPicker({type: component, color: currentColor}));
         setColorForGraph(component, currentColor)
     };
 
     const handleCallback = (childData) => {
         setCurrentColor(childData)
-        console.log("childData: ", childData)
     }
 
     const handleTitleSave = (event) => {
         setHeadingText(event.target.value);
-        console.log('graphConfig ', graphConfig)
         let newConfig = JSON.parse(JSON.stringify(graphConfig));
-        newConfig['title']["text"] = event.target.value
-        console.log('graphConfig after', newConfig)
+        newConfig['title']['useHTML']=true
+        newConfig['title']["text"] = `<span style="cursor:pointer;" id="custom-title" onClick="`+updateCustomizeTab('heading')+`"> `+event.target.value+` </span>`;
         dispatch(setGraphConfig(newConfig))
     };
 
     const handleTitleChange = (event) => {
         setHeadingText(event.target.value);
+        let newConfig = JSON.parse(JSON.stringify(graphConfig));
+        newConfig['title']['useHTML']=true
+        newConfig['title']["text"] = `<span style="cursor:pointer;" id="custom-title" onClick="`+updateCustomizeTab('heading')+`"> `+event.target.value+` </span>`;
+        dispatch(setGraphConfig(newConfig))
     };
 
     const handleTitleFontSizeChange = (event) => {
@@ -234,9 +237,13 @@ export default function Heading({expanedState, setTabState}) {
         setHeadingVisible(event.target.checked);
         let newConfig = JSON.parse(JSON.stringify(graphConfig));
         if (event.target.checked) {
-            newConfig['title']['text'] = headingText ? headingText : 'Chart Title';
-            newConfig['subtitle']['text'] = headingText ? headingText : 'Chart Subtitle';
+            setHeadingText("Chart Title");
+            setSubHeadingText("Chart Subtitle")
+            newConfig['title']['text'] = headingText ? headingText : '<span style="cursor:pointer;" id="custom-title">Chart Title</span>';
+            newConfig['subtitle']['text'] = headingText ? headingText : '<span style="cursor:pointer;" id="custom-subtitle">Chart Subtitle</span>';
         } else {
+            setHeadingText("");
+            setSubHeadingText("")
             newConfig['title']['text'] = "";
             newConfig['subtitle']['text'] = "";
         }
@@ -244,7 +251,6 @@ export default function Heading({expanedState, setTabState}) {
     }
 
     const handleTitleFormatting = (event, newFormats,) => {
-        console.log("newFormats", newFormats);
         setFormats(newFormats);
         let newConfig = JSON.parse(JSON.stringify(graphConfig));
         let titleStyle = newConfig['title']['style'] || {};
@@ -255,7 +261,6 @@ export default function Heading({expanedState, setTabState}) {
     };
 
     const handleTitleAlignment = (event, newAlignment) => {
-        console.log("newAlignment", newAlignment);
         setAlignment(newAlignment);
         let newConfig = JSON.parse(JSON.stringify(graphConfig));
         let title = newConfig['title'];
@@ -267,16 +272,17 @@ export default function Heading({expanedState, setTabState}) {
     /*For New Subtitle Start*/
     const subHandleTitleSave = (event) =>{
         setSubHeadingText(event.target.value);
-        console.log('graphConfig ', graphConfig)
         let newConfig = JSON.parse(JSON.stringify(graphConfig));
-        newConfig['subtitle']["text"] = event.target.value
-        console.log('graphConfig after', newConfig)
+        newConfig['subtitle']["text"] = `<span style="cursor:pointer;" id="custom-subtitle"> `+event.target.value+` </span>`;
         dispatch(setGraphConfig(newConfig))
     }
     /*For New Subtitle End*/
 
     const subHandleTitleChange = (event) =>{
         setSubHeadingText(event.target.value);
+        let newConfig = JSON.parse(JSON.stringify(graphConfig));
+        newConfig['subtitle']["text"] = `<span style="cursor:pointer;" id="custom-subtitle"> `+event.target.value+` </span>`;
+        dispatch(setGraphConfig(newConfig))
     }
 
     /*For Subtitle Font Family Start*/
@@ -304,7 +310,6 @@ export default function Heading({expanedState, setTabState}) {
 
     /*For Subtitle Style Like Bold, Italic Start*/
     const handleSubTitleFormatting = (event, newSubFormats,) => {
-        // console.log("newFormats", newFormats);
         subsetFormats(newSubFormats);
         let newConfig = JSON.parse(JSON.stringify(graphConfig));
         let titleStyle = newConfig['subtitle']['style'] || {};
@@ -316,7 +321,6 @@ export default function Heading({expanedState, setTabState}) {
     /*For Subtitle Style Like Bold, Italic End*/
 
     const handleSubTitleAlignment = (event, newSubAlignment) => {
-        console.log("newAlignment", newSubAlignment);
         subSetAlignment(newSubAlignment);
         let newConfig = JSON.parse(JSON.stringify(graphConfig));
         let subTitle = newConfig['subtitle'];
@@ -358,7 +362,7 @@ export default function Heading({expanedState, setTabState}) {
                                         'aria-label': 'title',
                                     }}
                                     value={headingText}
-                                    onBlur={handleTitleSave}
+                                    // onBlur={handleTitleSave}
                                     onChange={handleTitleChange}
                                 />
                             </div>
@@ -443,45 +447,6 @@ export default function Heading({expanedState, setTabState}) {
                                         </StyledToggleButtonGroup>
                                     </Paper>
                                 </div>
-                                {/*<div className={'rightGrid'}>*/}
-                                {/*    <FormHelperText id="title-text">Title text color</FormHelperText>*/}
-                                {/*    <div className={'colorPiker'}*/}
-                                {/*         style={{*/}
-                                {/*             width: 'calc(100% - 30px)'*/}
-                                {/*         }}>*/}
-                                {/*        <div className={'fixColors'}>*/}
-                                {/*            <div className={'ActiveColor'} style={{backgroundColor: "#28B5A6"}}/>*/}
-                                {/*            <Divider flexItem orientation="vertical" sx={{mx: 0.5, my: 1}}/>*/}
-                                {/*            <div className={'ColorVariation'}*/}
-                                {/*                 style={{'backgroundColor': '#000000'}}></div>*/}
-                                {/*            <div className={'ColorVariation'}*/}
-                                {/*                 style={{'backgroundColor': '#FCD364'}}></div>*/}
-                                {/*        </div>*/}
-                                {/*        <div className={'colorDropdown'}>*/}
-                                {/*            <button aria-describedby={id} type="button" onClick={handleClick}>*/}
-                                {/*                Auto*/}
-                                {/*            </button>*/}
-                                {/*            <Popover*/}
-                                {/*                id={id}*/}
-                                {/*                open={open}*/}
-                                {/*                anchorEl={anchorEl}*/}
-                                {/*                onClose={handleClose}*/}
-                                {/*                anchorOrigin={{*/}
-                                {/*                    vertical: 'bottom',*/}
-                                {/*                    horizontal: 'center',*/}
-                                {/*                }}*/}
-                                {/*                transformOrigin={{*/}
-                                {/*                    vertical: 'top',*/}
-                                {/*                    horizontal: 'center',*/}
-                                {/*                }}*/}
-                                {/*                style={{height: 'auto'}}*/}
-                                {/*            >*/}
-                                {/*                <CustomColorPicker parentCallback={handleCallback}*/}
-                                {/*                                   usedColors={usedColors}></CustomColorPicker>*/}
-                                {/*            </Popover>*/}
-                                {/*        </div>*/}
-                                {/*    </div>*/}
-                                {/*</div>*/}
                                 <div className={'rightGrid'}>
                                     <FormHelperText id="title-text">Title text color</FormHelperText>
                                     <div className={'colorPiker'}
@@ -490,7 +455,7 @@ export default function Heading({expanedState, setTabState}) {
                                          }}>
                                         <div className={'fixColors'}>
                                             <div className={'ActiveColor'} style={{
-                                                'backgroundColor': graphConfig.title.style.color
+                                                'backgroundColor':  graphConfig.title && graphConfig.title.style.color
                                             }}/>
                                             <Divider flexItem orientation="vertical" sx={{mx: 0.5, my: 1}}/>
                                             <div className={'ColorVariation'}
@@ -550,7 +515,7 @@ export default function Heading({expanedState, setTabState}) {
                                         'aria-label': 'subtitle',
                                     }}
                                     value={subHeadingText}
-                                    onBlur={subHandleTitleSave}
+                                    // onBlur={subHandleTitleSave}
                                     onChange={subHandleTitleChange}
                                 />
                             </div>
@@ -636,45 +601,6 @@ export default function Heading({expanedState, setTabState}) {
                                         </StyledToggleButtonGroup>
                                     </Paper>
                                 </div>
-                                {/*<div className={'rightGrid'}>*/}
-                                {/*    <FormHelperText id="title-text">Subtitle text color</FormHelperText>*/}
-                                {/*    <div className={'colorPiker'}*/}
-                                {/*         style={{*/}
-                                {/*             width: 'calc(100% - 30px)'*/}
-                                {/*         }}>*/}
-                                {/*        <div className={'fixColors'}>*/}
-                                {/*            <div className={'ActiveColor'}></div>*/}
-                                {/*            <Divider flexItem orientation="vertical" sx={{mx: 0.5, my: 1}}/>*/}
-                                {/*            <div className={'ColorVariation'}*/}
-                                {/*                 style={{'backgroundColor': '#000000'}}></div>*/}
-                                {/*            <div className={'ColorVariation'}*/}
-                                {/*                 style={{'backgroundColor': '#FCD364'}}></div>*/}
-                                {/*        </div>*/}
-                                {/*        <div className={'colorDropdown'}>*/}
-                                {/*            <button aria-describedby={id} type="button" onClick={handleClick}>*/}
-                                {/*                Auto*/}
-                                {/*            </button>*/}
-                                {/*            <Popover*/}
-                                {/*                id={id}*/}
-                                {/*                open={open}*/}
-                                {/*                anchorEl={anchorEl}*/}
-                                {/*                onClose={handleClose}*/}
-                                {/*                anchorOrigin={{*/}
-                                {/*                    vertical: 'bottom',*/}
-                                {/*                    horizontal: 'center',*/}
-                                {/*                }}*/}
-                                {/*                transformOrigin={{*/}
-                                {/*                    vertical: 'top',*/}
-                                {/*                    horizontal: 'center',*/}
-                                {/*                }}*/}
-                                {/*                style={{height: 'auto'}}*/}
-                                {/*            >*/}
-                                {/*                <CustomColorPicker parentCallback={handleCallback}*/}
-                                {/*                                   usedColors={usedColors}></CustomColorPicker>*/}
-                                {/*            </Popover>*/}
-                                {/*        </div>*/}
-                                {/*    </div>*/}
-                                {/*</div>*/}
                                 <div className={'rightGrid'}>
                                     <FormHelperText id="title-text">Subtitle text color</FormHelperText>
                                     <div className={'colorPiker'}
@@ -683,7 +609,7 @@ export default function Heading({expanedState, setTabState}) {
                                          }}>
                                         <div className={'fixColors'}>
                                             <div className={'ActiveColor'} style={{
-                                                'backgroundColor': graphConfig.subtitle.style.color
+                                                'backgroundColor': graphConfig.subtitle && graphConfig.subtitle.style.color
                                             }}></div>
                                             <Divider flexItem orientation="vertical" sx={{mx: 0.5, my: 1}}/>
                                             <div className={'ColorVariation'}

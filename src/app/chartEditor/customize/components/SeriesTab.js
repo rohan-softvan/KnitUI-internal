@@ -38,10 +38,13 @@ const renderSeriesMenuItem = (title, color) => (
 
 
 const getSelectedSeries = (graphConfig) => {
-  if (graphConfig.chart.type === "pie") {
-    return graphConfig.series[0].data[0];
-  } else
-    return graphConfig.series[0]
+  if(graphConfig && graphConfig.chart){
+    if (graphConfig.chart.type === "pie") {
+      return graphConfig.series[0].data[0];
+    } else {
+      return graphConfig.series[0]
+    }
+  }
 }
 
 
@@ -59,13 +62,15 @@ export default function SeriesTab({expanedState, setTabState}) {
     setOpen(true)
   };
   let seriesMenu = []
-  const seriesData = graphConfig.chart.type === "pie" ? graphConfig.series[0].data : graphConfig.series;
-  for (let i = 0; i < seriesData.length; i++) {
-    let obj = {};
-    obj.title = renderSeriesMenuItem(seriesData[i].name, seriesData[i].color)
-    obj.value = seriesData[i].name
-    obj.key = i
-    seriesMenu.push(obj)
+  const seriesData = graphConfig && graphConfig.chart && graphConfig.chart.type === "pie" ? graphConfig.series[0].data : graphConfig.series;
+  if(Array.isArray(seriesData) && seriesData.length > 0){
+    for (let i = 0; i < seriesData.length; i++) {
+      let obj = {};
+      obj.title = renderSeriesMenuItem(seriesData[i].name, seriesData[i].color)
+      obj.value = seriesData[i].name
+      obj.key = i
+      seriesMenu.push(obj)
+    }
   }
 
   const id = 'series-color-picker';
@@ -137,7 +142,7 @@ export default function SeriesTab({expanedState, setTabState}) {
                       menu={seriesMenu}
                       width={"full"}
                       handleChange={handleSeriesChange}
-                      menuValue={selectedSeries.name}
+                      menuValue={selectedSeries && selectedSeries.name}
                   />
                 </div>
               </div>
@@ -154,7 +159,7 @@ export default function SeriesTab({expanedState, setTabState}) {
                        }}>
                     <div className={'fixColors'}>
                       <div className={'ActiveColor'}
-                           style={{'backgroundColor': selectedSeries.color}}></div>
+                           style={{'backgroundColor': selectedSeries && selectedSeries.color}}></div>
                       <Divider flexItem orientation="vertical" sx={{mx: 0.5, my: 1}}/>
                       <div className={'ColorVariation'}
                            style={{'backgroundColor': '#000000'}}
@@ -188,7 +193,7 @@ export default function SeriesTab({expanedState, setTabState}) {
                             component={"series"}
                             parentCallback={handleCallback}
                             usedColors={colorPickerColors["series"]}
-                            selectedColor={selectedSeries.color}
+                            selectedColor={selectedSeries && selectedSeries.color}
                         />
                       </Popover>
                     </div>
@@ -198,7 +203,7 @@ export default function SeriesTab({expanedState, setTabState}) {
                   <FormHelperText id="title-text">Show in legend</FormHelperText>
                   <SelectComponent
                       menu={legend}
-                      menuValue={selectedSeries.showInLegend ? "on" : "off"}
+                      menuValue={selectedSeries && selectedSeries.showInLegend ? "on" : "off"}
                       handleChange={handleShowInLegend}
                   />
                 </div>

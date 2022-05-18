@@ -218,7 +218,7 @@ export default function DatalabelsTab({expanedState, setTabState}) {
                     </Grid>
                     <Grid item xs={6} className={'SwitchIcon'}>
                         <Switch
-                            checked={graphConfig.plotOptions.series.dataLabels ? graphConfig.plotOptions.series.dataLabels.enabled : false}
+                            checked={graphConfig && graphConfig.plotOptions && graphConfig.plotOptions.series.dataLabels ? graphConfig.plotOptions.series.dataLabels.enabled : false}
                             onChange={handleChartDataLabelVisible}/>
                     </Grid>
                 </Grid>
@@ -318,7 +318,7 @@ export default function DatalabelsTab({expanedState, setTabState}) {
                                      }}>
                                     <div className={'fixColors'}>
                                         <div className={'ActiveColor'} style={{
-                                            'backgroundColor': graphConfig['plotOptions']['series']['dataLabels']['color']
+                                            'backgroundColor': graphConfig && graphConfig.plotOptions && graphConfig['plotOptions']['series']['dataLabels']['color']
                                         }}/>
                                         <Divider flexItem orientation="vertical" sx={{mx: 0.5, my: 1}}/>
                                         <div className={'ColorVariation'}

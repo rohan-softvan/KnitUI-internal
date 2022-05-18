@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { updateCustomizeTab } from "../_helpers/eventHelper"
 export const chartEditorEnum = {
   chartDefaultProps: {
+    reflow: true,
     backgroundColor: "#ffffff",
     borderWidth: 1,
     borderColor: "#000",
@@ -11,7 +12,8 @@ export const chartEditorEnum = {
     height: 600,
   },
   titleDefaultProps: {
-    text: "",
+    // text: `<span style=\"cursor:pointer;\" id=\"custom-title\" onClick=\"`+updateCustomizeTab('heading')+`\"></span>`,
+    text:'',
     style: {
       color: "#ff0000",
     },
@@ -27,6 +29,7 @@ export const chartEditorEnum = {
     gridLineWidth: 1, //TODO change to 0
     title: {
       enabled: true,
+      text:'<span style="cursor:pointer;" id="custom-x-axis-title"> X axis Hai</span>'
       //rotation: 0
     },
     labels: {
@@ -42,6 +45,7 @@ export const chartEditorEnum = {
     gridLineWidth: 1,
     title: {
       enabled: true,
+      text:'<span style="cursor:pointer;" id="custom-y-axis-title"> Y axis Hai</span>'
       //rotation: 0
     },
     labels: {
@@ -66,9 +70,7 @@ export const chartEditorEnum = {
       point: {
         events: {
           click: function() {
-            console.log("seriesClick::: ", this);
             updateCustomizeTab("series")
-            // handleChange(3)
           }
         }
       },
