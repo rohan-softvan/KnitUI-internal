@@ -38,10 +38,39 @@ const PivotTable = () => {
   const [display, setDisplay] = useState(true);
   const [fontSize, setFontSize] = useState(14);
   const [fontFamily, setFontFamily] = useState('Roboto');
-  const [rows, setRows] = useState(selectedQuestion[0].rows);
+  const [rows, setRows] = useState([
+    {
+      uniqueName: "Q8 Do you have a meal plan for on-campus dining?",
+      sort: "asc"
+    }
+    // {
+    //   "uniqueName": "Q6 We would like to learn a little bit more about how you structure meal time between home, work and school. Which of these best describes you?",
+    //   "sort": "asc"
+    // },
+  ]);
 
-  const [columns, setColumns] = useState(selectedQuestion[0].columns);
-  const [measures, setMeasures] = useState(selectedQuestion[0].measures);
+  const [columns, setColumns] = useState([
+    {
+      uniqueName:
+          "Q20 Would you be interested in ordering from a food locker like this?",
+      sort: "asc"
+    }
+  ]);
+  const [measures, setMeasures] = useState([
+    {
+      uniqueName:
+          "Q20 Would you be interested in ordering from a food locker like this?",
+      aggregation: "sum"
+    }
+    // {
+    //   uniqueName: "Q8 Do you have a meal plan for on-campus dining?",
+    //   aggregation: "sum",
+    // },
+    // {
+    //   "uniqueName": "Q6 We would like to learn a little bit more about how you structure meal time between home, work and school. Which of these best describes you?",
+    //   "aggregation": "sum"
+    // },
+  ]);
   let graphConfig = useSelector((state) => state.chart.graphConfig);
   let myRef = useRef();
   let pieRef = useRef();
@@ -200,7 +229,7 @@ const PivotTable = () => {
 
   const report = {
     dataSource: {
-      data: dataJSONConfig
+      data: DataJson
     },
     tableSizes: {
       columns: [
