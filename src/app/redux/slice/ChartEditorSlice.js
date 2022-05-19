@@ -1,9 +1,9 @@
-import {createSlice,current} from '@reduxjs/toolkit'
+import {createSlice, current} from '@reduxjs/toolkit'
 import Highcharts from "highcharts";
 import {updateCustomizeTab} from "../../_helpers/eventHelper";
 
 const handleTitleClick = event => {
-  console.log("event::",event.currentTarget.textContent)
+  console.log("event::", event.currentTarget.textContent)
   console.log("handleTitleClick invoked 😁");
   updateCustomizeTab("heading");
 };
@@ -20,7 +20,7 @@ const handleAxisTitleClick = (event, axisType) => {
 
 
 const setDefaultEventsForGraph = (graphConfig) => {
-  console.log('in  default function==>',graphConfig)
+  console.log('in  default function==>', graphConfig)
   let newConfig = {...graphConfig};
   // newConfig.xAxis.title.text= !newConfig.xAxis.title.text && <span style="cursor:pointer;" id="custom-x-axis-title"> X axis Hai</span>
   // let newConfig = JSON.parse(JSON.stringify(graphConfig));
@@ -36,19 +36,19 @@ const setDefaultEventsForGraph = (graphConfig) => {
   //adding event listener for background
   newConfig.chart.events = {
     load: function () {
-      console.log("loaded chart",newConfig);
-      if(newConfig.title.text){
-        console.log('document.getElementById("custom-title")=>',document.getElementById("custom-title").value)
+      console.log("loaded chart", newConfig);
+      if (newConfig.title.text) {
+        console.log('document.getElementById("custom-title")=>', document.getElementById("custom-title").value)
         document
             .getElementById("custom-title")
             .addEventListener("click", handleTitleClick);
       }
-      if(newConfig.subtitle.text){
+      if (newConfig.subtitle.text) {
         document
             .getElementById("custom-subtitle")
             .addEventListener("click", handleSubTitleClick);
       }
-      console.log('yaxis==>',document.getElementById("custom-y-axis-title"))
+      console.log('yaxis==>', document.getElementById("custom-y-axis-title"))
       if (
           newConfig.chart.type !== "pie"
       ) {
@@ -59,7 +59,7 @@ const setDefaultEventsForGraph = (graphConfig) => {
         //     .getElementById("custom-y-axis-title")
         //     .addEventListener("click", e => handleAxisTitleClick(e, "y"));
       }
-      if(document.getElementById("custom-y-axis-title")){
+      if (document.getElementById("custom-y-axis-title")) {
         document
             .getElementById("custom-y-axis-title")
             .addEventListener("click", e => handleAxisTitleClick(e, "y"));
@@ -94,13 +94,21 @@ export const chartEditorSlice = createSlice({
   initialState: {
     graphConfig: {},
     pieChartConfig: {},
-    generalConfig:{},
-    dataJSON:[],
-    expandedStateConfig:{ heading: false, appearance: false, legend: false, axis: false, series: false, dataLables: false },
-    currentTab:0,
-    selectedItems:[{rows:[],columns:[],measures:[]}],
-    selectedQuestionList:[],
-    chartType:'bar'
+    generalConfig: {},
+    dataJSON: [],
+    expandedStateConfig: {
+      heading: false,
+      appearance: false,
+      legend: false,
+      axis: false,
+      series: false,
+      dataLables: false
+    },
+    currentTab: 0,
+    selectedItems: [{rows: [], columns: [], measures: []}],
+    selectedQuestionList: [],
+    chartType: 'bar',
+    generalChartType: 'bar',
   },
   reducers: {
     setGraphConfig: (state, action) => {
@@ -108,46 +116,59 @@ export const chartEditorSlice = createSlice({
       // state.graphConfig = action.payload
       state.graphConfig = setDefaultEventsForGraph(action.payload);
       if (action.payload.chart.type !== "pie") {
-        console.log("plotting>> ", action.payload.chart.type, " chart")
         Highcharts.chart('highchartsContainer', action.payload)
       }
       // else{
       //   plotPieChart(JSON.parse(JSON.stringify(action.payload)))
       // }
     },
-    setPieChartConfig: (state,action)=>{
-      state.pieChartConfig=action.payload
+    setPieChartConfig: (state, action) => {
+      state.pieChartConfig = action.payload
     },
-    setGeneralConfig: (state,action)=>{
-      state.generalConfig=action.payload
+    setGeneralConfig: (state, action) => {
+      state.generalConfig = action.payload
     },
-    setDataJSONConfig:(state,action)=>{
-      state.dataJSON=action.payload
+    setDataJSONConfig: (state, action) => {
+      state.dataJSON = action.payload
     },
-    setTabValueConfig: (state,action)=>{
-      state.currentTab=action.payload
+    setTabValueConfig: (state, action) => {
+      state.currentTab = action.payload
     },
-    setExpandedStateConfig:(state,action)=>{
-      console.log('exdpanded==?',action.payload)
+    setExpandedStateConfig: (state, action) => {
+      console.log('exdpanded==?', action.payload)
       state.expandedStateConfig = action.payload
     },
-    setSelectedQuestion: (state, action)=>{
-      console.log('action.payloadd==>',current(state.selectedItems),action)
-      state.selectedQuestionList=action.payload.questionList;
+    setSelectedQuestion: (state, action) => {
+      console.log('action.payloadd==>', current(state.selectedItems), action)
+      state.selectedQuestionList = action.payload.questionList;
       const type = action.payload.questionList.length % 2 === 0 ? "rows" : "columns";
-      if(state.selectedItems[0].measures.length <= 0){
-          state.selectedItems[0].measures.push({uniqueName:action.payload.text, aggregation: "sum"})
+      if (state.selectedItems[0].measures.length <= 0) {
+        state.selectedItems[0].measures.push({uniqueName: action.payload.text, aggregation: "sum"})
       }
-      state.selectedItems[0][type].push({uniqueName:action.payload.text,sort: "asc"});
+      state.selectedItems[0][type].push({uniqueName: action.payload.text, sort: "asc"});
     },
-    setChartType: (state,action)=>{
-      console.log('chart Type==>',action.payload)
+    setChartType: (state, action) => {
+      console.log('chart Type==>', action.payload)
       state.chartType = action.payload
+    },
+    setGeneralChartType: (state, action) => {
+      console.log('setGeneralChartType==>', action.payload)
+      state.generalChartType = action.payload
     }
   },
 })
 
 
 // Action creators are generated for each case reducer function
-export const {setGraphConfig,setPieChartConfig,setGeneralConfig,setDataJSONConfig,setTabValueConfig,setExpandedStateConfig,setSelectedQuestion,setChartType} = chartEditorSlice.actions
+export const {
+  setGraphConfig,
+  setPieChartConfig,
+  setGeneralConfig,
+  setDataJSONConfig,
+  setTabValueConfig,
+  setExpandedStateConfig,
+  setSelectedQuestion,
+  setChartType,
+  setGeneralChartType
+} = chartEditorSlice.actions
 export default chartEditorSlice.reducer

@@ -48,36 +48,53 @@ const getSelectedSeries = (graphConfig) => {
   }
 }
 
-const getSeriesData = (graphConfig) => {
-  if (graphConfig && graphConfig.chart) {
-    if (graphConfig.chart.type === "pie") {
-      return graphConfig.series[0].data;
-    } else if ((graphConfig.chart.type === "bar" || graphConfig.chart.type === "column") && graphConfig.plotOptions.series.colorByPoint) {
-      const {categories} = graphConfig.xAxis;
+const getSeriesData = (config) => {
+  if (config && config.chart) {
+    if (config.chart.type === "pie") {
+      return config.series[0].data;
+    } else if ((config.chart.type === "bar" || config.chart.type === "column") && config.plotOptions.series.colorByPoint) {
+      const {categories} = config.xAxis;
       let series = [];
       categories.forEach((category, index) => {
         let seriesItem = {};
         seriesItem["name"] = category;
-        seriesItem["color"] = graphConfig["colors"][index];
+        seriesItem["color"] = config["colors"][index];
         series.push(seriesItem);
       })
       return series;
     } else {
-      return graphConfig.series
+      return config.series
     }
   }
 }
 
-
-export default function SeriesTab({expanedState, setTabState}) {
+export default function SeriesTab({expanedState, setTabState, pieConfig, setPieConfig}) {
   const dispatch = useDispatch();
   let graphConfig = useSelector((state) => state.chart.graphConfig);
   let colorPickerColors = useSelector((state) => state.colorPicker);
+  let generalChartType = useSelector((state) => state.chart.generalChartType);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [open, setOpen] = React.useState(false)
   const [currentColor, setCurrentColor] = React.useState('')
-  const [selectedSeries, setSelectedSeries] = React.useState(getSelectedSeries(graphConfig))
-  console.log("getSelectedSeries(graphConfig): ", selectedSeries)
+  const [selectedSeries, setSelectedSeries] = React.useState(getSelectedSeries(generalChartType === "pie" ? pieConfig : graphConfig))
+
+  function getGraphConfigs() {
+    console.log("in getGraphConfigs: ", generalChartType)
+    if (generalChartType === "pie") {
+      return JSON.parse(JSON.stringify(pieConfig))
+    } else {
+      return JSON.parse(JSON.stringify(graphConfig));
+    }
+  }
+
+  function setGraphConfigs(config) {
+    if (generalChartType === "pie") {
+      setPieConfig(config);
+    } else {
+      dispatch(setGraphConfig(config));
+    }
+  }
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
     setOpen(true)
@@ -85,7 +102,7 @@ export default function SeriesTab({expanedState, setTabState}) {
 
   let seriesMenu = [];
 
-  const seriesData = getSeriesData(graphConfig);
+  const seriesData = getSeriesData(getGraphConfigs());
 
   if (Array.isArray(seriesData) && seriesData.length > 0) {
     for (let i = 0; i < seriesData.length; i++) {
@@ -101,7 +118,7 @@ export default function SeriesTab({expanedState, setTabState}) {
   const id = 'series-color-picker';
 
   const setSeriesColor = (color) => {
-    let newConfig = JSON.parse(JSON.stringify(graphConfig));
+    let newConfig = getGraphConfigs();
     if ((newConfig.chart.type === "bar" || newConfig.chart.type === "column") && newConfig.plotOptions.series.colorByPoint) {
       let selectedSeriesConfig = graphConfig.xAxis.categories.findIndex(e => e === selectedSeries.name);
       newConfig.colors[selectedSeriesConfig] = color;
@@ -115,7 +132,7 @@ export default function SeriesTab({expanedState, setTabState}) {
     let selectedSeriesClone = JSON.parse(JSON.stringify(selectedSeries));
     selectedSeriesClone.color = color;
     setSelectedSeries(selectedSeriesClone);
-    dispatch(setGraphConfig(newConfig));
+    setGraphConfigs(newConfig);
   }
 
   const handleClose = () => {
@@ -131,27 +148,28 @@ export default function SeriesTab({expanedState, setTabState}) {
 
   const handleShowInLegend = (event) => {
     const {value} = event.target;
-    let newConfig = JSON.parse(JSON.stringify(graphConfig));
+    let newConfig = getGraphConfigs();
     let selectedSeriesConfig = newConfig.series.find(e => e.name === selectedSeries.name);
     selectedSeriesConfig["showInLegend"] = value === "on"
     let selectedSeriesClone = JSON.parse(JSON.stringify(selectedSeries));
     selectedSeriesClone["showInLegend"] = value === "on"
     setSelectedSeries(selectedSeriesClone);
-    dispatch(setGraphConfig(newConfig));
+    setGraphConfigs(newConfig);
   }
 
   const handleSeriesChange = (event) => {
     const {value} = event.target;
     let selectedSeriesConfig = "";
-    if (graphConfig.chart.type === "pie") {
-      selectedSeriesConfig = graphConfig.series[0].data.find(e => e.name === value);
-    } else if ((graphConfig.chart.type === "bar" || graphConfig.chart.type === "column") && graphConfig.plotOptions.series.colorByPoint) {
+    let newConfig = getGraphConfigs();
+    if (newConfig.chart.type === "pie") {
+      selectedSeriesConfig = newConfig.series[0].data.find(e => e.name === value);
+    } else if ((newConfig.chart.type === "bar" || newConfig.chart.type === "column") && newConfig.plotOptions.series.colorByPoint) {
       selectedSeriesConfig = {
-        name: graphConfig.xAxis.categories.find(e => e === value),
-        color: graphConfig.colors[graphConfig.xAxis.categories.findIndex(e => e === value)]
+        name: newConfig.xAxis.categories.find(e => e === value),
+        color: newConfig.colors[newConfig.xAxis.categories.findIndex(e => e === value)]
       };
     } else {
-      selectedSeriesConfig = graphConfig.series.find(e => e.name === value);
+      selectedSeriesConfig = newConfig.series.find(e => e.name === value);
     }
     setSelectedSeries(selectedSeriesConfig);
   }

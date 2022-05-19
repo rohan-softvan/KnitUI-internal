@@ -104,7 +104,7 @@ const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({theme}) => ({
     },
 }));
 
-export default function DatalabelsTab({expanedState, setTabState}) {
+export default function DatalabelsTab({expanedState, setTabState, pieConfig, setPieConfig}) {
     const dispatch = useDispatch();
     let graphConfig = useSelector((state) => state.chart.graphConfig);
     let colorPickerColors = useSelector((state) => state.colorPicker);
@@ -116,29 +116,51 @@ export default function DatalabelsTab({expanedState, setTabState}) {
 
     const [dataLabelPosition, setDataLabelPosition] = React.useState("left")
     const [selectedFontFamily, setSelectedFontFamily] = React.useState('roboto')
-    const [selectedFontSize, setSelectedFontSize] = React.useState('auto')
+    const [selectedFontSize, setSelectedFontSize] = React.useState('auto');
 
     const id = 'data-label-color-picker';
+
+    let generalChartType = useSelector((state) => state.chart.generalChartType);
+
+
+    function getGraphConfigs() {
+        console.log("in getGraphConfigs: ", generalChartType)
+        if (generalChartType === "pie") {
+            return JSON.parse(JSON.stringify(pieConfig))
+        } else {
+            return JSON.parse(JSON.stringify(graphConfig));
+        }
+    }
+
+    function setGraphConfigs(config) {
+        if (generalChartType === "pie") {
+            setPieConfig(config);
+        } else {
+            dispatch(setGraphConfig(config));
+        }
+    }
+
+
 
     const handleTitleFormatting = (event, newFormats,) => {
         console.log("newFormats", newFormats);
         setFormats(newFormats);
-        let newConfig = JSON.parse(JSON.stringify(graphConfig));
+        let newConfig = getGraphConfigs();
         let dataLabelsStyle = newConfig['plotOptions']['series']['dataLabels']['style'];
         dataLabelsStyle["fontWeight"] = newFormats.includes("bold") ? "bold" : "normal";
         dataLabelsStyle["fontStyle"] = newFormats.includes("italic") ? "italic" : "normal";
         newConfig['plotOptions']['series']['dataLabels']['style'] = dataLabelsStyle;
-        dispatch(setGraphConfig(newConfig));
+        setGraphConfigs(newConfig);
     };
 
     const handleTitleAlignment = (event, newAlignment) => {
         console.log("newAlignment", newAlignment);
         setAlignment(newAlignment);
-        let newConfig = JSON.parse(JSON.stringify(graphConfig));
+        let newConfig = getGraphConfigs();
         let dataLabels = newConfig['plotOptions']['series']['dataLabels'];
         dataLabels["align"] = newAlignment;
         newConfig['plotOptions']['series']['dataLabels'] = dataLabels;
-        dispatch(setGraphConfig(newConfig));
+        setGraphConfigs(newConfig);
     };
 
     const handleClick = (event) => {
@@ -147,9 +169,9 @@ export default function DatalabelsTab({expanedState, setTabState}) {
     };
 
     const setDataLabelColor = (color) => {
-        let newConfig = JSON.parse(JSON.stringify(graphConfig));
+        let newConfig = getGraphConfigs();
         newConfig['plotOptions']['series']['dataLabels']['color'] = color;
-        dispatch(setGraphConfig(newConfig));
+        setGraphConfigs(newConfig);
     }
 
     const handleClose = () => {
@@ -165,41 +187,41 @@ export default function DatalabelsTab({expanedState, setTabState}) {
 
     const handleChartDataLabelVisible = (event) => {
         const {checked} = event.target;
-        let newConfig = JSON.parse(JSON.stringify(graphConfig));
+        let newConfig = getGraphConfigs();
         newConfig.plotOptions.series.dataLabels.enabled = checked
         console.log("Checked Console for datalabel", newConfig)
-        dispatch(setGraphConfig(newConfig));
+        setGraphConfigs(newConfig);
     }
 
     const handleDataLabelPositionChange = (event) => {
         const {value} = event.target;
         setDataLabelPosition(value);
-        let newConfig = JSON.parse(JSON.stringify(graphConfig));
+        let newConfig = getGraphConfigs();
         // if (!("plotOptions" in newConfig)) {
         //     newConfig['plotOptions'] = {...chartEditorEnum.plotOptionsDefaultProps}
         // }
         newConfig.plotOptions.series.dataLabels.align = value
-        dispatch(setGraphConfig(newConfig));
+        setGraphConfigs(newConfig);
     }
 
     const handleTitleFontFamilyChange = (event) => {
         const {value} = event.target;
         setSelectedFontFamily(value);
-        let newConfig = JSON.parse(JSON.stringify(graphConfig));
+        let newConfig = getGraphConfigs();
         let dataLabelsStyle = newConfig['plotOptions']['series']['dataLabels']['style'];
         dataLabelsStyle["fontFamily"] = fontFamily.find(e => e.value === value).title
         newConfig['plotOptions']['series']['dataLabels']['style'] = dataLabelsStyle;
-        dispatch(setGraphConfig(newConfig));
+        setGraphConfigs(newConfig);
     }
 
     const handleTitleFontSizeChange = (event) => {
         const {value} = event.target;
         setSelectedFontSize(value);
-        let newConfig = JSON.parse(JSON.stringify(graphConfig));
+        let newConfig = getGraphConfigs();
         let dataLabelsStyle = newConfig['plotOptions']['series']['dataLabels']['style'];
         dataLabelsStyle["fontSize"] = value === "auto" ? "11px" : value + 'px'
         newConfig['plotOptions']['series']['dataLabels']['style'] = dataLabelsStyle;
-        dispatch(setGraphConfig(newConfig));
+        setGraphConfigs(newConfig);
     }
 
     return (
@@ -218,7 +240,7 @@ export default function DatalabelsTab({expanedState, setTabState}) {
                     </Grid>
                     <Grid item xs={6} className={'SwitchIcon'}>
                         <Switch
-                            checked={graphConfig && graphConfig.plotOptions && graphConfig.plotOptions.series.dataLabels ? graphConfig.plotOptions.series.dataLabels.enabled : false}
+                            checked={getGraphConfigs().plotOptions.series.dataLabels ? getGraphConfigs().plotOptions.series.dataLabels.enabled : false}
                             onChange={handleChartDataLabelVisible}/>
                     </Grid>
                 </Grid>

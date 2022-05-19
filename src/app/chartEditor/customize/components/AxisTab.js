@@ -146,7 +146,7 @@ const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({theme}) => ({
   },
 }));
 
-export default function LegendTab({expanedState, setTabState}) {
+export default function LegendTab({expanedState, setTabState, pieConfig, setPieConfig}) {
   const dispatch = useDispatch();
   let graphConfig = useSelector((state) => state.chart.graphConfig);
   let colorPickerColors = useSelector((state) => state.colorPicker);
@@ -178,6 +178,24 @@ export default function LegendTab({expanedState, setTabState}) {
   const [xAxisFontSize, setxAxisFontSize] = React.useState('auto')
   const [xAxisTitleName, setXAxisTitleName] = React.useState('on')
   const [selectedAngleOfLabel, setSelectedAngleOfLabel] = React.useState('0')
+  let generalChartType = useSelector((state) => state.chart.generalChartType);
+
+  function getGraphConfigs() {
+    console.log("in getGraphConfigs: ", generalChartType)
+    if (generalChartType === "pie") {
+      return JSON.parse(JSON.stringify(pieConfig))
+    } else {
+      return JSON.parse(JSON.stringify(graphConfig));
+    }
+  }
+
+  function setGraphConfigs(config) {
+    if (generalChartType === "pie") {
+      setPieConfig(config);
+    } else {
+      dispatch(setGraphConfig(config));
+    }
+  }
 
   const handleFormat = (event, newFormats) => {
     setFormats(newFormats);
@@ -223,16 +241,16 @@ export default function LegendTab({expanedState, setTabState}) {
 
   const handleChartInvertAxis = (event) => {
     setInvertAxis(event.target.checked);
-    let newConfig = JSON.parse(JSON.stringify(graphConfig));
+    let newConfig = getGraphConfigs();
     newConfig['chart']['inverted'] = event.target.checked
-    dispatch(setGraphConfig(newConfig));
+    setGraphConfigs(newConfig);
   }
 
   const handleXAxisTitleSave = (event) => {
     setXAxisTitle(event.target.value);
-    let newConfig = JSON.parse(JSON.stringify(graphConfig));
-    newConfig['xAxis']['title']["text"] = '<p style="cursor:pointer;" id="custom-x-axis-title">'+ event.target.value +'</p>'
-    dispatch(setGraphConfig(newConfig))
+    let newConfig = getGraphConfigs();
+    newConfig['xAxis']['title']["text"] = '<p style="cursor:pointer;" id="custom-x-axis-title">' + event.target.value + '</p>'
+    setGraphConfigs(newConfig)
   };
 
   const handleXAxisTitleChange = (event) => {
@@ -242,78 +260,78 @@ export default function LegendTab({expanedState, setTabState}) {
   const handleXAxisTitleFontFamilyChange = (event) => {
     const {value} = event.target;
     setSelectedFontFamily(value);
-    let newConfig = JSON.parse(JSON.stringify(graphConfig));
+    let newConfig = getGraphConfigs();
     let legendStyle = newConfig['xAxis']['title']['style'] || {};
     legendStyle["fontFamily"] = fontFamily.find(e => e.value === value).title
     newConfig['xAxis']['title']['style'] = legendStyle;
-    dispatch(setGraphConfig(newConfig));
+    setGraphConfigs(newConfig);
   }
 
   const handlexAxisFontSizeChange = (event) => {
     const {value} = event.target;
     setxAxisFontSize(value);
-    let newConfig = JSON.parse(JSON.stringify(graphConfig));
+    let newConfig = getGraphConfigs();
     let xAxisStyle = newConfig['xAxis']['title']['style'] || {};
     xAxisStyle["fontSize"] = value === "auto" ? "12px" : value + 'px';
     newConfig['xAxis']['title']['style'] = xAxisStyle;
-    dispatch(setGraphConfig(newConfig));
+    setGraphConfigs(newConfig);
   }
 
   const handleXAxisFormat = (event, newFormats) => {
     setFormats(newFormats);
-    let newConfig = JSON.parse(JSON.stringify(graphConfig));
+    let newConfig = getGraphConfigs();
     let xAxisStyle = newConfig['xAxis']['title']['style'] || {};
     xAxisStyle["fontWeight"] = newFormats.includes("bold") ? "bold" : "normal";
     xAxisStyle["fontStyle"] = newFormats.includes("italic") ? "italic" : "normal";
     newConfig['xAxis']['title']['style'] = xAxisStyle;
-    dispatch(setGraphConfig(newConfig));
+    setGraphConfigs(newConfig);
   }
 
   const setXAxisColor = (color) => {
-    let newConfig = JSON.parse(JSON.stringify(graphConfig));
+    let newConfig = getGraphConfigs();
     let style = newConfig['xAxis']['title']['style'] || {};
     style["color"] = color;
     newConfig['xAxis']['title']['style'] = style;
-    dispatch(setGraphConfig(newConfig));
+    setGraphConfigs(newConfig);
   }
 
   const setYAxisColor = (color) => {
-    let newConfig = JSON.parse(JSON.stringify(graphConfig));
+    let newConfig = getGraphConfigs();
     let style = newConfig['yAxis']['title']['style'] || {};
     style["color"] = color;
     newConfig['yAxis']['title']['style'] = style;
-    dispatch(setGraphConfig(newConfig));
+    setGraphConfigs(newConfig);
   }
 
   const setGridLineColor = (axis, color) => {
-    let newConfig = JSON.parse(JSON.stringify(graphConfig));
+    let newConfig = getGraphConfigs();
     newConfig[`${axis}Axis`]['gridLineColor'] = color;
-    dispatch(setGraphConfig(newConfig));
+    setGraphConfigs(newConfig);
   }
 
   const handleXAxisTitleName = (event) => {
     const {value} = event.target;
     // setXAxisTitleName(value);
-    let newConfig = JSON.parse(JSON.stringify(graphConfig));
+    let newConfig = getGraphConfigs();
     newConfig["xAxis"]["title"]["enabled"] = value === "on"
-    dispatch(setGraphConfig(newConfig));
+    setGraphConfigs(newConfig);
   }
 
   const handleXAxisGridLine = (event) => {
     const {value} = event.target;
-    let newConfig = JSON.parse(JSON.stringify(graphConfig));
+    let newConfig = getGraphConfigs();
     newConfig["xAxis"]["gridLineWidth"] = value === "on" ? 1 : 0
-    dispatch(setGraphConfig(newConfig));
+    setGraphConfigs(newConfig);
   }
 
   const handleXAxisAngleOfLabel = (event) => {
     const {value} = event.target;
     setSelectedAngleOfLabel(value);
-    let newConfig = JSON.parse(JSON.stringify(graphConfig));
+    let newConfig = getGraphConfigs();
     let xAxisAngel = newConfig['xAxis']['labels']['rotation'] || {};
     xAxisAngel = value === "horizontal" ? Number("0") : Number(value);
     newConfig['xAxis']['labels']['rotation'] = xAxisAngel;
-    dispatch(setGraphConfig(newConfig));
+    setGraphConfigs(newConfig);
   }
 
   /*Y Axis*/
@@ -334,9 +352,9 @@ export default function LegendTab({expanedState, setTabState}) {
 
   const handleYAxisTitleSave = (event) => {
     setYAxisTitle(event.target.value);
-    let newConfig = JSON.parse(JSON.stringify(graphConfig));
+    let newConfig = getGraphConfigs();
     newConfig['yAxis'][0]['title']["text"] = `<span style="cursor:pointer;" id="custom-y-axis-title"> ${event.target.value} </span>`
-    dispatch(setGraphConfig(newConfig))
+    setGraphConfigs(newConfig)
   };
 
   const handleYAxisTitleChange = (event) => {
@@ -346,68 +364,68 @@ export default function LegendTab({expanedState, setTabState}) {
   const handleYAxisTitleFontFamilyChange = (event) => {
     const {value} = event.target;
     setSelectedYAxisFontFamily(value);
-    let newConfig = JSON.parse(JSON.stringify(graphConfig));
+    let newConfig = getGraphConfigs();
     let legendStyle = newConfig['yAxis']['title']['style'] || {};
     legendStyle["fontFamily"] = fontFamily.find(e => e.value === value).title
     newConfig['yAxis']['title']['style'] = legendStyle;
-    dispatch(setGraphConfig(newConfig));
+    setGraphConfigs(newConfig);
   }
 
   const handleYAxisFontSizeChange = (event) => {
     const {value} = event.target;
     setYAxisFontSize(value);
-    let newConfig = JSON.parse(JSON.stringify(graphConfig));
+    let newConfig = getGraphConfigs();
     let yAxisStyle = newConfig['yAxis']['title']['style'] || {};
     yAxisStyle["fontSize"] = value === "auto" ? "12px" : value + 'px';
     newConfig['yAxis']['title']['style'] = yAxisStyle;
-    dispatch(setGraphConfig(newConfig));
+    setGraphConfigs(newConfig);
   }
 
   const handleYAxisFormat = (event, newFormats) => {
     setYAxisFormats(newFormats);
-    let newConfig = JSON.parse(JSON.stringify(graphConfig));
+    let newConfig = getGraphConfigs();
     let yAxisStyle = newConfig['yAxis']['title']['style'] || {};
     yAxisStyle["fontWeight"] = newFormats.includes("bold") ? "bold" : "normal";
     yAxisStyle["fontStyle"] = newFormats.includes("italic") ? "italic" : "normal";
     newConfig['yAxis']['title']['style'] = yAxisStyle;
-    dispatch(setGraphConfig(newConfig));
+    setGraphConfigs(newConfig);
   }
 
   const handleYAxisTitleName = (event) => {
     const {value} = event.target;
     // setXAxisTitleName(value);
-    let newConfig = JSON.parse(JSON.stringify(graphConfig));
+    let newConfig = getGraphConfigs();
     newConfig["yAxis"]["title"]["enabled"] = value === "on"
-    dispatch(setGraphConfig(newConfig));
+    setGraphConfigs(newConfig);
   }
 
   const handleGridLineWidthForXAxis = (event, newGridLineWidth) => {
-    let newConfig = JSON.parse(JSON.stringify(graphConfig));
+    let newConfig = getGraphConfigs();
     newConfig["xAxis"]["gridLineWidth"] = Number(newGridLineWidth[0])
-    dispatch(setGraphConfig(newConfig));
+    setGraphConfigs(newConfig);
   }
 
   const handleYAxisGridLine = (event) => {
     const {value} = event.target;
-    let newConfig = JSON.parse(JSON.stringify(graphConfig));
+    let newConfig = getGraphConfigs();
     newConfig["yAxis"]["gridLineWidth"] = value === "on" ? 1 : 0
-    dispatch(setGraphConfig(newConfig));
+    setGraphConfigs(newConfig);
   }
 
   const handleGridLineWidthForYAxis = (event, newGridLineWidth) => {
-    let newConfig = JSON.parse(JSON.stringify(graphConfig));
+    let newConfig = getGraphConfigs();
     newConfig["yAxis"]["gridLineWidth"] = Number(newGridLineWidth[0])
-    dispatch(setGraphConfig(newConfig));
+    setGraphConfigs(newConfig);
   }
 
   const handleYAxisAngleOfLabel = (event) => {
     const {value} = event.target;
     setSelectedYAngleOfLabel(value);
-    let newConfig = JSON.parse(JSON.stringify(graphConfig));
+    let newConfig = getGraphConfigs();
     let yAxisAngel = newConfig['yAxis']['labels']['rotation'] || {};
     yAxisAngel = value === "horizontal" ? Number("0") : Number(value);
     newConfig['yAxis']['labels']['rotation'] = yAxisAngel;
-    dispatch(setGraphConfig(newConfig));
+    setGraphConfigs(newConfig);
   }
   return (
       <Accordion expanded={expanedState} onChange={(event, expandedState) => setTabState('axis', expandedState)}>
@@ -597,7 +615,7 @@ export default function LegendTab({expanedState, setTabState}) {
                     <FormHelperText id="title-text">Gridline</FormHelperText>
                     <SelectComponent
                         menu={axisValue}
-                        menuValue={graphConfig["xAxis"] &&  graphConfig["xAxis"]["gridLineWidth"] ? "1" : "0"}
+                        menuValue={graphConfig["xAxis"] && graphConfig["xAxis"]["gridLineWidth"] ? "1" : "0"}
                         handleChange={handleXAxisGridLine}
                     />
                   </div>
@@ -616,7 +634,8 @@ export default function LegendTab({expanedState, setTabState}) {
                          }}>
                       <div className={'fixColors'}>
                         <div
-                            className={'ActiveColor'} style={{'backgroundColor': graphConfig && graphConfig.xAxis && graphConfig.xAxis.gridLineColor}}
+                            className={'ActiveColor'}
+                            style={{'backgroundColor': graphConfig && graphConfig.xAxis && graphConfig.xAxis.gridLineColor}}
 
                         />
                         <Divider flexItem orientation="vertical" sx={{mx: 0.5, my: 1}}/>
@@ -871,7 +890,8 @@ export default function LegendTab({expanedState, setTabState}) {
                          }}>
                       <div className={'fixColors'}>
                         <div
-                            className={'ActiveColor'} style={{'backgroundColor': graphConfig && graphConfig.yAxis && graphConfig.yAxis.gridLineColor}}
+                            className={'ActiveColor'}
+                            style={{'backgroundColor': graphConfig && graphConfig.yAxis && graphConfig.yAxis.gridLineColor}}
 
                         />
                         <Divider flexItem orientation="vertical" sx={{mx: 0.5, my: 1}}/>

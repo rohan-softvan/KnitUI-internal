@@ -46,7 +46,8 @@ const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({theme}) => ({
     },
 }));
 
-export default function AppearanceTab({expanedState, setTabState}) {
+export default function AppearanceTab({expanedState, setTabState, pieConfig, setPieConfig}) {
+
     const dispatch = useDispatch();
     let graphConfig = useSelector((state) => state.chart.graphConfig);
     let colorPickerColors = useSelector((state) => state.colorPicker);
@@ -55,17 +56,36 @@ export default function AppearanceTab({expanedState, setTabState}) {
     const [borderColorAnchorEl, setBorderColorAnchorEl] = React.useState(null);
     const [backgroundColorColorPickerOpen, setBackgroundColorColorPickerOpen] = React.useState(false)
     const [borderColorColorPickerOpen, setBorderColorColorPickerOpen] = React.useState(false)
+    let generalChartType = useSelector((state) => state.chart.generalChartType);
+
+    function getGraphConfigs() {
+        console.log("in getGraphConfigs: ", generalChartType)
+        if (generalChartType === "pie") {
+            return JSON.parse(JSON.stringify(pieConfig))
+        } else {
+            return JSON.parse(JSON.stringify(graphConfig));
+        }
+    }
+
+    function setGraphConfigs(config) {
+        if (generalChartType === "pie") {
+            setPieConfig(config);
+        } else {
+            dispatch(setGraphConfig(config));
+        }
+    }
+
 
     const handleChangeWidth = (event, newValue) => {
-        let newConfig = JSON.parse(JSON.stringify(graphConfig));
+        let newConfig = getGraphConfigs();
         newConfig["chart"]["width"] = newValue;
-        dispatch(setGraphConfig(newConfig));
+        setGraphConfigs(newConfig);
     };
 
     const handleChangeHeight = (event, newValue) => {
-        let newConfig = JSON.parse(JSON.stringify(graphConfig));
+        let newConfig = getGraphConfigs();
         newConfig["chart"]["height"] = newValue;
-        dispatch(setGraphConfig(newConfig));
+        setGraphConfigs(newConfig);
     };
 
     const handleAutoClick = (type) => {
@@ -112,7 +132,7 @@ export default function AppearanceTab({expanedState, setTabState}) {
 
     const handleColorChange = (component, color) => {
         console.log(component, color)
-        let newConfig = JSON.parse(JSON.stringify(graphConfig));
+        let newConfig = getGraphConfigs();
         let chart = newConfig["chart"];
         if (color === "transparent") {
             chart[component] = "rgba(0,0,0,0)";
@@ -120,19 +140,19 @@ export default function AppearanceTab({expanedState, setTabState}) {
             chart[component] = color;
         }
         newConfig.chart = chart;
-        dispatch(setGraphConfig(newConfig));
+        setGraphConfigs(newConfig);
     }
 
     const handleBorderWidthChange = (event, newBorderWidth) => {
-        let newConfig = JSON.parse(JSON.stringify(graphConfig));
+        let newConfig = getGraphConfigs();
         newConfig["chart"]["borderWidth"] = Number(newBorderWidth[0])
-        dispatch(setGraphConfig(newConfig));
+        setGraphConfigs(newConfig);
     }
 
     const handleBorderRadiusChange = (event, newBorderRadius) => {
-        let newConfig = JSON.parse(JSON.stringify(graphConfig));
+        let newConfig = getGraphConfigs();
         newConfig["chart"]["borderRadius"] = Number(newBorderRadius[0])
-        dispatch(setGraphConfig(newConfig));
+        setGraphConfigs(newConfig);
     }
 
     return (

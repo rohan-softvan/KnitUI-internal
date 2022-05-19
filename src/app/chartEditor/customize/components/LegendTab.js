@@ -106,7 +106,7 @@ const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({theme}) => ({
     },
   },
 }));
-export default function LegendTab({expanedState, setTabState}) {
+export default function LegendTab({expanedState, setTabState, pieConfig, setPieConfig}) {
   // const switchlabel = { inputProps: { 'aria-label': 'Switch demo' } };
   const dispatch = useDispatch();
   let graphConfig = useSelector((state) => state.chart.graphConfig);
@@ -125,15 +125,33 @@ export default function LegendTab({expanedState, setTabState}) {
   const [selectedFontFamily, setSelectedFontFamily] = React.useState('roboto')
   const [legendPosition, setLegendPosition] = React.useState("top")
   const [legendFontSize, setLegendFontSize] = React.useState('auto')
+  let generalChartType = useSelector((state) => state.chart.generalChartType);
+
+  function getGraphConfigs() {
+    console.log("in getGraphConfigs: ", generalChartType)
+    if (generalChartType === "pie") {
+      return JSON.parse(JSON.stringify(pieConfig))
+    } else {
+      return JSON.parse(JSON.stringify(graphConfig));
+    }
+  }
+
+  function setGraphConfigs(config) {
+    if (generalChartType === "pie") {
+      setPieConfig(config);
+    } else {
+      dispatch(setGraphConfig(config));
+    }
+  }
 
   const handleLegendFormatting = (event, newFormats) => {
     setFormats(newFormats);
-    let newConfig = JSON.parse(JSON.stringify(graphConfig));
+    let newConfig = getGraphConfigs();
     let legendStyle = newConfig['legend']['itemStyle'] || {};
     legendStyle["fontWeight"] = newFormats.includes("bold") ? "bold" : "normal";
     legendStyle["fontStyle"] = newFormats.includes("italic") ? "italic" : "normal";
     newConfig['legend']['itemStyle'] = legendStyle;
-    dispatch(setGraphConfig(newConfig));
+    setGraphConfigs(newConfig)
   };
 
   const handleAlignment = (event, newAlignment) => {
@@ -165,58 +183,58 @@ export default function LegendTab({expanedState, setTabState}) {
 
   const handleChartLegendVisible = (event) => {
     setLegendVisible(event.target.checked);
-    let newConfig = JSON.parse(JSON.stringify(graphConfig));
+    let newConfig = getGraphConfigs();
     newConfig['legend'] = {...chartEditorEnum.legendsDefaultProps}
     newConfig.legend.enabled = event.target.checked
-    dispatch(setGraphConfig(newConfig));
+    setGraphConfigs(newConfig);
   }
 
   const handleLegendFontFamilyChange = (event) => {
     const {value} = event.target;
     setSelectedFontFamily(value);
-    let newConfig = JSON.parse(JSON.stringify(graphConfig));
+    let newConfig = getGraphConfigs();
     let legendStyle = newConfig['legend']['itemStyle'] || {};
     legendStyle["fontFamily"] = fontFamily.find(e => e.value === value).title
     newConfig['legend']['itemStyle'] = legendStyle;
-    dispatch(setGraphConfig(newConfig));
+    setGraphConfigs(newConfig);
   }
 
   const handleLegendPositionChange = (event) => {
     const {value} = event.target;
     setLegendPosition(value);
-    let newConfig = JSON.parse(JSON.stringify(graphConfig));
+    let newConfig = getGraphConfigs();
     if (!("legend" in newConfig)) {
       newConfig['legend'] = {...chartEditorEnum.legendsDefaultProps}
     }
     newConfig.legend.verticalAlign = value
-    dispatch(setGraphConfig(newConfig));
+    setGraphConfigs(newConfig);
   }
 
   const handleLegendFontSizeChange = (event) => {
     const {value} = event.target;
     setLegendFontSize(value);
-    let newConfig = JSON.parse(JSON.stringify(graphConfig));
+    let newConfig = getGraphConfigs();
     let legendStyle = newConfig['legend']['itemStyle'] || {};
     legendStyle["fontSize"] = value === "auto" ? "12px" : value + 'px';
     newConfig['legend']['itemStyle'] = legendStyle;
-    dispatch(setGraphConfig(newConfig));
+    setGraphConfigs(newConfig);
   }
 
   const handleLegendAlignment = (event, newAlignment) => {
     setAlignment(newAlignment);
-    let newConfig = JSON.parse(JSON.stringify(graphConfig));
+    let newConfig = getGraphConfigs();
     let legend = newConfig['legend'] || {};
     legend["align"] = newAlignment;
     newConfig.legend = legend;
-    dispatch(setGraphConfig(newConfig));
+    setGraphConfigs(newConfig);
   };
 
   const setColorLegends = (color) => {
-    let newConfig = JSON.parse(JSON.stringify(graphConfig));
+    let newConfig = getGraphConfigs();
     let style = newConfig["legend"]['itemStyle'] || {};
     style["color"] = color;
     newConfig['legend']['style'] = style;
-    dispatch(setGraphConfig(newConfig));
+    setGraphConfigs(newConfig);
   }
 
   return (
@@ -341,7 +359,7 @@ export default function LegendTab({expanedState, setTabState}) {
                          }}>
                       <div className={'fixColors'}>
                         <div className={'ActiveColor'} style={{
-                          'backgroundColor':  graphConfig && graphConfig.legend &&  graphConfig.legend.itemStyle.color
+                          'backgroundColor': graphConfig && graphConfig.legend && graphConfig.legend.itemStyle.color
                         }}/>
                         <Divider flexItem orientation="vertical" sx={{mx: 0.5, my: 1}}/>
                         <div className={'ColorVariation'}
