@@ -36,7 +36,6 @@ const renderSeriesMenuItem = (title, color) => (
       marginRight: '15px'
     }}></span><span>{title}</span></div>)
 
-
 const getSelectedSeries = (graphConfig) => {
   if (graphConfig && graphConfig.chart) {
     if (graphConfig.chart.type === "pie") {
@@ -50,7 +49,6 @@ const getSelectedSeries = (graphConfig) => {
 }
 
 const getSeriesData = (graphConfig) => {
-  console.log("chartType==> in series",graphConfig)
   if (graphConfig && graphConfig.chart) {
     if (graphConfig.chart.type === "pie") {
       return graphConfig.series[0].data;
@@ -76,13 +74,15 @@ export default function SeriesTab({expanedState, setTabState}) {
   let graphConfig = useSelector((state) => state.chart.graphConfig);
   let colorPickerColors = useSelector((state) => state.colorPicker);
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const [open, setOpen] = React.useState(false);
-  const [currentColor, setCurrentColor] = React.useState('');
-  const [selectedSeries, setSelectedSeries] = React.useState(getSelectedSeries(graphConfig));
+  const [open, setOpen] = React.useState(false)
+  const [currentColor, setCurrentColor] = React.useState('')
+  const [selectedSeries, setSelectedSeries] = React.useState(getSelectedSeries(graphConfig))
+  console.log("getSelectedSeries(graphConfig): ", selectedSeries)
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
     setOpen(true)
   };
+
   let seriesMenu = [];
 
   const seriesData = getSeriesData(graphConfig);
@@ -96,6 +96,7 @@ export default function SeriesTab({expanedState, setTabState}) {
       seriesMenu.push(obj);
     }
   }
+
 
   const id = 'series-color-picker';
 

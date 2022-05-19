@@ -8,8 +8,8 @@ export const chartEditorEnum = {
     borderWidth: 1,
     borderColor: "#000",
     borderRadius: 3,
-    width: 800,
-    height: 600,
+    //width: 897 ,
+    height: 597,
   },
   titleDefaultProps: {
     // text: `<span style=\"cursor:pointer;\" id=\"custom-title\" onClick=\"`+updateCustomizeTab('heading')+`\"></span>`,

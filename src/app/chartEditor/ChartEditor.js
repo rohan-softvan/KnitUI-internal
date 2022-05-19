@@ -55,11 +55,11 @@ import Highcharts from "highcharts";
 import highcharts3d from "highcharts/highcharts-3d";
 import HighchartsExporting from "highcharts/modules/exporting";
 import {useDispatch, useSelector} from "react-redux";
-import {setGraphConfig, setTabValueConfig, setChartType, setGeneralChartType} from "../redux/slice/ChartEditorSlice";
+import {setGraphConfig, setTabValueConfig, setChartType} from "../redux/slice/ChartEditorSlice";
 import CloseIcon from "@material-ui/icons/Close";
 import IconButton from "@material-ui/core/IconButton";
 import {chartEditorEnum} from "../enums";
-import {plotPieChart, updateCustomizeTab} from "../_helpers/eventHelper"
+import {plotGraph, updateCustomizeTab} from "../_helpers/eventHelper"
 
 HighchartsExporting(Highcharts);
 highcharts3d(Highcharts);
@@ -132,13 +132,6 @@ export default function ChartEditor(handleClick) {
   const [fullWidth, setFullWidth] = React.useState(true);
   const [value, setValue] = React.useState(tabValue);
   const [subvalue, subsetValue] = React.useState(0);
-  const [pieConfig, setPieConfig] = React.useState({})
-
-  const handleSetPieConfig = (config) => {
-    console.log("in handleSetPieConfig", config)
-    setPieConfig(config);
-    Highcharts.chart("highchartsContainer", config)
-  }
 
   /*Main Tab*/
   const handleChange = (event, newValue) => {
@@ -256,7 +249,7 @@ export default function ChartEditor(handleClick) {
 
     //setting the colors for multicolor graphs
     if ((config.chart.type === "bar" || config.chart.type === "column") && config.plotOptions.series.colorByPoint) {
-      // config.legend = {...chartEditorEnum.legendsDefaultProps, enabled: false};
+      config.legend = {...chartEditorEnum.legendsDefaultProps, enabled: false};
       if (config.series.length === 3) {
         config.colors = chartEditorEnum.defaultSeriesColors["threePoint"];
         // if series is exactly 5
@@ -359,7 +352,6 @@ export default function ChartEditor(handleClick) {
       default:
         chartType = type
     }
-    dispatch(setGeneralChartType(chartType));
     newConfig.chart['type'] = chartType
 
     //set option for 3d Chart Type
@@ -420,20 +412,22 @@ export default function ChartEditor(handleClick) {
     // To set Pie Chart Config after chart change
     if (chartType === "pie") {
       newConfig.series = pieSeriesConfig
+      // if(type === 'pie'){
+      //   newConfig.plotOptions={}
+      // }
     } else {
       newConfig.series = generalSeriesConfig
     }
+
     let graphData = setDefaultGraphProperties(newConfig);
     console.log("graphData final::: ", graphData);
-    if (chartType === "pie") {
-      console.log("plotting pie");
-      // dispatch(setGraphConfig(graphData));
-      // plotPieChart(graphData)
-      handleSetPieConfig(graphData);
-      // Highcharts.chart("highchartsContainer", graphData);
-    } else {
-      dispatch(setGraphConfig(graphData))
-    }
+    plotGraph(graphData);
+    // if (chartType === "pie") {
+    //   console.log("plotting pie")
+    //   Highcharts.chart("highchartsContainer", graphData)
+    // } else {
+    //   dispatch(setGraphConfig(graphData))
+    // }
   };
 
   async function downloadPngBtn() {
@@ -473,13 +467,16 @@ export default function ChartEditor(handleClick) {
     });
   }
 
-  const handleChangeWidth = (event) => {
-    console.log("handleChangeWidth", event)
-    // let newConfig = JSON.parse(JSON.stringify(graphConfig));
-    // newConfig["chart"]["width"] = newValueW;
-    // newConfig["chart"]["height"] = newValueH
-    // console.log("handleChangeHeight",newConfig)
-    // dispatch(setGraphConfig(newConfig));
+  const handleChangeWidth = (event) =>{
+    console.log("handleChangeWidth",event.nativeEvent.layerX, event.nativeEvent.pageY)
+    let newValueW = event.nativeEvent.layerX;
+    let newValueH = event.nativeEvent.layerY;
+    console.log("Final W H",newValueW, newValueH)
+    let newConfig = JSON.parse(JSON.stringify(graphConfig));
+    newConfig["chart"]["width"] = newValueW;
+    newConfig["chart"]["height"] = newValueH
+    console.log("handleChangeHeight",newConfig)
+    dispatch(setGraphConfig(newConfig));
   }
 
   return (
@@ -727,7 +724,7 @@ export default function ChartEditor(handleClick) {
                       </TabPanel>
                       <TabPanel value={tabValue} index={2}>
                         <div className="subTabs">
-                          <CustomizeTab pieConfig={pieConfig} setPieConfig={handleSetPieConfig}/>
+                          <CustomizeTab/>
                         </div>
                       </TabPanel>
                       <TabPanel value={tabValue} index={3}>
@@ -771,7 +768,8 @@ export default function ChartEditor(handleClick) {
                     </div>
                     <div
                         className="charResize"
-                        onMouseUpCapture={handleChangeWidth}
+                        //onMouseUpCapture = {handleChangeWidth}
+                        onDragEnter ={handleChangeWidth}
                         // onMouseUpCapture={() => {
                         //
                         //   Highcharts.charts.forEach(function (chart, index) {

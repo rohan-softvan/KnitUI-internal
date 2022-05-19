@@ -217,7 +217,8 @@ export default function QuestionTab() {
   return (
       questionData && questionData.map((item, index) => item.questionType === 'MC' ? (
                   <div key={index} className={'accordianChart'}>
-                    <Accordion expanded={expand.includes(item.numericQuestionId)}
+                    <Accordion
+                        //expanded={expand.includes(item.numericQuestionId)}
                                style={selectedQuestions.includes(item.numericQuestionId) ? {backgroundColor: '#12988A'} : {}}>
                       <AccordionSummary
                           expandIcon={<ExpandMoreIcon/>}

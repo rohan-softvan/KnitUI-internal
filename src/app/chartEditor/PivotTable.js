@@ -38,39 +38,10 @@ const PivotTable = () => {
   const [display, setDisplay] = useState(true);
   const [fontSize, setFontSize] = useState(14);
   const [fontFamily, setFontFamily] = useState('Roboto');
-  const [rows, setRows] = useState([
-    {
-      uniqueName: "Q8 Do you have a meal plan for on-campus dining?",
-      sort: "asc"
-    }
-    // {
-    //   "uniqueName": "Q6 We would like to learn a little bit more about how you structure meal time between home, work and school. Which of these best describes you?",
-    //   "sort": "asc"
-    // },
-  ]);
+  const [rows, setRows] = useState(selectedQuestion[0].rows);
 
-  const [columns, setColumns] = useState([
-    {
-      uniqueName:
-          "Q20 Would you be interested in ordering from a food locker like this?",
-      sort: "asc"
-    }
-  ]);
-  const [measures, setMeasures] = useState([
-    {
-      uniqueName:
-          "Q20 Would you be interested in ordering from a food locker like this?",
-      aggregation: "sum"
-    }
-    // {
-    //   uniqueName: "Q8 Do you have a meal plan for on-campus dining?",
-    //   aggregation: "sum",
-    // },
-    // {
-    //   "uniqueName": "Q6 We would like to learn a little bit more about how you structure meal time between home, work and school. Which of these best describes you?",
-    //   "aggregation": "sum"
-    // },
-  ]);
+  const [columns, setColumns] = useState(selectedQuestion[0].columns);
+  const [measures, setMeasures] = useState(selectedQuestion[0].measures);
   let graphConfig = useSelector((state) => state.chart.graphConfig);
   let myRef = useRef();
   let pieRef = useRef();
@@ -126,7 +97,7 @@ const PivotTable = () => {
 
     //setting the colors for multicolor graphs
     if ((config.chart.type === "bar" || config.chart.type === "column") && config.plotOptions.series.colorByPoint) {
-      // config.legend = {...chartEditorEnum.legendsDefaultProps, enabled: false};
+      config.legend = {...chartEditorEnum.legendsDefaultProps, enabled: false};
       if (config.series.length === 3) {
         config.colors = chartEditorEnum.defaultSeriesColors["threePoint"];
         // if series is exactly 5
@@ -212,7 +183,7 @@ const PivotTable = () => {
           type: config.type,
         },
         function (data) {
-          let graphData = Object.values(graphConfig).length !== 0 ? setDefaultGraphProperties(graphConfig) : setDefaultGraphProperties(data);
+          let graphData = Object.values(graphConfig).length !== 0 ? JSON.parse(JSON.stringify(setDefaultGraphProperties(graphConfig))) : setDefaultGraphProperties(data);
           graphData.xAxis.title.text=`<span style="cursor:pointer;" id="custom-x-axis-title"> ${data.xAxis.title.text}</span>`
           graphData.yAxis[0].title.text=`<span style="cursor:pointer;" id="custom-y-axis-title"> ${data.yAxis[0].title.text}</span>`
           dispatch(setGeneralConfig(data.series))
@@ -229,7 +200,7 @@ const PivotTable = () => {
 
   const report = {
     dataSource: {
-      data: DataJson
+      data: dataJSONConfig
     },
     tableSizes: {
       columns: [
