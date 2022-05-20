@@ -20,7 +20,7 @@ function CustomColorPicker(props) {
               props.component === "xAxisTextColor" ?
                   graphConfig["xAxis"]["title"].style.color :
                   props.component === "yAxisTextColor" ?
-                      graphConfig["yAxis"]["title"].style.color :
+                      graphConfig["yAxis"][0]["title"].style.color :
                       props.component === "dataLabelsColor" ?
                           graphConfig['plotOptions']['series']['dataLabels']['color'] :
                           props.component === "xAxisGridLineColor" ?

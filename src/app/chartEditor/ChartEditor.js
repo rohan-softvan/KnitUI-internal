@@ -46,7 +46,8 @@ import ThreeDDonutChart from "../../assets/images/charteditor/3DDonutChart.svg";
 import AreaLineChart from "../../assets/images/charteditor/AreaLineChart.svg";
 import LineAndColumnChart from "../../assets/images/charteditor/LineAndColumn.svg";
 import ScatterLineChart from "../../assets/images/charteditor/ScatterLine.svg";
-import LineCharts from "../../assets/images/charteditor/LineCharts.png"
+import BarChart from "../../assets/images/charteditor/LineCharts.png"
+import LineCharts from "../../assets/images/charteditor/Line Chart.svg"
 import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
@@ -60,7 +61,7 @@ import CloseIcon from "@material-ui/icons/Close";
 import IconButton from "@material-ui/core/IconButton";
 import {chartEditorEnum} from "../enums";
 import {plotGraph, updateCustomizeTab} from "../_helpers/eventHelper"
-
+import HeightIcon from '@material-ui/icons/Height';
 HighchartsExporting(Highcharts);
 highcharts3d(Highcharts);
 
@@ -550,7 +551,7 @@ export default function ChartEditor(handleClick) {
                                   expandIcon={<ExpandMoreIcon/>}
                                   aria-controls="panel2a-content"
                                   id="panel2a-header">
-                                <Typography className='AccordTitle rootTitle'><img src={LineCharts}/>Bar
+                                <Typography className='AccordTitle rootTitle'><img src={BarChart}/>Bar
                                   charts</Typography>
                               </AccordionSummary>
                               <AccordionDetails>
@@ -763,7 +764,7 @@ export default function ChartEditor(handleClick) {
                         <img src={WaveChartSmall} onClick={() => handleChartChange("area")}/>
                       </div>
                       <div className={'chartIcons'}>
-                        <img src={LineCharts} onClick={() => handleChartChange("line")}/>
+                        <img src={BarChart} onClick={() => handleChartChange("bar")}/>
                       </div>
                       <div className={'chartIcons'}>
                         <img src={DonutChartSmall} onClick={() => handleChartChange("donut")}/>
@@ -771,8 +772,8 @@ export default function ChartEditor(handleClick) {
                     </div>
                     <div
                         className="charResize"
-                        //onMouseUpCapture = {handleChangeWidth}
-                        onDragEnter={handleChangeWidth}
+
+                        // onDragEnter={handleChangeWidth}
                         // onMouseUpCapture={() => {
                         //
                         //   Highcharts.charts.forEach(function (chart, index) {
@@ -792,6 +793,7 @@ export default function ChartEditor(handleClick) {
                         //   });
                         // }}
                     >
+                      {/*<HeightIcon  onMouseUpCapture = {handleChangeWidth}/>*/}
                       <div id="highchartsContainer"/>
                     </div>
                     <div className={'downloadPng'}>
@@ -808,6 +810,4 @@ export default function ChartEditor(handleClick) {
         </Dialog>
       </React.Fragment>
   );
-
-
 }

@@ -68,6 +68,7 @@ const getSeriesData = (config) => {
   }
 }
 
+
 export default function SeriesTab({expanedState, setTabState, pieConfig, setPieConfig}) {
   const dispatch = useDispatch();
   let graphConfig = useSelector((state) => state.chart.graphConfig);

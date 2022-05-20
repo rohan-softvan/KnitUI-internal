@@ -5,12 +5,17 @@
     overflow: scroll !important;
     max-height: 200px;
 }
- 
+
 .MuiPopover-root .MuiMenu-paper ul li p{
     padding-left: 0px !important;
 }
 .MuiOutlinedInput-input {
     min-width: auto !important;
+    white-space: nowrap;
+    overflow: hidden;
+    //text-overflow: ellipsis;
+    width: calc(100% - 45px);
+    text-overflow: ellipsis !important;
 }
 .MuiSelect-select:focus{
     background-color:transparent !important;

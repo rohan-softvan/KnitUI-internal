@@ -387,7 +387,7 @@ export default function AppearanceTab({expanedState, setTabState, pieConfig, set
                             <Slider
                                 ValueLabelComponent={ValueLabelComponent}
                                 aria-label="custom thumb label"
-                                value={graphConfig.chart && graphConfig.chart.height}
+                                value={graphConfig.chart && graphConfig.chart.height ? graphConfig.chart.height :  100}
                                 min={50}
                                 max={5000}
                                 onChange={handleChangeHeight}

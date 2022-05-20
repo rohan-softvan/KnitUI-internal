@@ -245,20 +245,20 @@ export default function DatalabelsTab({expanedState, setTabState, pieConfig, set
                     </Grid>
                 </Grid>
 
-                <Grid container spacing={2}>
-                    <Grid item xs={12}>
-                        <div className={'customGridTitle'}>
-                            <div className={'seriesValueData'}>
-                                <FormHelperText id="title-text">Position</FormHelperText>
-                                <SelectComponent
-                                    menu={position}
-                                    // menuValue={dataLabelPosition}
-                                    // handleChange={handleDataLabelPositionChange}
-                                />
-                            </div>
-                        </div>
-                    </Grid>
-                </Grid>
+                {/*<Grid container spacing={2}>*/}
+                {/*    <Grid item xs={12}>*/}
+                {/*        <div className={'customGridTitle'}>*/}
+                {/*            <div className={'seriesValueData'}>*/}
+                {/*                <FormHelperText id="title-text">Position</FormHelperText>*/}
+                {/*                <SelectComponent*/}
+                {/*                    menu={position}*/}
+                {/*                    // menuValue={dataLabelPosition}*/}
+                {/*                    // handleChange={handleDataLabelPositionChange}*/}
+                {/*                />*/}
+                {/*            </div>*/}
+                {/*        </div>*/}
+                {/*    </Grid>*/}
+                {/*</Grid>*/}
 
                 <Grid container spacing={2}>
                     <Grid item xs={12}>

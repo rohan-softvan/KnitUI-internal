@@ -12,7 +12,7 @@ let SET_ENVIRONMENT;
 let SET_CLOUDFRONT_URL;
 let API_GOKNIT;
 let ONE_SIGNAL_APPID;
-if (SERVER_ENV.includes("localhost") || SERVER_ENV.includes("app.goknit.us") || SERVER_ENV.includes("84")
+if (SERVER_ENV.includes("localhost") || SERVER_ENV.includes("app.goknit.us") || SERVER_ENV.includes("84") || SERVER_ENV.includes("192.168.0.27")
 ) {
 
   SET_BASE_URL = "https://services.goknit.us/v1/";

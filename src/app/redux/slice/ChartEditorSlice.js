@@ -37,27 +37,22 @@ const setDefaultEventsForGraph = (graphConfig) => {
   newConfig.chart.events = {
     load: function () {
       console.log("loaded chart", newConfig);
-      if (newConfig.title.text) {
-        console.log('document.getElementById("custom-title")=>', document.getElementById("custom-title").value)
+      if (newConfig.title.text &&  document.getElementById("custom-title")) {
         document
             .getElementById("custom-title")
             .addEventListener("click", handleTitleClick);
       }
-      if (newConfig.subtitle.text) {
+      if (newConfig.subtitle.text && document.getElementById("custom-subtitle")) {
         document
             .getElementById("custom-subtitle")
             .addEventListener("click", handleSubTitleClick);
       }
-      console.log('yaxis==>', document.getElementById("custom-y-axis-title"))
       if (
-          newConfig.chart.type !== "pie"
+          newConfig.chart.type !== "pie" && document.getElementById("custom-x-axis-title")
       ) {
         document
             .getElementById("custom-x-axis-title")
             .addEventListener("click", e => handleAxisTitleClick(e, "x"));
-        // document
-        //     .getElementById("custom-y-axis-title")
-        //     .addEventListener("click", e => handleAxisTitleClick(e, "y"));
       }
       if (document.getElementById("custom-y-axis-title")) {
         document
@@ -72,20 +67,9 @@ const setDefaultEventsForGraph = (graphConfig) => {
   //adding event listener for series
   newConfig.plotOptions.series.point.events = {
     click: function () {
-      console.log("seriesClick::: ", this);
       updateCustomizeTab("series");
-      // handleChange(3)
     }
   }
-
-  // newConfig.xAxis.labels.events={
-  //   click: function () {
-  //     console.log("alabel::: ", this);
-  //     updateCustomizeTab("axis")
-  //   },
-  // }
-  // newConfig.xAxis.
-  console.log("newConfig:: final", newConfig);
   return newConfig;
 }
 

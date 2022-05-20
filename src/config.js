@@ -21,7 +21,7 @@ let SET_ENVIRONMENT;
 let DOMAIN_URL;
 let REDIRECT_SIGNIN_URL;
 // DEV: OR LOCAL
-if (SERVER_ENV.includes("localhost") || SERVER_ENV.includes("app.goknit.us") || SERVER_ENV.includes("18.209.1.84")) {
+if (SERVER_ENV.includes("localhost") || SERVER_ENV.includes("app.goknit.us") || SERVER_ENV.includes("18.209.1.84") || SERVER_ENV.includes("192.168.0.27")) {
 
     REGION="us-east-1";
     URL="https://services.goknit.us/v1/";

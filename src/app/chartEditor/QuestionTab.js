@@ -224,8 +224,8 @@ export default function QuestionTab() {
                           expandIcon={<ExpandMoreIcon/>}
                           aria-controls="panel2a-content"
                           id="panel2a-header"
-                          IconButtonProps={{
-                            onClick: () => handleAccordionExpandClick(item.numericQuestionId)
+                          onClick={()=> {
+                            handleAccordionExpandClick(item.numericQuestionId)
                           }}
                           className={'questionCardBox'}
                       >

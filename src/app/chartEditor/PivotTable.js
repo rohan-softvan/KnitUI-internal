@@ -38,33 +38,10 @@ const PivotTable = () => {
   const [display, setDisplay] = useState(true);
   const [fontSize, setFontSize] = useState(14);
   const [fontFamily, setFontFamily] = useState('Roboto');
-  // const [rows, setRows] = useState(selectedQuestion[0].rows);
-  //
-  // const [columns, setColumns] = useState(selectedQuestion[0].columns);
-  // const [measures, setMeasures] = useState(selectedQuestion[0].measures);
+  const [rows, setRows] = useState(selectedQuestion[0].rows);
 
-  const [rows, setRows] = useState([
-    {
-      uniqueName: "Q8 Do you have a meal plan for on-campus dining?",
-      sort: "asc"
-    }
-  ]);
-
-  const [columns, setColumns] = useState([
-    {
-      uniqueName:
-          "Q20 Would you be interested in ordering from a food locker like this?",
-      sort: "asc"
-    }
-  ]);
-  const [measures, setMeasures] = useState([
-    {
-      uniqueName:
-          "Q20 Would you be interested in ordering from a food locker like this?",
-      aggregation: "sum"
-    }
-  ]);
-
+  const [columns, setColumns] = useState(selectedQuestion[0].columns);
+  const [measures, setMeasures] = useState(selectedQuestion[0].measures);
   let graphConfig = useSelector((state) => state.chart.graphConfig);
   let myRef = useRef();
   let pieRef = useRef();
@@ -207,8 +184,8 @@ const PivotTable = () => {
         },
         function (data) {
           let graphData = Object.values(graphConfig).length !== 0 ? JSON.parse(JSON.stringify(setDefaultGraphProperties(graphConfig))) : setDefaultGraphProperties(data);
-          graphData.xAxis.title.text = `<span style="cursor:pointer;" id="custom-x-axis-title"> ${data.xAxis.title.text}</span>`
-          graphData.yAxis[0].title.text = `<span style="cursor:pointer;" id="custom-y-axis-title"> ${data.yAxis[0].title.text}</span>`
+          graphData.xAxis.title.text=`<span style="cursor:pointer;" id="custom-x-axis-title"> ${data.xAxis.title.text}</span>`
+          graphData.yAxis[0].title.text=`<span style="cursor:pointer;" id="custom-y-axis-title"> ${data.yAxis[0].title.text}</span>`
           dispatch(setGeneralConfig(data.series))
           dispatch(setGraphConfig(graphData))
           // Highcharts.chart("highchartsContainer", graphData ? graphData : data);
@@ -223,7 +200,7 @@ const PivotTable = () => {
 
   const report = {
     dataSource: {
-      data: DataJson
+      data: dataJSONConfig
     },
     tableSizes: {
       columns: [
@@ -453,15 +430,15 @@ const PivotTable = () => {
   useEffect(() => {
 
     pieRef && pieRef.webdatarocks && getPieConfig()
-    // myRef && myRef.webdatarocks &&
-  }, [pieRef])
+      // myRef && myRef.webdatarocks &&
+  },[pieRef])
 
   useEffect(() => {
     myRef && myRef.webdatarocks && myRef.webdatarocks.on("reportcomplete", function () {
       myRef && myRef.webdatarocks && handleReportFieldModal(activeTab);
       myRef && myRef.webdatarocks && createChart()
+        })
     })
-  })
 
   useEffect(() => {
     if (JSON.stringify(graphConfig) != '{}') {
@@ -527,7 +504,7 @@ const PivotTable = () => {
                   <WebDataRocksReact.Pivot
                       ref={elem => {
                         myRef = elem;
-                        pieRef = elem;
+                        pieRef= elem;
                       }}
                       width={"100%"}
                       height={"100%"}

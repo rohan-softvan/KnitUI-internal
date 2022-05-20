@@ -246,15 +246,18 @@ export default function LegendTab({expanedState, setTabState, pieConfig, setPieC
     setGraphConfigs(newConfig);
   }
 
-  const handleXAxisTitleSave = (event) => {
+  // const handleXAxisTitleSave = (event) => {
+  //   setXAxisTitle(event.target.value);
+  //   let newConfig = getGraphConfigs();
+  //   newConfig['xAxis']['title']["text"] = '<p style="cursor:pointer;" id="custom-x-axis-title">' + event.target.value + '</p>'
+  //   setGraphConfigs(newConfig)
+  // };
+
+  const handleXAxisTitleChange = (event) => {
     setXAxisTitle(event.target.value);
     let newConfig = getGraphConfigs();
     newConfig['xAxis']['title']["text"] = '<p style="cursor:pointer;" id="custom-x-axis-title">' + event.target.value + '</p>'
     setGraphConfigs(newConfig)
-  };
-
-  const handleXAxisTitleChange = (event) => {
-    setXAxisTitle(event.target.value);
   };
 
   const handleXAxisTitleFontFamilyChange = (event) => {
@@ -297,9 +300,9 @@ export default function LegendTab({expanedState, setTabState, pieConfig, setPieC
 
   const setYAxisColor = (color) => {
     let newConfig = getGraphConfigs();
-    let style = newConfig['yAxis']['title']['style'] || {};
+    let style = newConfig['yAxis'][0]['title']['style'] || {};
     style["color"] = color;
-    newConfig['yAxis']['title']['style'] = style;
+    newConfig['yAxis'][0]['title']['style'] = style;
     setGraphConfigs(newConfig);
   }
 
@@ -350,24 +353,27 @@ export default function LegendTab({expanedState, setTabState, pieConfig, setPieC
     setYShow(!YShow)
   }
 
-  const handleYAxisTitleSave = (event) => {
+  // const handleYAxisTitleSave = (event) => {
+  //   setYAxisTitle(event.target.value);
+  //   let newConfig = getGraphConfigs();
+  //   newConfig['yAxis'][0]['title']["text"] = `<span style="cursor:pointer;" id="custom-y-axis-title"> ${event.target.value} </span>`
+  //   setGraphConfigs(newConfig)
+  // };
+
+  const handleYAxisTitleChange = (event) => {
     setYAxisTitle(event.target.value);
     let newConfig = getGraphConfigs();
     newConfig['yAxis'][0]['title']["text"] = `<span style="cursor:pointer;" id="custom-y-axis-title"> ${event.target.value} </span>`
     setGraphConfigs(newConfig)
   };
 
-  const handleYAxisTitleChange = (event) => {
-    setYAxisTitle(event.target.value);
-  };
-
   const handleYAxisTitleFontFamilyChange = (event) => {
     const {value} = event.target;
     setSelectedYAxisFontFamily(value);
     let newConfig = getGraphConfigs();
-    let legendStyle = newConfig['yAxis']['title']['style'] || {};
+    let legendStyle = newConfig['yAxis'][0]['title']['style'] || {};
     legendStyle["fontFamily"] = fontFamily.find(e => e.value === value).title
-    newConfig['yAxis']['title']['style'] = legendStyle;
+    newConfig['yAxis'][0]['title']['style'] = legendStyle;
     setGraphConfigs(newConfig);
   }
 
@@ -375,19 +381,19 @@ export default function LegendTab({expanedState, setTabState, pieConfig, setPieC
     const {value} = event.target;
     setYAxisFontSize(value);
     let newConfig = getGraphConfigs();
-    let yAxisStyle = newConfig['yAxis']['title']['style'] || {};
+    let yAxisStyle = newConfig['yAxis'][0]['title']['style'] || {};
     yAxisStyle["fontSize"] = value === "auto" ? "12px" : value + 'px';
-    newConfig['yAxis']['title']['style'] = yAxisStyle;
+    newConfig['yAxis'][0]['title']['style'] = yAxisStyle;
     setGraphConfigs(newConfig);
   }
 
   const handleYAxisFormat = (event, newFormats) => {
     setYAxisFormats(newFormats);
     let newConfig = getGraphConfigs();
-    let yAxisStyle = newConfig['yAxis']['title']['style'] || {};
+    let yAxisStyle = newConfig['yAxis'][0]['title']['style'] || {};
     yAxisStyle["fontWeight"] = newFormats.includes("bold") ? "bold" : "normal";
     yAxisStyle["fontStyle"] = newFormats.includes("italic") ? "italic" : "normal";
-    newConfig['yAxis']['title']['style'] = yAxisStyle;
+    newConfig['yAxis'][0]['title']['style'] = yAxisStyle;
     setGraphConfigs(newConfig);
   }
 
@@ -395,7 +401,7 @@ export default function LegendTab({expanedState, setTabState, pieConfig, setPieC
     const {value} = event.target;
     // setXAxisTitleName(value);
     let newConfig = getGraphConfigs();
-    newConfig["yAxis"]["title"]["enabled"] = value === "on"
+    newConfig["yAxis"][0]["title"]["enabled"] = value === "on"
     setGraphConfigs(newConfig);
   }
 
@@ -463,7 +469,7 @@ export default function LegendTab({expanedState, setTabState, pieConfig, setPieC
                         'aria-label': 'title',
                       }}
                       value={xAxisTitle}
-                      onBlur={handleXAxisTitleSave}
+                      // onBlur={handleXAxisTitleSave}
                       onChange={handleXAxisTitleChange}
                   />
                 </div>
@@ -613,9 +619,10 @@ export default function LegendTab({expanedState, setTabState, pieConfig, setPieC
                 <div className={'customGridTitle'}>
                   <div className={'selectFullDropdown'}>
                     <FormHelperText id="title-text">Gridline</FormHelperText>
+                    {console.log("graphConfig[xAxis]==>",graphConfig["xAxis"])}
                     <SelectComponent
                         menu={axisValue}
-                        menuValue={graphConfig["xAxis"] && graphConfig["xAxis"]["gridLineWidth"] ? "1" : "0"}
+                        menuValue={graphConfig["xAxis"] && graphConfig["xAxis"]["gridLineWidth"] ? "on" : "off"}
                         handleChange={handleXAxisGridLine}
                     />
                   </div>
@@ -720,7 +727,7 @@ export default function LegendTab({expanedState, setTabState, pieConfig, setPieC
                         'aria-label': 'title',
                       }}
                       value={yAxisTitle}
-                      onBlur={handleYAxisTitleSave}
+                      // onBlur={handleYAxisTitleSave}
                       onChange={handleYAxisTitleChange}
                   />
                 </div>
@@ -871,7 +878,7 @@ export default function LegendTab({expanedState, setTabState, pieConfig, setPieC
                     <FormHelperText id="title-text">Major Gridline</FormHelperText>
                     <SelectComponent
                         menu={axisValue}
-                        menuValue={graphConfig && graphConfig["yAxis"] && graphConfig["yAxis"]["gridLineWidth"] ? "1" : "0"}
+                        menuValue={graphConfig && graphConfig["yAxis"] && graphConfig["yAxis"]["gridLineWidth"] ? "on" : "off"}
                         handleChange={handleYAxisGridLine}
                     />
                   </div>
