@@ -255,7 +255,7 @@ export default function QuestionTab() {
                             {/*<Checkbox {...label} />*/}
                           </div>
                           <div style={{display: 'flex'}}><span
-                              style={{paddingRight: '5px'}}>{item.questionNumber ? item.questionNumber : "-"}</span> {item.questionText ? item.questionText : "-"}
+                              style={{paddingRight: '5px',minWidth: '40px'}}>{item.questionNumber ? item.questionNumber : "-"}</span> {item.questionText ? item.questionText : "-"}
                           </div>
                         </Typography>
                       </AccordionSummary>

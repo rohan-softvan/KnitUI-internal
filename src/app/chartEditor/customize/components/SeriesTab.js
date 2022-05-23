@@ -34,7 +34,7 @@ const renderSeriesMenuItem = (title, color) => (
       height: '16px',
       borderRadius: '50%',
       marginRight: '15px'
-    }}></span><span>{title}</span></div>)
+    }}/><span className={"series-menu-item"}>{title}</span></div>)
 
 const getSelectedSeries = (graphConfig) => {
   if (graphConfig && graphConfig.chart) {

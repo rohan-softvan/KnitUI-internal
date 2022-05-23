@@ -240,7 +240,7 @@ export default function DatalabelsTab({expanedState, setTabState, pieConfig, set
                     </Grid>
                     <Grid item xs={6} className={'SwitchIcon'}>
                         <Switch
-                            checked={getGraphConfigs().plotOptions.series.dataLabels ? getGraphConfigs().plotOptions.series.dataLabels.enabled : false}
+                            checked={getGraphConfigs() && getGraphConfigs().plotOptions && getGraphConfigs().plotOptions.series.dataLabels ? getGraphConfigs().plotOptions.series.dataLabels.enabled : false}
                             onChange={handleChartDataLabelVisible}/>
                     </Grid>
                 </Grid>

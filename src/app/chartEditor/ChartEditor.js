@@ -1,7 +1,6 @@
-import React, {Component} from "react";
+import React from "react";
 import {Grid, Typography} from "@material-ui/core";
 import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
@@ -25,7 +24,6 @@ import PieChartSmall from "../../assets/images/charteditor/PieChart.png";
 import DonutChartSmall from "../../assets/images/charteditor/DonutChart.png";
 import WaveChartSmall from "../../assets/images/charteditor/WaveChart.png";
 import Appearance from '../../assets/images/charteditor/Appearance.png';
-import Series from '../../assets/images/charteditor/Series.png';
 import Barchart from "../../assets/images/charteditor/BasicBar.svg";
 import StackedBarCharts from "../../assets/images/charteditor/StackedBar.svg";
 import PercentStackedBarChart from "../../assets/images/charteditor/StackedPercentBar.svg";
@@ -43,9 +41,6 @@ import PieChart from "../../assets/images/charteditor/PieChart.svg";
 import DonutChart from "../../assets/images/charteditor/DonutChart.svg";
 import ThreeDPieChart from "../../assets/images/charteditor/3DPieChart.svg";
 import ThreeDDonutChart from "../../assets/images/charteditor/3DDonutChart.svg";
-import AreaLineChart from "../../assets/images/charteditor/AreaLineChart.svg";
-import LineAndColumnChart from "../../assets/images/charteditor/LineAndColumn.svg";
-import ScatterLineChart from "../../assets/images/charteditor/ScatterLine.svg";
 import BarChart from "../../assets/images/charteditor/LineCharts.png"
 import LineCharts from "../../assets/images/charteditor/Line Chart.svg"
 import Accordion from '@material-ui/core/Accordion';
@@ -56,12 +51,13 @@ import Highcharts from "highcharts";
 import highcharts3d from "highcharts/highcharts-3d";
 import HighchartsExporting from "highcharts/modules/exporting";
 import {useDispatch, useSelector} from "react-redux";
-import {setGraphConfig, setTabValueConfig, setChartType, setGeneralChartType} from "../redux/slice/ChartEditorSlice";
+import {setChartType, setGeneralChartType, setGraphConfig, setTabValueConfig} from "../redux/slice/ChartEditorSlice";
 import CloseIcon from "@material-ui/icons/Close";
 import IconButton from "@material-ui/core/IconButton";
 import {chartEditorEnum} from "../enums";
-import {plotGraph, updateCustomizeTab} from "../_helpers/eventHelper"
-import HeightIcon from '@material-ui/icons/Height';
+import {setDefaultEventsForGraph, updateCustomizeTab} from "../_helpers/eventHelper"
+import {Resizable} from "re-resizable";
+
 HighchartsExporting(Highcharts);
 highcharts3d(Highcharts);
 
@@ -138,8 +134,10 @@ export default function ChartEditor(handleClick) {
   /*Setting config for pie chart and rendering graph*/
   const handleSetPieConfig = (config) => {
     console.log("in handleSetPieConfig", config);
-    setPieConfig(config);
-    Highcharts.chart("highchartsContainer", config);
+    const finalConfig = setDefaultEventsForGraph(config);
+    console.log("finalConfig:: ", finalConfig)
+    setPieConfig(finalConfig);
+    Highcharts.chart("highchartsContainer", finalConfig);
   }
 
   /*Main Tab*/
@@ -430,7 +428,11 @@ export default function ChartEditor(handleClick) {
 
     let graphData = setDefaultGraphProperties(newConfig);
     console.log("graphData final::: ", graphData);
-    // plotGraph(graphData);
+    if (chartType === "pie") {
+      handleSetPieConfig(graphData);
+    } else {
+      dispatch(setGraphConfig(graphData));
+    }
     handleSetPieConfig(graphData);
   };
 
@@ -471,14 +473,14 @@ export default function ChartEditor(handleClick) {
     });
   }
 
-  const handleChangeWidth = (event) => {
-    console.log("handleChangeWidth", event.nativeEvent.layerX, event.nativeEvent.pageY)
-    let newValueW = event.nativeEvent.layerX;
-    let newValueH = event.nativeEvent.layerY;
-    console.log("Final W H", newValueW, newValueH)
+  const handleChangeWidth = (width, height) => {
+    // console.log("handleChangeWidth", event.nativeEvent.layerX, event.nativeEvent.pageY)
+    // let newValueW = event.nativeEvent.layerX;
+    // let newValueH = event.nativeEvent.layerY;
+    // console.log("Final W H", newValueW, newValueH)
     let newConfig = JSON.parse(JSON.stringify(graphConfig));
-    newConfig["chart"]["width"] = newValueW;
-    newConfig["chart"]["height"] = newValueH
+    newConfig["chart"]["width"] = width;
+    newConfig["chart"]["height"] = height
     console.log("handleChangeHeight", newConfig)
     dispatch(setGraphConfig(newConfig));
   }
@@ -770,32 +772,43 @@ export default function ChartEditor(handleClick) {
                         <img src={DonutChartSmall} onClick={() => handleChartChange("donut")}/>
                       </div>
                     </div>
-                    <div
-                        className="charResize"
-
-                        // onDragEnter={handleChangeWidth}
-                        // onMouseUpCapture={() => {
-                        //
-                        //   Highcharts.charts.forEach(function (chart, index) {
-                        //     if (chart) {
-                        //       if (chart.renderTo.id === "highchartsContainer") {
-                        //
-                        //         const ResizeWidth = document.getElementById('highchartsContainer').clientWidth;
-                        //         const ResizeHeight = document.getElementById('highchartsContainer').clientHeight;
-                        //
-                        //         console.log("Checked High chart Width & Height",ResizeWidth,ResizeHeight)
-                        //
-                        //         // console.log("Checked Resize Event for Width",document.getElementsByClassName("charResize").offsetWidth);
-                        //         // console.log("Checked Resize Event for Height",document.getElementsByClassName("charResize").offsetHeight);
-                        //         // chart.reflow();
-                        //       }
-                        //     }
-                        //   });
-                        // }}
+                    <Resizable
+                        onResizeStop={(e, direction, ref, d) => {
+                          let width= graphConfig.chart.width ? Number(graphConfig.chart.width) + d.width : 934 + d.width;
+                          let height= Number(graphConfig.chart.height) + d.height;
+                          console.log('e==>',e,d,graphConfig,Number(graphConfig.chart.width),width)
+                          handleChangeWidth(width,height)
+                        }}
                     >
-                      {/*<HeightIcon  onMouseUpCapture = {handleChangeWidth}/>*/}
+
                       <div id="highchartsContainer"/>
-                    </div>
+                    </Resizable>
+                    {/*<div*/}
+                    {/*    className="charResize"*/}
+
+                    {/*    // onDragEnter={handleChangeWidth}*/}
+                    {/*    // onMouseUpCapture={() => {*/}
+                    {/*    //*/}
+                    {/*    //   Highcharts.charts.forEach(function (chart, index) {*/}
+                    {/*    //     if (chart) {*/}
+                    {/*    //       if (chart.renderTo.id === "highchartsContainer") {*/}
+                    {/*    //*/}
+                    {/*    //         const ResizeWidth = document.getElementById('highchartsContainer').clientWidth;*/}
+                    {/*    //         const ResizeHeight = document.getElementById('highchartsContainer').clientHeight;*/}
+                    {/*    //*/}
+                    {/*    //         console.log("Checked High chart Width & Height",ResizeWidth,ResizeHeight)*/}
+                    {/*    //*/}
+                    {/*    //         // console.log("Checked Resize Event for Width",document.getElementsByClassName("charResize").offsetWidth);*/}
+                    {/*    //         // console.log("Checked Resize Event for Height",document.getElementsByClassName("charResize").offsetHeight);*/}
+                    {/*    //         // chart.reflow();*/}
+                    {/*    //       }*/}
+                    {/*    //     }*/}
+                    {/*    //   });*/}
+                    {/*    // }}*/}
+                    {/*>*/}
+                    {/*  <HeightIcon  onMouseUpCapture = {handleChangeWidth}/>*/}
+                    {/*  <div id="highchartsContainer"/>*/}
+                    {/*</div>*/}
                     <div className={'downloadPng'}>
                       <Button onClick={downloadPngBtn}><img src={ExportPng}/>Download in PNG</Button>
                     </div>

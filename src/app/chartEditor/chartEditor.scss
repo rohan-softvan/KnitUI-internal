@@ -1277,3 +1277,11 @@
 .subTabs input::-ms-input-placeholder { /* Microsoft Edge */
     color: #a4a4a4;
 }
+
+.series-menu-item{
+    display: block;
+    max-width: 740px; //TODO make this responsive
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
