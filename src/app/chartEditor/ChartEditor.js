@@ -215,6 +215,7 @@ export default function ChartEditor(handleClick) {
   });
 
   const setDefaultGraphProperties = (graphConfig) => {
+    console.log("setDefaultGraphProperties:graphConfig ", graphConfig)
     let config = JSON.parse(JSON.stringify(graphConfig));
     config.chart = {...chartEditorEnum.chartDefaultProps, ...config.chart}
     config.credits = {enabled: false}
@@ -268,6 +269,7 @@ export default function ChartEditor(handleClick) {
       }
       //setting the colors for  general graphs
     } else if (config.chart.type === "pie") {
+      config.legend = {...chartEditorEnum.legendsDefaultProps, enabled: true};
       config.plotOptions.pie = {...config.plotOptions.pie, showInLegend: true};
       // if series is exactly 3
       if (config.series[0].data.length === 3) {
@@ -294,6 +296,7 @@ export default function ChartEditor(handleClick) {
       }
 
     } else {
+      config.legend = {...chartEditorEnum.legendsDefaultProps, enabled: true};
       config.legend = {...chartEditorEnum.legendsDefaultProps};
       if ("colors" in config) {
         delete config.colors;

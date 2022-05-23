@@ -19,9 +19,12 @@ export const chartEditorSlice = createSlice({
     },
     currentTab: 0,
     selectedItems: [{rows: [], columns: [], measures: []}],
-    selectedQuestionList: [],
+    selectedQuestionList: ['13'],
     chartType: 'bar',
     generalChartType: 'bar',
+    selectedQuestionsOptionsList: {
+      13: ["I eat most of my meals on campus", "I eat most of my meals at home", "I eat some meals at home, some on campus"]
+    }
   },
   reducers: {
     setGraphConfig: (state, action) => {
@@ -52,8 +55,12 @@ export const chartEditorSlice = createSlice({
       state.expandedStateConfig = action.payload
     },
     setSelectedQuestion: (state, action) => {
+      console.log("setSelectedQuestion:: payload: ", action.payload)
       console.log('action.payloadd==>', current(state.selectedItems), action)
       state.selectedQuestionList = action.payload.questionList;
+      let newSelectedQuestionsOptionsList = state.selectedQuestionsOptionsList;
+      newSelectedQuestionsOptionsList[action.payload.questionList[action.payload.questionList.length - 1]] = action.payload.questionChoice;
+      state.selectedQuestionsOptionsList = newSelectedQuestionsOptionsList;
       const type = action.payload.questionList.length % 2 === 0 ? "rows" : "columns";
       if (state.selectedItems[0].measures.length <= 0) {
         state.selectedItems[0].measures.push({uniqueName: action.payload.text, aggregation: "sum"})
@@ -67,6 +74,10 @@ export const chartEditorSlice = createSlice({
     setGeneralChartType: (state, action) => {
       console.log('setGeneralChartType==>', action.payload)
       state.generalChartType = action.payload
+    },
+    setSelectedQuestionsOptionsList: (state, action) => {
+      console.log('setSelectedQuestionsOptionsList==>', action.payload);
+      state.selectedQuestionsOptionsList = action.payload;
     }
   },
 })
@@ -82,6 +93,7 @@ export const {
   setExpandedStateConfig,
   setSelectedQuestion,
   setChartType,
-  setGeneralChartType
+  setGeneralChartType,
+  setSelectedQuestionsOptionsList
 } = chartEditorSlice.actions
 export default chartEditorSlice.reducer

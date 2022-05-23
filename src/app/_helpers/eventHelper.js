@@ -37,7 +37,8 @@ const handleAxisTitleClick = (event, axisType) => {
 
 export const setDefaultEventsForGraph = (graphConfig) => {
   console.log('in setDefaultEventsForGraph function==>', graphConfig)
-  let newConfig = {...graphConfig};
+  // let newConfig = {...graphConfig};
+  let newConfig = JSON.parse(JSON.stringify(graphConfig));
   //adding event listener for legends
   newConfig.series.forEach((seriesItem => {
     seriesItem.events = {
