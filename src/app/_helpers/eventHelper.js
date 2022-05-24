@@ -37,7 +37,6 @@ const handleAxisTitleClick = (event, axisType) => {
 
 export const setDefaultEventsForGraph = (graphConfig) => {
   console.log('in setDefaultEventsForGraph function==>', graphConfig)
-  // let newConfig = {...graphConfig};
   let newConfig = JSON.parse(JSON.stringify(graphConfig));
   //adding event listener for legends
   newConfig.series.forEach((seriesItem => {
@@ -80,9 +79,11 @@ export const setDefaultEventsForGraph = (graphConfig) => {
     }
   };
   //adding event listener for series
-  newConfig.plotOptions.series.point.events = {
-    click: function () {
-      updateCustomizeTab("series");
+  if( newConfig && newConfig.plotOptions  && newConfig.plotOptions.series ){
+    newConfig.plotOptions.series.point.events = {
+      click: function () {
+        updateCustomizeTab("series");
+      }
     }
   }
   return newConfig;

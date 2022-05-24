@@ -138,7 +138,7 @@
         }
         .MuiAccordionDetails-root{
             display: block;
-            padding: 8px 5px 16px 38px;
+            padding: 0px 5px 16px 38px;
             .selectValue{
                 margin-bottom: 10px;
                 -webkit-transition: height 0.5s;
@@ -159,8 +159,9 @@
                         overflow: hidden;
                         text-overflow: ellipsis;
                         width: 33.33%;
+                        align-items: center;
                         span{
-                            padding:2px 0;
+                            padding:2px 3px 2px 0px;
                         }
                     }
                 }
@@ -176,6 +177,19 @@
             .selectValue.default-questions{
                 height: auto !important;
                 overflow: hidden;
+            }
+            .default-questions{
+                ul{
+                    li{
+                        padding-top: 5px;
+                        padding-bottom: 5px;
+                        display:flex;
+                        align-items:center;
+                        img{
+                            margin-right: 3px;
+                        }
+                    }
+                }
             }
         }
         .MuiIconButton-label{
@@ -229,7 +243,7 @@
             }
         }
         .withoutAccordian{
-            padding: 8px 5px 10px 10px;
+            padding: 8px 5px 10px 40px;
             ul{
                 margin: 0px;
                 padding: 0px;
@@ -1135,6 +1149,7 @@
     .downloadPng{
         display: flex;
         justify-content: end;
+        margin-top:10px;
         button{
             border:1px solid #8F8F8F;
             background: transparent;
@@ -1284,4 +1299,34 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+@media screen and (max-width: 1800px) {
+    .series-menu-item{
+        max-width:54%;
+    }
+}
+@media screen and (max-width: 1600px) {
+    .series-menu-item{
+        max-width:46%;
+    }
+}
+@media screen and (max-width: 1440px) {
+    .series-menu-item{
+        max-width:500px;
+    }
+}
+@media screen and (max-width: 1366px) {
+    .series-menu-item{
+        max-width:40%;
+    }
+}
+@media screen and (max-width: 1280px) {
+    .series-menu-item{
+        max-width:35%;
+    }
+}
+@media screen and (max-width: 1199px) {
+    .series-menu-item{
+        max-width:32%;
+    }
 }

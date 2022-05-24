@@ -55,7 +55,6 @@ export const chartEditorSlice = createSlice({
       state.expandedStateConfig = action.payload
     },
     setSelectedQuestion: (state, action) => {
-      console.log("setSelectedQuestion:: payload: ", action.payload)
       console.log('action.payloadd==>', current(state.selectedItems), action)
       state.selectedQuestionList = action.payload.questionList;
       let newSelectedQuestionsOptionsList = state.selectedQuestionsOptionsList;
@@ -79,7 +78,7 @@ export const chartEditorSlice = createSlice({
       console.log('setSelectedQuestionsOptionsList==>', action.payload);
       state.selectedQuestionsOptionsList = action.payload;
     }
-  },
+  }
 })
 
 

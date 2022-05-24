@@ -3,7 +3,7 @@ import Highcharts from "highcharts";
 import * as WebDataRocksReact from "react-webdatarocks";
 import 'webdatarocks/webdatarocks.css'
 import "webdatarocks/webdatarocks.highcharts";
-import {DataJson} from './jsondata/DataJson';
+import {DataJSON} from './jsondata/DataJson';
 import TabPanel from "./TabPanel";
 import {makeStyles, Tab, Tabs} from "@material-ui/core";
 import OptionsTab from './OptionsTab';
@@ -38,31 +38,22 @@ const PivotTable = () => {
   const [display, setDisplay] = useState(true);
   const [fontSize, setFontSize] = useState(14);
   const [fontFamily, setFontFamily] = useState('Roboto');
+  // const [rows, setRows] = useState(selectedQuestion[0].rows);
+  //
+  // const [columns, setColumns] = useState(selectedQuestion[0].columns);
+  // const [measures, setMeasures] = useState(selectedQuestion[0].measures);
+  const [rows, setRows] = useState({
+    uniqueName: "Q8 Do you have a meal plan for on-campus dining?"
+  });
 
-  const [rows, setRows] = useState([
-    {
-      uniqueName: "Q8 Do you have a meal plan for on-campus dining?",
-      sort: "asc"
-    }
-  ]);
-
-  const [columns, setColumns] = useState([
-    {
-      uniqueName:
-          "Q20 Would you be interested in ordering from a food locker like this?",
-      sort: "asc"
-    }
-  ]);
-  const [measures, setMeasures] = useState([
-    {
-      uniqueName:
-          "Q20 Would you be interested in ordering from a food locker like this?",
-      aggregation: "sum"
-    }
-  ]);
-
-
-
+  const [columns, setColumns] = useState({
+    uniqueName: "Q6 We would like to learn a little bit more about how you structure meal time between home, work and school. Which of these best describes you?"
+  },{
+    uniqueName: "Q20 Would you be interested in ordering from a food locker like this?"
+  });
+  const [measures, setMeasures] = useState({
+    uniqueName: "sum"
+  });
   let graphConfig = useSelector((state) => state.chart.graphConfig);
   let myRef = useRef();
   let pieRef = useRef();
@@ -221,13 +212,93 @@ const PivotTable = () => {
 
   const report = {
     dataSource: {
-      data: DataJson
+      data: DataJSON
     },
     tableSizes: {
       columns: [
         {
           idx: 0,
           width: 200
+        },
+        {
+            idx: 1,
+            width: 100
+        },
+        {
+            idx: 2,
+            width: 100
+        },
+        {
+            idx: 3,
+            width: 100
+        },
+        {
+            idx: 4,
+            width: 100
+        },
+        {
+            idx: 5,
+            width: 100
+        },
+        {
+            idx: 6,
+            width: 100
+        },
+        {
+            idx: 7,
+            width: 100
+        },
+        {
+            idx: 8,
+            width: 100
+        },
+        {
+            idx: 9,
+            width: 100
+        },
+        {
+            idx: 10,
+            width: 100
+        },
+        {
+            idx: 11,
+            width: 100
+        },
+        {
+            idx: 12,
+            width: 100
+        },
+        {
+          idx: 13,
+          width: 100
+        },
+        {
+          idx: 14,
+          width: 100
+        },
+        {
+          idx: 15,
+          width: 100
+        },
+        {
+          idx: 16,
+          width: 100
+        },
+        {
+          idx: 17,
+          width: 100
+        },
+        {
+          idx: 18,
+          width: 100
+        },
+        {
+          idx: 19,
+          width: 100
+        },
+        {
+          idx: 20,
+          width: 100
         }
       ]
     },
@@ -461,13 +532,13 @@ const PivotTable = () => {
         })
     })
 
-  useEffect(() => {
-    if (JSON.stringify(graphConfig) != '{}') {
-      let newGraphConfig = JSON.parse(JSON.stringify(graphConfig));
-      Highcharts.chart("highchartsContainer", graphConfig);
-    }
-
-  }, [graphConfig])
+  // useEffect(() => {
+  //   if (JSON.stringify(graphConfig) != '{}') {
+  //     let newGraphConfig = JSON.parse(JSON.stringify(graphConfig));
+  //     Highcharts.chart("highchartsContainer", graphConfig);
+  //   }
+  //
+  // }, [graphConfig])
 
   useEffect(
       () => {

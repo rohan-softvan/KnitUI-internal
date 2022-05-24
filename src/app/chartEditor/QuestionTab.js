@@ -1,17 +1,22 @@
 import * as React from 'react';
-import {useEffect} from 'react';
 import {Grid, Typography} from "@material-ui/core";
 import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import Checkbox from '@material-ui/core/Checkbox';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import Radio from '@material-ui/core/Radio';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import {useDispatch, useSelector} from "react-redux";
+import {useEffect} from "react";
 import {setDataJSONConfig, setSelectedQuestion, setSelectedQuestionsOptionsList} from '../redux/slice/ChartEditorSlice';
 import MainChartCheckbox from '../../../src/assets/images/charteditor/MainChartCheckbox.png';
 import MainChartUncheckbox from '../../../src/assets/images/charteditor/MainChartUnheckBox.png';
-import SubCheckboxSelected from '../../../src/assets/images/charteditor/SubCheckboxSelected.png';
+
+import SubCheckboxSelected from '../../../src/assets/images/charteditor/SubCheckboxSelected.png'
 import SubCheckboxUnselected from '../../../src/assets/images/charteditor/SubCheckboxUnselected.png';
+import SubCheckboxUnselectedGray from '../../../src/assets/images/charteditor/SubCheckboxUnselectedGray.png';
 
 const label = {inputProps: {'aria-label': 'Checkbox demo'}};
 
@@ -20,7 +25,6 @@ export default function QuestionTab() {
   const questionData = useSelector(store => store.data.questionCardListBox);
   const selectedQuestionList = useSelector(store => store.chart.selectedQuestionList);
   const selectedQuestionsOptionsList = useSelector(store => store.chart.selectedQuestionsOptionsList);
-
   const [selectedQuestions, setSelectedQuestions] = React.useState([...selectedQuestionList]);
   const [subOptionSelected, setSubOptionSelected] = React.useState([]);
   const [dataJSON, setDataJSON] = React.useState([])
@@ -92,7 +96,7 @@ export default function QuestionTab() {
         setDataJSON(updatedNewJson)
         dispatch(setDataJSONConfig(updatedNewJson))
       } else {
-        let updatedOptionsList = [...optionsList[value.numericQuestionId]];
+        let updatedOptionsList = optionsList[value.numericQuestionId] ? [...optionsList[value.numericQuestionId]] : [];
         updatedOptionsList.push(subOption.description);
         let obj = {};
         obj[value.numericQuestionId] = [...updatedOptionsList];
@@ -143,7 +147,6 @@ export default function QuestionTab() {
     }
     console.log("dataJSON <<< ", dataJSON, selectedQuestions)
   }
-
   const setSelectedQuestionsStateForGraphType = (item, subOption, key, isQuestion, type) => {
     console.log('value=>', item, key)
     let questionName = item.questionNumber + " " + item.questionName
@@ -228,13 +231,12 @@ export default function QuestionTab() {
   useEffect(() => {
     console.log("Expand: ", expand)
   }, [expand])
-
   return (
       questionData && questionData.map((item, index) => item.questionType === 'MC' ? (
                   <div key={index} className={'accordianChart'}>
                     <Accordion
                         //expanded={expand.includes(item.numericQuestionId)}
-                        style={selectedQuestionList.includes(item.numericQuestionId) ? {backgroundColor: '#12988A'} : {}}>
+                        style={selectedQuestions.includes(item.numericQuestionId) ? {backgroundColor: '#12988A'} : {}}>
                       <AccordionSummary
                           expandIcon={<ExpandMoreIcon/>}
                           aria-controls="panel2a-content"
@@ -244,15 +246,16 @@ export default function QuestionTab() {
                           }}
                           className={'questionCardBox'}
                       >
-                        <Typography style={selectedQuestionList.includes(item.numericQuestionId) ? {color: '#fff'} : {}}>
+                        <Typography style={selectedQuestions.includes(item.numericQuestionId) ? {color: '#fff'} : {}}>
                           <div style={{margin: '0px 10px'}}>
-                            {selectedQuestionList.includes(item.numericQuestionId) ? (
+                            {selectedQuestions.includes(item.numericQuestionId) ? (
                                 <img
                                     src={MainChartCheckbox}
-                                    height={"20px"}
-                                    width={"20px"}
+                                    height={"18px"}
+                                    width={"18px"}
                                     onClick={(e) => {
                                       // e.stopPropagation();
+                                      // e.target.checked ? setSelectedQuestionsState(item, true) : setSelectedQuestionsState(item, true, "remove")
                                       console.log("removing ")
                                       setSelectedQuestionsState(item, true, undefined, "remove");
                                     }}
@@ -260,10 +263,11 @@ export default function QuestionTab() {
                             ) : (
                                 <img
                                     src={MainChartUncheckbox}
-                                    height={"20px"}
-                                    width={"20px"}
+                                    height={"18px"}
+                                    width={"18px"}
                                     onClick={(e) => {
                                       // e.stopPropagation();
+                                      // e.target.checked ? setSelectedQuestionsState(item, true) : setSelectedQuestionsState(item, true, "remove")
                                       setSelectedQuestionsState(item, true, undefined);
                                     }}
                                 />
@@ -294,10 +298,27 @@ export default function QuestionTab() {
                             {/*{console.log("Checked List Length",item.filterQuestionChoice.length >= 9)}*/}
                             {item.filterQuestionChoice && item.filterQuestionChoice.map(el => (
                                 <li>
-                                  {/*{console.log("filterQuestionChoice1: ", item.numericQuestionId)}*/}
-                                  {/*{console.log("filterQuestionChoice11: ", selectedQuestionsOptionsList)}*/}
-                                  {/*{console.log("filterQuestionChoice2: ", selectedQuestionsOptionsList[item.numericQuestionId])}*/}
-                                  {/*{console.log("filterQuestionChoice3: ", selectedQuestionsOptionsList[item.numericQuestionId]?.includes(el.choiceText))}*/}
+                                  {/*{selectedQuestions.includes(item.numericQuestionId) ? (*/}
+                                  {/*    <img*/}
+                                  {/*        src={SubCheckboxUnselected}*/}
+                                  {/*        width={"23px"}*/}
+                                  {/*        height={"20px"}*/}
+                                  {/*        {...el.choiceText}*/}
+                                  {/*        onClick={(e) => {*/}
+                                  {/*          e.target.checked ? setSelectedQuestionsState(item, false, el) : setSelectedQuestionsState(item, false, el, "remove")*/}
+                                  {/*        }}*/}
+                                  {/*    />*/}
+                                  {/*) : (*/}
+                                  {/*    <img*/}
+                                  {/*        src={SubCheckboxSelected}*/}
+                                  {/*        width={"23px"}*/}
+                                  {/*        height={"20px"}*/}
+                                  {/*        {...el.choiceText}*/}
+                                  {/*        onClick={(e) => {*/}
+                                  {/*          e.target.checked ? setSelectedQuestionsState(item, false, el) : setSelectedQuestionsState(item, false, el, "remove")*/}
+                                  {/*        }}*/}
+                                  {/*    />*/}
+                                  {/*)}*/}
                                   {selectedQuestionsOptionsList[Number(item.numericQuestionId)]?.includes(el.choiceText) ? (
                                       <img
                                           src={SubCheckboxSelected}
@@ -310,7 +331,7 @@ export default function QuestionTab() {
                                       />
                                   ) : (
                                       <img
-                                          src={SubCheckboxUnselected}
+                                          src={SubCheckboxUnselectedGray}
                                           width={"23px"}
                                           height={"20px"}
                                           {...el.choiceText}
@@ -320,10 +341,6 @@ export default function QuestionTab() {
                                       />
 
                                   )}
-
-                                  {/*<Checkbox checked={selectedQuestionsOptionsList[Number(item.numericQuestionId)]?.includes(el.choiceText)} {...el.choiceText} onClick={(e) => {*/}
-                                  {/*  e.target.checked ? setSelectedQuestionsState(item, false, el) : setSelectedQuestionsState(item, false, el, "remove")*/}
-                                  {/*}}/>*/}
                                   {el.choiceText}
                                 </li>
                             ))}
@@ -364,13 +381,10 @@ export default function QuestionTab() {
               (
                   <div key={index} className={'accordianChart'}>
                     <div className={'noAccordian'}>
-                      <Typography style={selectedQuestions.includes(1) ? {color: '#fff'} : {}}>
-                        <Checkbox
-                            {...label}
-                            onClick={(e) => {
-                              e.target.checked ? setSelectedQuestionsState(1) : setSelectedQuestionsState(1, false, undefined, "remove")
-                            }}/>
-                        <span>{item.questionNumber ? item.questionNumber : "-"}</span> {item.questionText ? item.questionText : "-"}
+                      <Typography style={selectedQuestions.includes(1) ? {color: '#fff'} : {}}><Checkbox {...label}
+                                                                                                         onClick={(e) => {
+                                                                                                           e.target.checked ? setSelectedQuestionsState(1) : setSelectedQuestionsState(1, false, undefined, "remove")
+                                                                                                         }}/><span>{item.questionNumber ? item.questionNumber : "-"}</span> {item.questionText ? item.questionText : "-"}
                       </Typography>
                       <div className='withoutAccordian'>
                         <ul>
