@@ -23,7 +23,7 @@ export const chartEditorSlice = createSlice({
     chartType: 'bar',
     generalChartType: 'bar',
     selectedQuestionsOptionsList: {
-      13: ["I eat most of my meals on campus", "I eat most of my meals at home", "I eat some meals at home, some on campus"]
+      13: ["I eat most of my meals at home", "I eat some meals at home, some on campus"]
     }
   },
   reducers: {
@@ -57,9 +57,6 @@ export const chartEditorSlice = createSlice({
     setSelectedQuestion: (state, action) => {
       console.log('action.payloadd==>', current(state.selectedItems), action)
       state.selectedQuestionList = action.payload.questionList;
-      let newSelectedQuestionsOptionsList = state.selectedQuestionsOptionsList;
-      newSelectedQuestionsOptionsList[action.payload.questionList[action.payload.questionList.length - 1]] = action.payload.questionChoice;
-      state.selectedQuestionsOptionsList = newSelectedQuestionsOptionsList;
       const type = action.payload.questionList.length % 2 === 0 ? "rows" : "columns";
       if (state.selectedItems[0].measures.length <= 0) {
         state.selectedItems[0].measures.push({uniqueName: action.payload.text, aggregation: "sum"})

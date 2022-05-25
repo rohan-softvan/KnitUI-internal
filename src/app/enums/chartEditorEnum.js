@@ -26,7 +26,7 @@ export const chartEditorEnum = {
   },
   xAxisDefaultProps: {
     gridLineColor: "#E6E6E6",
-    gridLineWidth: 1, //TODO change to 0
+    gridLineWidth: 0, //TODO change to 0
     title: {
       enabled: true,
       text:'<span style="cursor:pointer;" id="custom-x-axis-title"> X axis Hai</span>'
@@ -42,7 +42,7 @@ export const chartEditorEnum = {
   },
   yAxisDefaultProps: {
     gridLineColor: "#E6E6E6",
-    gridLineWidth: 1,
+    gridLineWidth: 0,
     title: {
       enabled: true,
       text:'<span style="cursor:pointer;" id="custom-y-axis-title"> Y axis Hai</span>'
