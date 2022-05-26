@@ -1,15 +1,15 @@
-import React, {useEffect, useMemo, useRef, useState} from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import Highcharts from "highcharts";
 import * as WebDataRocksReact from "react-webdatarocks";
 import 'webdatarocks/webdatarocks.css'
 import "webdatarocks/webdatarocks.highcharts";
-import {DataJSON} from './jsondata/DataJson';
+import { DataJSON } from './jsondata/DataJson';
 import TabPanel from "./TabPanel";
-import {makeStyles, Tab, Tabs} from "@material-ui/core";
+import { makeStyles, Tab, Tabs } from "@material-ui/core";
 import OptionsTab from './OptionsTab';
-import {useDispatch, useSelector} from "react-redux";
-import {setGeneralConfig, setGraphConfig, setPieChartConfig} from "../redux/slice/ChartEditorSlice";
-import {chartEditorEnum} from "../enums";
+import { useDispatch, useSelector } from "react-redux";
+import { setGeneralConfig, setGraphConfig, setPieChartConfig } from "../redux/slice/ChartEditorSlice";
+import { chartEditorEnum } from "../enums";
 
 
 const PivotTable = () => {
@@ -48,7 +48,7 @@ const PivotTable = () => {
 
   const [columns, setColumns] = useState({
     uniqueName: "Q6 We would like to learn a little bit more about how you structure meal time between home, work and school. Which of these best describes you?"
-  },{
+  }, {
     uniqueName: "Q20 Would you be interested in ordering from a food locker like this?"
   });
   const [measures, setMeasures] = useState({
@@ -68,15 +68,15 @@ const PivotTable = () => {
 
   const setDefaultGraphProperties = (graphConfig) => {
     let config = JSON.parse(JSON.stringify(graphConfig));
-    config.chart = {...chartEditorEnum.chartDefaultProps, ...config.chart}
-    config.credits = {enabled: false}
+    config.chart = { ...chartEditorEnum.chartDefaultProps, ...config.chart }
+    config.credits = { enabled: false }
     if (!config.title || !config.title.text) {
       config.title = chartEditorEnum.titleDefaultProps
     }
     if (!config.subtitle) {
       config.subtitle = chartEditorEnum.subtitleDefaultProps
     }
-    config.exporting = {enabled: false}
+    config.exporting = { enabled: false }
     config.xAxis = {
       // title: chartEditorEnum.xAxisDefaultProps.title,
       gridLineColor: chartEditorEnum.xAxisDefaultProps.gridLineColor,
@@ -109,7 +109,7 @@ const PivotTable = () => {
 
     //setting the colors for multicolor graphs
     if ((config.chart.type === "bar" || config.chart.type === "column") && config.plotOptions.series.colorByPoint) {
-      config.legend = {...chartEditorEnum.legendsDefaultProps, enabled: false};
+      config.legend = { ...chartEditorEnum.legendsDefaultProps, enabled: false };
       if (config.series.length === 3) {
         config.colors = chartEditorEnum.defaultSeriesColors["threePoint"];
         // if series is exactly 5
@@ -146,7 +146,7 @@ const PivotTable = () => {
       }
 
     } else {
-      config.legend = {...chartEditorEnum.legendsDefaultProps};
+      config.legend = { ...chartEditorEnum.legendsDefaultProps };
       if ("colors" in config) {
         delete config.colors;
       }
@@ -179,128 +179,54 @@ const PivotTable = () => {
 
   const getPieConfig = () => {
     myRef.webdatarocks.highcharts.getData(
-        {
-          type: "pie",
-          styledMode: true
-        },
-        function (data) {
-          dispatch(setPieChartConfig(data.series))
-          // dispatch(setGraphConfig(data))
-        }
+      {
+        type: "pie",
+        styledMode: true
+      },
+      function (data) {
+        dispatch(setPieChartConfig(data.series))
+        // dispatch(setGraphConfig(data))
+      }
     );
   }
   const createChart = () => {
     myRef.webdatarocks.highcharts.getData(
-        {
-          type: config.type,
-        },
-        function (data) {
-          let graphData = Object.values(graphConfig).length !== 0 ? JSON.parse(JSON.stringify(setDefaultGraphProperties(graphConfig))) : setDefaultGraphProperties(data);
-          graphData.xAxis.title.text=`<span style="cursor:pointer;" id="custom-x-axis-title"> ${data.xAxis.title.text}</span>`
-          graphData.yAxis[0].title.text=`<span style="cursor:pointer;" id="custom-y-axis-title"> ${data.yAxis[0].title.text}</span>`
-          dispatch(setGeneralConfig(data.series))
-          dispatch(setGraphConfig(graphData))
-          // Highcharts.chart("highchartsContainer", graphData ? graphData : data);
-        },
-        function (data) {
-          dispatch(setGraphConfig(data))
-          // Highcharts.chart("highchartsContainer", graphConfig);
-          // Highcharts.reflow();
-        }
+      {
+        type: config.type,
+      },
+      function (data) {
+        let graphData = Object.values(graphConfig).length !== 0 ? JSON.parse(JSON.stringify(setDefaultGraphProperties(graphConfig))) : setDefaultGraphProperties(data);
+        graphData.xAxis.title.text = `<span style="cursor:pointer;" id="custom-x-axis-title"> ${data.xAxis.title.text}</span>`
+        graphData.yAxis[0].title.text = `<span style="cursor:pointer;" id="custom-y-axis-title"> ${data.yAxis[0].title.text}</span>`
+        dispatch(setGeneralConfig(data.series))
+        dispatch(setGraphConfig(graphData))
+        // Highcharts.chart("highchartsContainer", graphData ? graphData : data);
+      },
+      function (data) {
+        dispatch(setGraphConfig(data))
+        // Highcharts.chart("highchartsContainer", graphConfig);
+        // Highcharts.reflow();
+      }
     );
   };
+
+  const getDynamicWidth = (totalColumns) => {
+    let columnWidths = [{
+      idx: 0,
+      width: 200
+    }];
+    for (let i = 1; i <= totalColumns; i++) {
+      columnWidths.push({ idx: i, width: 100 })
+    }
+    return columnWidths;
+  }
 
   const report = {
     dataSource: {
       data: DataJSON
     },
     tableSizes: {
-      columns: [
-        {
-          idx: 0,
-          width: 200
-        },
-        {
-            idx: 1,
-            width: 100
-        },
-        {
-            idx: 2,
-            width: 100
-        },
-        {
-            idx: 3,
-            width: 100
-        },
-        {
-            idx: 4,
-            width: 100
-        },
-        {
-            idx: 5,
-            width: 100
-        },
-        {
-            idx: 6,
-            width: 100
-        },
-        {
-            idx: 7,
-            width: 100
-        },
-        {
-            idx: 8,
-            width: 100
-        },
-        {
-            idx: 9,
-            width: 100
-        },
-        {
-            idx: 10,
-            width: 100
-        },
-        {
-            idx: 11,
-            width: 100
-        },
-        {
-            idx: 12,
-            width: 100
-        },
-        {
-          idx: 13,
-          width: 100
-        },
-        {
-          idx: 14,
-          width: 100
-        },
-        {
-          idx: 15,
-          width: 100
-        },
-        {
-          idx: 16,
-          width: 100
-        },
-        {
-          idx: 17,
-          width: 100
-        },
-        {
-          idx: 18,
-          width: 100
-        },
-        {
-          idx: 19,
-          width: 100
-        },
-        {
-          idx: 20,
-          width: 100
-        }
-      ]
+      columns: [...getDynamicWidth(metaData.totalColumns)]
     },
 
     // tableSizes: {
@@ -433,7 +359,7 @@ const PivotTable = () => {
 
   const handleChartChange = type => {
     config.type = type;
-    setConfig({...config});
+    setConfig({ ...config });
     // createChart();
   };
 
@@ -465,8 +391,8 @@ const PivotTable = () => {
   }
 
   const handleTitleSave = () => {
-    config.title = {text: newTitle};
-    setConfig({...config});
+    config.title = { text: newTitle };
+    setConfig({ ...config });
     // createChart();
   };
 
@@ -510,27 +436,27 @@ const PivotTable = () => {
       }
     };
     // config.title.style.color = color;
-    setConfig({...config});
+    setConfig({ ...config });
     // createChart()
   }
 
   const handleOptionsConfigChange = (type, value) => {
     optionsConfig[type] = value;
-    setOptionsConfig({...optionsConfig});
+    setOptionsConfig({ ...optionsConfig });
   };
 
   useEffect(() => {
 
     pieRef && pieRef.webdatarocks && getPieConfig()
-      // myRef && myRef.webdatarocks &&
-  },[pieRef])
+    // myRef && myRef.webdatarocks &&
+  }, [pieRef])
 
   useEffect(() => {
     myRef && myRef.webdatarocks && myRef.webdatarocks.on("reportcomplete", function () {
       myRef && myRef.webdatarocks && handleReportFieldModal(activeTab);
       myRef && myRef.webdatarocks && createChart()
-        })
     })
+  })
 
   // useEffect(() => {
   //   if (JSON.stringify(graphConfig) != '{}') {
@@ -541,23 +467,23 @@ const PivotTable = () => {
   // }, [graphConfig])
 
   useEffect(
-      () => {
-        return () => {
-          setDisplay(false);
-          setTimeout(() => {
-            setMetaData({totalRows: null, totalColumns: null});
-            setDisplay(true);
-          }, 50);
-        }
-      },
-      [rows, columns, measures, optionsConfig]
+    () => {
+      return () => {
+        setDisplay(false);
+        setTimeout(() => {
+          setMetaData({ totalRows: null, totalColumns: null });
+          setDisplay(true);
+        }, 50);
+      }
+    },
+    [rows, columns, measures, optionsConfig]
   );
 
   useEffect(
-      () => {
-        return () => {
-          if (myRef && myRef.webdatarocks && activeTab === 0) {
-            myRef &&
+    () => {
+      return () => {
+        if (myRef && myRef.webdatarocks && activeTab === 0) {
+          myRef &&
             myRef.webdatarocks.on("reportchange", function () {
               // let bodyStyles = document.body.style;
               // bodyStyles.setProperty('--displayFlag', 'block');
@@ -566,10 +492,10 @@ const PivotTable = () => {
               handleReportFieldModal(activeTab);
             });
 
-          }
         }
       }
-      // [value]
+    }
+    // [value]
   );
 
   const handleReportFieldModal = (activeTab) => {
@@ -586,68 +512,68 @@ const PivotTable = () => {
     }
   }
   return (
-      // style={{ display: 'flex', justifyContent: 'center', marginTop: '15px' }}
-      display && (
-          <div>
+    // style={{ display: 'flex', justifyContent: 'center', marginTop: '15px' }}
+    display && (
+      <div>
+        <div>
+          <div className="pivotTable">
             <div>
-              <div className="pivotTable">
-                <div>
-                  {/* <div style={{ width: '500px !important', minWidth: '700px' }}> */}
-                  <WebDataRocksReact.Pivot
-                      ref={elem => {
-                        myRef = elem;
-                        pieRef= elem;
-                      }}
-                      width={"100%"}
-                      height={"100%"}
-                      toolbar={false}
-                      report={report}
-                      reportcomplete={reportComplete}
-                      localizationloaded
-                      customizeCell={(cellBuilder, cellData) => {
-                        if (cellData.columnIndex > metaData.totalColumns)
-                          metaData.totalColumns = cellData.columnIndex;
-                        if (cellData.rowIndex > metaData.totalRows)
-                          metaData.totalRows = cellData.rowIndex;
-                      }}
-                      reportchange={calculateDynamicWidth}
-                      aftergriddraw={() => {
-                        const grandTotalCell = document.getElementsByClassName(
-                            "wdr-header wdr-header-c wdr-grand-total"
-                        )[0];
-                        if (grandTotalCell) grandTotalCell.innerHTML = "Total";
-                        calculateDynamicWidth();
-                        calculateDynamicHeight();
-                        // handleResize()
-                      }}
-                  />
-                </div>
-              </div>
-
-
-            </div>
-            <div className={"TabRoot"}>
-              <div className={classes.root}>
-                <Tabs
-                    value={activeTab}
-                    onChange={handleChange}
-                    aria-label="pivot-table-tabs"
-                >
-                  <Tab label="Fields" {...a11yProps(0)} />
-                  <Tab label="Options" {...a11yProps(1)} />
-                </Tabs>
-
-                <TabPanel value={activeTab} index={0}>
-                  {renderFieldsTab()}
-                </TabPanel>
-                <TabPanel value={activeTab} index={1}>
-                  <OptionsTab handleChange={handleOptionsConfigChange}
-                              optionsConfig={optionsConfig}/>
-                </TabPanel>
-              </div>
+              {/* <div style={{ width: '500px !important', minWidth: '700px' }}> */}
+              <WebDataRocksReact.Pivot
+                ref={elem => {
+                  myRef = elem;
+                  pieRef = elem;
+                }}
+                width={"100%"}
+                height={"100%"}
+                toolbar={false}
+                report={report}
+                reportcomplete={reportComplete}
+                localizationloaded
+                customizeCell={(cellBuilder, cellData) => {
+                  if (cellData.columnIndex > metaData.totalColumns)
+                    metaData.totalColumns = cellData.columnIndex;
+                  if (cellData.rowIndex > metaData.totalRows)
+                    metaData.totalRows = cellData.rowIndex;
+                }}
+                reportchange={calculateDynamicWidth}
+                aftergriddraw={() => {
+                  const grandTotalCell = document.getElementsByClassName(
+                    "wdr-header wdr-header-c wdr-grand-total"
+                  )[0];
+                  if (grandTotalCell) grandTotalCell.innerHTML = "Total";
+                  calculateDynamicWidth();
+                  calculateDynamicHeight();
+                  // handleResize()
+                }}
+              />
             </div>
           </div>
-      )
+
+
+        </div>
+        <div className={"TabRoot"}>
+          <div className={classes.root}>
+            <Tabs
+              value={activeTab}
+              onChange={handleChange}
+              aria-label="pivot-table-tabs"
+            >
+              <Tab label="Fields" {...a11yProps(0)} />
+              <Tab label="Options" {...a11yProps(1)} />
+            </Tabs>
+
+            <TabPanel value={activeTab} index={0}>
+              {renderFieldsTab()}
+            </TabPanel>
+            <TabPanel value={activeTab} index={1}>
+              <OptionsTab handleChange={handleOptionsConfigChange}
+                optionsConfig={optionsConfig} />
+            </TabPanel>
+          </div>
+        </div>
+      </div>
+    )
   );
 };
 

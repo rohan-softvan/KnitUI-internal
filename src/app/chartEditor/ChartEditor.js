@@ -798,7 +798,8 @@ export default function ChartEditor(handleClick) {
                       onResizeStop={(e, direction, ref, d) => {
                         // let width=graphConfig.chart.width ? Number(graphConfig.chart.width) + d.width :  - d.width;
                         let width = ref.clientWidth;
-                        let height = Number(graphConfig.chart.height) + d.height;
+                        // let height = Number(graphConfig.chart.height) + d.height;
+                        let height= ref.clientHeight;
                         console.log('e==>', e, d, graphConfig, Number(graphConfig.chart.width), width, ref.clientWidth)
                         handleChangeWidth(width, height)
                       }}

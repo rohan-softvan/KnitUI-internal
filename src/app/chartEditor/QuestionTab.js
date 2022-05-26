@@ -326,8 +326,8 @@ export default function QuestionTab() {
                     {selectedQuestionsOptionsList[Number(item.numericQuestionId)]?.includes(el.choiceText) ? (
                       <img
                         src={SubCheckboxSelected}
-                        width={"23px"}
-                        height={"20px"}
+                        width={"19px"}
+                        height={"16px"}
                         onClick={(e) => {
                           setSelectedQuestionsState(item, false, el, "remove")
                         }}
@@ -335,8 +335,8 @@ export default function QuestionTab() {
                     ) : (
                       <img
                         src={SubCheckboxUnselectedGray}
-                        width={"23px"}
-                        height={"20px"}
+                        width={"19px"}
+                        height={"16px"}
                         onClick={(e) => {
                           setSelectedQuestionsState(item, false, el)
                         }}
@@ -420,8 +420,8 @@ export default function QuestionTab() {
                     {selectedQuestionsOptionsList[item.numericQuestionId]?.includes(key) ? (
                       <img
                         src={SubCheckboxSelected}
-                        width={"23px"}
-                        height={"20px"}
+                        width={"19px"}
+                        height={"16px"}
                         onClick={(e) => {
                           setSelectedQuestionsState(item, false, {
                             description: key,
@@ -432,8 +432,8 @@ export default function QuestionTab() {
                     ) : (
                       <img
                         src={SubCheckboxUnselectedGray}
-                        width={"23px"}
-                        height={"20px"}
+                        width={"19px"}
+                        height={"16px"}
                         onClick={(e) => {
                           setSelectedQuestionsState(item, false, {
                             description: key,

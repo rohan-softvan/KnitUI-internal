@@ -11,10 +11,9 @@ import {useDispatch, useSelector} from 'react-redux';
 export default function CustomizeTab({pieConfig, setPieConfig}) {
     const dispatch = useDispatch();
     let expandedConfig = useSelector((state) => state.chart.expandedStateConfig);
-    const [expanedState, setExpandedState] = useState(expandedConfig);
 
     const setTabState = (tab, tabState) => {
-        let updatedExpandedState = {...expanedState}
+        let updatedExpandedState = JSON.parse(JSON.stringify(expandedConfig));
         updatedExpandedState[tab] = tabState;
         dispatch(setExpandedStateConfig(updatedExpandedState))
     }
