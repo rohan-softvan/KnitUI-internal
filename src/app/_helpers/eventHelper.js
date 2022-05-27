@@ -35,6 +35,7 @@ const handleAxisTitleClick = (event, axisType) => {
 };
 
 
+
 export const setDefaultEventsForGraph = (graphConfig) => {
   console.log('in setDefaultEventsForGraph function==>', graphConfig)
   // let newConfig = JSON.parse(JSON.stringify(graphConfig));

@@ -29,7 +29,7 @@ export const chartEditorEnum = {
     gridLineWidth: 0, //TODO change to 0
     title: {
       enabled: true,
-      text:'<span style="cursor:pointer;" id="custom-x-axis-title"> X axis Hai</span>'
+      text:'<span style="cursor:pointer;" id="custom-x-axis-title"> X Axis Title</span>'
       //rotation: 0
     },
     labels: {
@@ -45,7 +45,7 @@ export const chartEditorEnum = {
     gridLineWidth: 0,
     title: {
       enabled: true,
-      text:'<span style="cursor:pointer;" id="custom-y-axis-title"> Y axis Hai</span>'
+      text:'<span style="cursor:pointer;" id="custom-y-axis-title"> Y Axis Title</span>'
       //rotation: 0
     },
     labels: {

@@ -19,19 +19,19 @@ export const chartEditorSlice = createSlice({
     },
     currentTab: 0,
     selectedItems: [{rows: [], columns: [], measures: []}],
-    selectedQuestionList: ['13'],
+    selectedQuestionList: [],
     chartType: 'bar',
     generalChartType: 'bar',
     selectedQuestionsOptionsList: {
-      13: ["I eat most of my meals at home", "I eat some meals at home, some on campus"]
+      // 13: ["I eat most of my meals at home", "I eat some meals at home, some on campus"]
     }
   },
   reducers: {
     setGraphConfig: (state, action) => {
-      console.log('action==>', action.payload)
       // state.graphConfig = action.payload
       state.graphConfig = setDefaultEventsForGraph(action.payload);
       if (action.payload.chart.type !== "pie") {
+        console.log('action==>', action.payload)
         Highcharts.chart('highchartsContainer', action.payload)
       }
       // else{
@@ -59,7 +59,7 @@ export const chartEditorSlice = createSlice({
       state.selectedQuestionList = action.payload.questionList;
       const type = action.payload.questionList.length % 2 === 0 ? "rows" : "columns";
       if (state.selectedItems[0].measures.length <= 0) {
-        state.selectedItems[0].measures.push({uniqueName: action.payload.text, aggregation: "sum"})
+        state.selectedItems[0].measures.push({uniqueName: "count", aggregation: "sum"})
       }
       state.selectedItems[0][type].push({uniqueName: action.payload.text, sort: "asc"});
     },

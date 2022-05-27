@@ -484,10 +484,6 @@ class Data extends Component {
   }
 
 
-  chartEditorModal = () => {
-    console.log("Checked The Modal open ")
-  }
-
   renderTitle = () => {
     return (
       <Grid container spacing={1} style={{ paddingBottom: 30 }}>

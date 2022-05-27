@@ -115,6 +115,7 @@
         .MuiAccordionSummary-root{
             min-height: 30px;
             padding: 0px;
+            align-items:flex-start;
             .MuiAccordionSummary-content{
                 margin: 12px 0px;
             }
@@ -134,6 +135,7 @@
             }
             div{
                 height: 100%;
+                text-align:justify;
             }
         }
         .MuiAccordionDetails-root{
@@ -182,7 +184,7 @@
                     li{
                         padding-top: 5px;
                         padding-bottom: 5px;
-                        display:flex;
+                        // display:flex;
                         align-items:center;
                         img{
                             margin-right: 3px;
@@ -1342,18 +1344,46 @@
         max-width:500px;
     }
 }
-// @media screen and (min-width: 1366px) {
-//     .series-menu-item{
-//         max-width:40%;
-//     }
+@media screen and (min-width: 1366px) {
+    .series-menu-item{
+        max-width:40%;
+    }
+}
+@media screen and (min-width: 1280px) {
+    .series-menu-item{
+        max-width:35%;
+    }
+}
+@media screen and (min-width: 1199px) {
+    .series-menu-item{
+        max-width:32%;
+    }
+}
+.information-card .MuiPaper-rounded{
+    min-width: 330px;
+    padding: 10px;
+    background: #F6F3E6;
+}
+.information-card .MuiPaper-rounded button{
+    display: block;
+    background: #fff !important;
+    border-radius: 4px;
+    color: #000 !important;
+    padding: 5px 8px !important;
+    margin-top: 10px;
+}
+.informative-icon{
+    margin:5px 10px 0px 0px;
+    cursor:pointer;
+}
+// .popover{
+//     width:200px;
+//     height:250px;
+    
 // }
-// @media screen and (min-width: 1280px) {
-//     .series-menu-item{
-//         max-width:35%;
-//     }
-// }
-// @media screen and (min-width: 1199px) {
-//     .series-menu-item{
-//         max-width:32%;
-//     }
+
+// .mainChartBox div:nth-child(1){
+//     background: url("../../assets/images/charteditor/resize.png");
+//     background-position: bottom right;
+//     background-repeat: no-repeat; 
 // }
