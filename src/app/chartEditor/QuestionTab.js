@@ -1,24 +1,21 @@
 import * as React from 'react';
-import { Grid, Typography } from "@material-ui/core";
+import {useEffect} from 'react';
+import {Grid, Typography} from "@material-ui/core";
 import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import Checkbox from '@material-ui/core/Checkbox';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import Radio from '@material-ui/core/Radio';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
-import { setDataJSONConfig, setSelectedQuestion, setSelectedQuestionsOptionsList } from '../redux/slice/ChartEditorSlice';
+import {useDispatch, useSelector} from "react-redux";
+import {setDataJSONConfig, setSelectedQuestion, setSelectedQuestionsOptionsList} from '../redux/slice/ChartEditorSlice';
 import MainChartCheckbox from '../../../src/assets/images/charteditor/MainChartCheckbox.png';
 import MainChartUncheckbox from '../../../src/assets/images/charteditor/MainChartUnheckBox.png';
 
 import SubCheckboxSelected from '../../../src/assets/images/charteditor/SubCheckboxSelected.png'
-import SubCheckboxUnselected from '../../../src/assets/images/charteditor/SubCheckboxUnselected.png';
 import SubCheckboxUnselectedGray from '../../../src/assets/images/charteditor/SubCheckboxUnselectedGray.png';
 import {getChartJSONResponse} from "../redux/actions/ChartAction"
-const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
+
+const label = {inputProps: {'aria-label': 'Checkbox demo'}};
 
 export default function QuestionTab() {
   const dispatch = useDispatch()
@@ -55,35 +52,36 @@ export default function QuestionTab() {
   }
 
   useEffect(() => {
-    let newList=[]
+    let newList = []
     Object.entries(subOptionSelected).map(([key, value]) => {
       newList.push({
-        "question_id":value.questionId,
-        "numeric_question_ids":key,
+        "question_id": value.questionId,
+        "numeric_question_ids": key,
         "option_list": value.optionList
       })
-      })
-      let user_request={
-        "knit_project_id":projectId,
-        "question_dtls":newList
-      }
-      // getChartJSON
-      if(newList.length > 0){
-        dispatch(getChartJSONResponse(user_request))
-      }
-      console.log('selectedQuestions==>',newList)
+    })
+    let user_request = {
+      "knit_project_id": projectId,
+      "question_dtls": newList
+    }
+    // getChartJSON
+    if (newList.length > 0) {
+      dispatch(getChartJSONResponse(user_request))
+    }
+    console.log('selectedQuestions==>', newList)
   }, [selectedQuestions])
-  
+
   const setSelectedQuestionsState = (value, isQuestion, subOption, type) => {
     console.log('value=>', value)
-    console.log('subOption=>', subOption,selectedQuestionsOptionsList,selectedQuestionList)
+    console.log('subOption=>', subOption, selectedQuestionsOptionsList, selectedQuestionList)
     let questionName = value.questionNumber + " " + value.questionName
     let dataJson = JSON.parse(JSON.stringify(dataJSON))
-    let optionsList = JSON.parse(JSON.stringify(selectedQuestionsOptionsList))
+    let optionsList = JSON.parse(JSON.stringify(selectedQuestionsOptionsList));
+    console.log("optionsList:: ", optionsList)
     let newSelectedQuestionList = selectedQuestions;
-    let newSelectedQuestionsOptionsList = { ...selectedQuestionsOptionsList };    
+    let newSelectedQuestionsOptionsList = {...selectedQuestionsOptionsList};
     if (isQuestion) {
-      console.log("removing ", isQuestion, type,value)
+      console.log("removing ", isQuestion, type, value)
       if (type && type === "remove") {
         let selectedQuestionsUpdated = selectedQuestions.filter(e => e !== value.numericQuestionId);
         setSelectedQuestions([...selectedQuestionsUpdated])
@@ -100,10 +98,13 @@ export default function QuestionTab() {
           selectedQuestions.push(value.numericQuestionId);
           setSelectedQuestions([...selectedQuestions])
           newSelectedQuestionList = selectedQuestions
-          console.log('selectedQuestions=>',selectedQuestions)
+          console.log('selectedQuestions=>', selectedQuestions)
         }
         if (value.questionType === "MC") {
-          newSelectedQuestionsOptionsList[value.numericQuestionId] = {"questionId":value.questionId,"optionList":value.questionChoice.map(q => q.choiceText)};
+          newSelectedQuestionsOptionsList[value.numericQuestionId] = {
+            "questionId": value.questionId,
+            "optionList": value.questionChoice.map(q => q.choiceText)
+          };
         } else {
           newSelectedQuestionsOptionsList[value.numericQuestionId] = Object.keys(value.filterGraphData);
         }
@@ -121,25 +122,30 @@ export default function QuestionTab() {
       console.log("QuestionAns", value, selectedQuestions, "type", type)
       if (type && type === "remove") {
         //let updatedNewJson = dataJSON.filter(item => item[questionName] !== subOption.description);
-        let updatedOptionsList = optionsList[value.numericQuestionId].filter(opt => opt !== subOption.description);
-        let newSelectedQuestionsOptionsList = { ...selectedQuestionsOptionsList };
-        newSelectedQuestionsOptionsList[value.numericQuestionId] = [...updatedOptionsList];
+        let updatedOptionsList = optionsList[value.numericQuestionId].optionList.filter(opt => opt !== subOption.description);
+        console.log("updatedOptionsList::", updatedOptionsList)
+        let newSelectedQuestionsOptionsList = JSON.parse(JSON.stringify(selectedQuestionsOptionsList));
+        newSelectedQuestionsOptionsList[value.numericQuestionId].optionList = [...updatedOptionsList];
         dispatch(setSelectedQuestionsOptionsList(newSelectedQuestionsOptionsList))
         //setDataJSON(updatedNewJson)
         //dispatch(setDataJSONConfig(updatedNewJson))
       } else {
-        let updatedOptionsList = optionsList[value.numericQuestionId] ? [...optionsList[value.numericQuestionId]] : [];
+        // let updatedOptionsList = optionsList[value.numericQuestionId]?.optionList ? [...optionsList[value.numericQuestionId].optionList] : [];
+        let updatedOptionsList = optionsList[value.numericQuestionId] ? [...optionsList[value.numericQuestionId]?.optionList] : [];
         updatedOptionsList.push(subOption.description);
-        let newSelectedQuestionsOptionsList = { ...selectedQuestionsOptionsList };
-        newSelectedQuestionsOptionsList[value.numericQuestionId] = [...updatedOptionsList];
+        console.log("updatedOptionsList:: ", updatedOptionsList)
+        let newSelectedQuestionsOptionsList = JSON.parse(JSON.stringify(selectedQuestionsOptionsList));
+        console.log("newSelectedQuestionsOptionsList:: ", newSelectedQuestionsOptionsList)
+        newSelectedQuestionsOptionsList[value.numericQuestionId] = {}
+        newSelectedQuestionsOptionsList[value.numericQuestionId].optionList = [...updatedOptionsList];
         dispatch(setSelectedQuestionsOptionsList(newSelectedQuestionsOptionsList))
-   
-        
+
+
         console.log('subOptionSelected==>', subOptionSelected)
-        if (!subOptionSelected.includes(value.numericQuestionId)) {
-          subOptionSelected.push(value.numericQuestionId)
-          setSubOptionSelected([...subOptionSelected])
-        }
+        // if (!selectedQuestions.includes(value.numericQuestionId)) {
+        //   selectedQuestions.push(value.numericQuestionId)
+        //   setSelectedQuestions([...selectedQuestions])
+        // }
         if (!selectedQuestions.includes(value.numericQuestionId)) {
 
           selectedQuestions.push(value.numericQuestionId);
@@ -186,7 +192,7 @@ export default function QuestionTab() {
         if (dataJSON.length <= 0 || selectedQuestions.includes(item.questionId)) {
           for (let i = 0; i < subOption.sum; i++) {
             let QuestionAns = key
-            dataJSON.push({ [questionName]: QuestionAns })
+            dataJSON.push({[questionName]: QuestionAns})
           }
         } else {
           let totalLength;
@@ -202,7 +208,7 @@ export default function QuestionTab() {
           dataJSON.map(i => i[questionName] = QuestionAns)
           // }
           for (let i = 0; i < totalLength; i++) {
-            dataJSON.push({ [questionName]: QuestionAns })
+            dataJSON.push({[questionName]: QuestionAns})
           }
         }
         setDataJSON(dataJSON)
@@ -234,207 +240,207 @@ export default function QuestionTab() {
     } else {
       expand.push(questionId);
     }
-    setExpand([...expand]);    
+    setExpand([...expand]);
   };
   useEffect(() => {
     console.log("Expand: ", expand)
   }, [expand])
   return (
-    questionData && questionData.map((item, index) => item.questionType === 'MC' &&  (
-      <div key={index} className={'accordianChart'}>
-        <Accordion
-          //expanded={expand.includes(item.numericQuestionId)}
-          style={selectedQuestions.includes(item.numericQuestionId) ? { backgroundColor: '#12988A' } : {}}
-          disabled={selectedQuestions.length >= 3 && !selectedQuestions.includes(item.numericQuestionId)? true : false}>
-          <AccordionSummary
-            expandIcon={<ExpandMoreIcon />}
-            aria-controls="panel2a-content"
-            id="panel2a-header"
-            onClick={(event) => {
-              handleAccordionExpandClick(item.numericQuestionId)
-            }}
-            className={'questionCardBox'}
-          >
-            <Typography style={selectedQuestions.includes(item.numericQuestionId) ? { color: '#fff' } : {}}>
-              <div style={{ margin: '0px 10px' }}>
-                {selectedQuestions.includes(item.numericQuestionId) ? (
-                  <img
-                    src={MainChartCheckbox}
-                    height={"18px"}
-                    width={"18px"}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      // e.target.checked ? setSelectedQuestionsState(item, true) : setSelectedQuestionsState(item, true, "remove")
-                      console.log("removing ")
-                      setSelectedQuestionsState(item, true, undefined, "remove");
-                    }}
-                  />
-                ) : (
-                  <img
-                    src={MainChartUncheckbox}
-                    height={"18px"}
-                    width={"18px"}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      // e.target.checked ? setSelectedQuestionsState(item, true) : setSelectedQuestionsState(item, true, "remove")
-                      setSelectedQuestionsState(item, true, undefined);
-                    }}
-                  />
-                )}
+      questionData && questionData.map((item, index) => item.questionType === 'MC' && (
+              <div key={index} className={'accordianChart'}>
+                <Accordion
+                    //expanded={expand.includes(item.numericQuestionId)}
+                    style={selectedQuestions.includes(item.numericQuestionId) ? {backgroundColor: '#12988A'} : {}}
+                    disabled={selectedQuestions.length >= 3 && !selectedQuestions.includes(item.numericQuestionId) ? true : false}>
+                  <AccordionSummary
+                      expandIcon={<ExpandMoreIcon/>}
+                      aria-controls="panel2a-content"
+                      id="panel2a-header"
+                      onClick={(event) => {
+                        handleAccordionExpandClick(item.numericQuestionId)
+                      }}
+                      className={'questionCardBox'}
+                  >
+                    <Typography style={selectedQuestions.includes(item.numericQuestionId) ? {color: '#fff'} : {}}>
+                      <div style={{margin: '0px 10px'}}>
+                        {selectedQuestions.includes(item.numericQuestionId) ? (
+                            <img
+                                src={MainChartCheckbox}
+                                height={"18px"}
+                                width={"18px"}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  // e.target.checked ? setSelectedQuestionsState(item, true) : setSelectedQuestionsState(item, true, "remove")
+                                  console.log("removing ")
+                                  setSelectedQuestionsState(item, true, undefined, "remove");
+                                }}
+                            />
+                        ) : (
+                            <img
+                                src={MainChartUncheckbox}
+                                height={"18px"}
+                                width={"18px"}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  // e.target.checked ? setSelectedQuestionsState(item, true) : setSelectedQuestionsState(item, true, "remove")
+                                  setSelectedQuestionsState(item, true, undefined);
+                                }}
+                            />
+                        )}
+                      </div>
+                      <div style={{display: 'flex'}}><span
+                          style={{
+                            paddingRight: '5px',
+                            minWidth: '40px'
+                          }}>{item.questionNumber ? item.questionNumber : "-"}</span> {item.questionText ? item.questionText : "-"}
+                      </div>
+                    </Typography>
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    <Typography style={selectedQuestions.includes(item.numericQuestionId) ? {color: '#fff'} : {}}>
+                      Select variables to compare:
+                    </Typography>
+                    <div
+                        className={`selectValue ${item.filterQuestionChoice.length > 9 ? (Show ? "full-questions" : "questions-hidden") : "default-questions"
+                        }`}
+                        style={selectedQuestions.includes(item.numericQuestionId) ? {
+                          color: '#fff',
+                        } : {}}
+                    >
+                      {console.log('selectedQuestionsOptionsList[Number(item.numericQuestionId)]==>', selectedQuestionsOptionsList[Number(item.numericQuestionId)])}
+                      <ul>
+                        {item.filterQuestionChoice && item.filterQuestionChoice.map(el => (
+                            <li>
+                              {selectedQuestionsOptionsList[Number(item.numericQuestionId)]?.optionList && selectedQuestionsOptionsList[Number(item.numericQuestionId)].optionList.includes(el.choiceText) ? (
+                                  <img
+                                      src={SubCheckboxSelected}
+                                      width={"19px"}
+                                      height={"16px"}
+                                      onClick={(e) => {
+                                        setSelectedQuestionsState(item, false, el, "remove")
+                                      }}
+                                  />
+                              ) : (
+                                  <img
+                                      src={SubCheckboxUnselectedGray}
+                                      width={"19px"}
+                                      height={"16px"}
+                                      onClick={(e) => {
+                                        setSelectedQuestionsState(item, false, el)
+                                      }}
+                                  />
+
+                              )}
+                              {el.choiceText}
+                            </li>
+                        ))}
+                      </ul>
+                    </div>
+                    {item.filterQuestionChoice.length > 9 &&
+                        <Grid container spacing={2} style={{alignItems: 'center'}}>
+                          <Grid item xs={6}>
+                            <Typography onClick={handleClickMenu}
+                                        style={selectedQuestions.includes(item.numericQuestionId) ? {
+                                          color: '#fff',
+                                          cursor: 'pointer'
+                                        } : {cursor: 'pointer'}}>
+                              {Show ? "View less" : "View more"}
+                            </Typography>
+                          </Grid>
+                          <Grid item xs={6}>
+                            {Show && <div className='selectOption'
+                                          style={selectedQuestions.includes(item.numericQuestionId) ? {color: '#fff'} : {}}>
+                              {/*<RadioGroup*/}
+                              {/*    row*/}
+                              {/*    aria-labelledby="demo-row-radio-buttons-group-label"*/}
+                              {/*    name="row-radio-buttons-group"*/}
+                              {/*>*/}
+                              {/*    <FormControlLabel value="select" control={<Radio />} label="Select all" />*/}
+                              {/*    <FormControlLabel value="deselect" control={<Radio />} label="De-select all" />*/}
+                              {/*</RadioGroup>*/}
+                              <Checkbox/> Select All
+                            </div>}
+                          </Grid>
+                        </Grid>
+                    }
+                  </AccordionDetails>
+                </Accordion>
               </div>
-              <div style={{ display: 'flex' }}><span
-                style={{
-                  paddingRight: '5px',
-                  minWidth: '40px'
-                }}>{item.questionNumber ? item.questionNumber : "-"}</span> {item.questionText ? item.questionText : "-"}
-              </div>
-            </Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <Typography style={selectedQuestions.includes(item.numericQuestionId) ? { color: '#fff' } : {}}>
-              Select variables to compare:
-            </Typography>
-            <div
-              className={`selectValue ${item.filterQuestionChoice.length > 9 ? (Show ? "full-questions" : "questions-hidden") : "default-questions"
-                }`}
-              style={selectedQuestions.includes(item.numericQuestionId) ? {
-                color: '#fff',
-              } : {}}
-            >
-              {console.log('selectedQuestionsOptionsList[Number(item.numericQuestionId)]==>',selectedQuestionsOptionsList[Number(item.numericQuestionId)])}
-              <ul>
-                {item.filterQuestionChoice && item.filterQuestionChoice.map(el => (
-                  <li>
-                    {selectedQuestionsOptionsList[Number(item.numericQuestionId)] && selectedQuestionsOptionsList[Number(item.numericQuestionId)].optionList.includes(el.choiceText) ? (
-                      <img
-                        src={SubCheckboxSelected}
-                        width={"19px"}
-                        height={"16px"}
-                        onClick={(e) => {
-                          setSelectedQuestionsState(item, false, el, "remove")
-                        }}
-                      />
-                    ) : (
-                      <img
-                        src={SubCheckboxUnselectedGray}
-                        width={"19px"}
-                        height={"16px"}
-                        onClick={(e) => {
-                          setSelectedQuestionsState(item, false, el)
-                        }}
-                      />
-
-                    )}
-                    {el.choiceText}
-                  </li>
-                ))}
-              </ul>
-            </div>
-            {item.filterQuestionChoice.length > 9 &&
-              <Grid container spacing={2} style={{ alignItems: 'center' }}>
-                <Grid item xs={6}>
-                  <Typography onClick={handleClickMenu}
-                    style={selectedQuestions.includes(item.numericQuestionId) ? {
-                      color: '#fff',
-                      cursor: 'pointer'
-                    } : { cursor: 'pointer' }}>
-                    {Show ? "View less" : "View more"}
-                  </Typography>
-                </Grid>
-                <Grid item xs={6}>
-                  {Show && <div className='selectOption'
-                    style={selectedQuestions.includes(item.numericQuestionId) ? { color: '#fff' } : {}}>
-                    {/*<RadioGroup*/}
-                    {/*    row*/}
-                    {/*    aria-labelledby="demo-row-radio-buttons-group-label"*/}
-                    {/*    name="row-radio-buttons-group"*/}
-                    {/*>*/}
-                    {/*    <FormControlLabel value="select" control={<Radio />} label="Select all" />*/}
-                    {/*    <FormControlLabel value="deselect" control={<Radio />} label="De-select all" />*/}
-                    {/*</RadioGroup>*/}
-                    <Checkbox /> Select All
-                  </div>}
-                </Grid>
-              </Grid>
-            }
-          </AccordionDetails>
-        </Accordion>
-      </div>
-    )
-    //  :
-    //   item.graphType === "stack_bar_chart" || item.graphType === "multi_column_bar_chart" &&
-    //   (
-    //     <div key={index} className={'accordianChart'}
-    //       style={selectedQuestions.includes(item.numericQuestionId) ? {
-    //         color: '#fff',
-    //         background: '#12988A'
-    //       } : {}}>
-    //       <div className={'noAccordian'}>
-    //         <Typography style={selectedQuestions.includes(item.numericQuestionId) ? {
-    //           color: '#fff',
-    //         } : {}}>
-    //           {selectedQuestions.includes(item.numericQuestionId) ? (
-    //             <img
-    //               src={MainChartCheckbox}
-    //               height={"18px"}
-    //               width={"18px"}
-    //               onClick={() => {
-    //                 setSelectedQuestionsState(item, true, undefined, "remove");
-    //               }}
-    //             />
-    //           ) : (
-    //             <img
-    //               src={MainChartUncheckbox}
-    //               height={"18px"}
-    //               width={"18px"}
-    //               onClick={() => {
-    //                 setSelectedQuestionsState(item, true, undefined);
-    //               }}
-    //             />
-    //           )}
+          )
+          //  :
+          //   item.graphType === "stack_bar_chart" || item.graphType === "multi_column_bar_chart" &&
+          //   (
+          //     <div key={index} className={'accordianChart'}
+          //       style={selectedQuestions.includes(item.numericQuestionId) ? {
+          //         color: '#fff',
+          //         background: '#12988A'
+          //       } : {}}>
+          //       <div className={'noAccordian'}>
+          //         <Typography style={selectedQuestions.includes(item.numericQuestionId) ? {
+          //           color: '#fff',
+          //         } : {}}>
+          //           {selectedQuestions.includes(item.numericQuestionId) ? (
+          //             <img
+          //               src={MainChartCheckbox}
+          //               height={"18px"}
+          //               width={"18px"}
+          //               onClick={() => {
+          //                 setSelectedQuestionsState(item, true, undefined, "remove");
+          //               }}
+          //             />
+          //           ) : (
+          //             <img
+          //               src={MainChartUncheckbox}
+          //               height={"18px"}
+          //               width={"18px"}
+          //               onClick={() => {
+          //                 setSelectedQuestionsState(item, true, undefined);
+          //               }}
+          //             />
+          //           )}
 
 
-    //           <span>{item.questionNumber ? item.questionNumber : "-"}</span> {item.questionText ? item.questionText : "-"}
-    //         </Typography>
-    //         <div className='withoutAccordian'>
-    //           <ul>
-    //             {Object.entries(item.filterGraphData).map(([key, value]) => {
-    //               return <li>
-    //                 {selectedQuestionsOptionsList[item.numericQuestionId]?.includes(key) ? (
-    //                   <img
-    //                     src={SubCheckboxSelected}
-    //                     width={"19px"}
-    //                     height={"16px"}
-    //                     onClick={(e) => {
-    //                       setSelectedQuestionsState(item, false, {
-    //                         description: key,
-    //                         choiceText: key
-    //                       }, "remove")
-    //                     }}
-    //                   />
-    //                 ) : (
-    //                   <img
-    //                     src={SubCheckboxUnselectedGray}
-    //                     width={"19px"}
-    //                     height={"16px"}
-    //                     onClick={(e) => {
-    //                       setSelectedQuestionsState(item, false, {
-    //                         description: key,
-    //                         choiceText: key
-    //                       })
-    //                     }}
-    //                   />
+          //           <span>{item.questionNumber ? item.questionNumber : "-"}</span> {item.questionText ? item.questionText : "-"}
+          //         </Typography>
+          //         <div className='withoutAccordian'>
+          //           <ul>
+          //             {Object.entries(item.filterGraphData).map(([key, value]) => {
+          //               return <li>
+          //                 {selectedQuestionsOptionsList[item.numericQuestionId]?.includes(key) ? (
+          //                   <img
+          //                     src={SubCheckboxSelected}
+          //                     width={"19px"}
+          //                     height={"16px"}
+          //                     onClick={(e) => {
+          //                       setSelectedQuestionsState(item, false, {
+          //                         description: key,
+          //                         choiceText: key
+          //                       }, "remove")
+          //                     }}
+          //                   />
+          //                 ) : (
+          //                   <img
+          //                     src={SubCheckboxUnselectedGray}
+          //                     width={"19px"}
+          //                     height={"16px"}
+          //                     onClick={(e) => {
+          //                       setSelectedQuestionsState(item, false, {
+          //                         description: key,
+          //                         choiceText: key
+          //                       })
+          //                     }}
+          //                   />
 
-    //                 )}
-    //                 {key}
-    //               </li>
-    //             })
-    //             }
-    //           </ul>
-    //         </div>
-    //       </div>
-    //     </div>)
-    )
+          //                 )}
+          //                 {key}
+          //               </li>
+          //             })
+          //             }
+          //           </ul>
+          //         </div>
+          //       </div>
+          //     </div>)
+      )
 
   );
 }

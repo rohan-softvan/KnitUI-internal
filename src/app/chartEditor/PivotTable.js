@@ -1,23 +1,23 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, {useEffect, useMemo, useRef, useState} from "react";
 import Highcharts from "highcharts";
 import * as WebDataRocksReact from "react-webdatarocks";
 import 'webdatarocks/webdatarocks.css'
 import "webdatarocks/webdatarocks.highcharts";
-import { DataJSON } from './jsondata/DataJson';
+import {DataJSON} from './jsondata/DataJson';
 import TabPanel from "./TabPanel";
-import { makeStyles, Tab, Tabs } from "@material-ui/core";
+import {makeStyles, Tab, Tabs} from "@material-ui/core";
 import OptionsTab from './OptionsTab';
-import { useDispatch, useSelector } from "react-redux";
-import { setGeneralConfig, setGraphConfig, setPieChartConfig } from "../redux/slice/ChartEditorSlice";
-import { chartEditorEnum } from "../enums";
+import {useDispatch, useSelector} from "react-redux";
+import {setGeneralConfig, setGraphConfig, setPieChartConfig} from "../redux/slice/ChartEditorSlice";
+import {chartEditorEnum} from "../enums";
 
 
-const PivotTable = ({ pieConfig, setPieConfig }) => {
+const PivotTable = ({pieConfig, setPieConfig}) => {
   const dispatch = useDispatch();
   const [activeTab, setActiveTab] = useState(0);
   let generalChartType = useSelector((state) => state.chart.generalChartType);
   let dataJSONConfig = useSelector((state) => state.chart.dataJSON);
-  console.log('dataJSNCOnfig==>',dataJSONConfig)
+  console.log('dataJSNCOnfig==>', dataJSONConfig)
   let selectedQuestion = useSelector((state) => state.chart.selectedItems);
   const [optionsConfig, setOptionsConfig] = useState({
     grandTotal: "on",
@@ -41,7 +41,7 @@ const PivotTable = ({ pieConfig, setPieConfig }) => {
   const [fontSize, setFontSize] = useState(14);
   const [fontFamily, setFontFamily] = useState('Roboto');
   const [rows, setRows] = useState(selectedQuestion[0].rows);
-  
+
   const [columns, setColumns] = useState(selectedQuestion[0].columns);
   const [measures, setMeasures] = useState(selectedQuestion[0].measures);
   // const [rows, setRows] = useState({
@@ -70,15 +70,15 @@ const PivotTable = ({ pieConfig, setPieConfig }) => {
 
   const setDefaultGraphProperties = (graphConfig) => {
     let config = JSON.parse(JSON.stringify(graphConfig));
-    config.chart = { ...chartEditorEnum.chartDefaultProps, ...config.chart }
-    config.credits = { enabled: false }
+    config.chart = {...chartEditorEnum.chartDefaultProps, ...config.chart}
+    config.credits = {enabled: false}
     if (!config.title || !config.title.text) {
       config.title = chartEditorEnum.titleDefaultProps
     }
     if (!config.subtitle) {
       config.subtitle = chartEditorEnum.subtitleDefaultProps
     }
-    config.exporting = { enabled: false }
+    config.exporting = {enabled: false}
     config.xAxis = {
       // title: chartEditorEnum.xAxisDefaultProps.title,
       gridLineColor: chartEditorEnum.xAxisDefaultProps.gridLineColor,
@@ -112,7 +112,7 @@ const PivotTable = ({ pieConfig, setPieConfig }) => {
 
     //setting the colors for multicolor graphs
     if ((config.chart.type === "bar" || config.chart.type === "column") && config.plotOptions.series.colorByPoint) {
-      config.legend = { ...chartEditorEnum.legendsDefaultProps, enabled: false };
+      config.legend = {...chartEditorEnum.legendsDefaultProps, enabled: false};
       if (config.series.length === 3) {
         config.colors = chartEditorEnum.defaultSeriesColors["threePoint"];
         // if series is exactly 5
@@ -149,7 +149,7 @@ const PivotTable = ({ pieConfig, setPieConfig }) => {
       }
 
     } else {
-      config.legend = { ...chartEditorEnum.legendsDefaultProps };
+      config.legend = {...chartEditorEnum.legendsDefaultProps};
       if ("colors" in config) {
         delete config.colors;
       }
@@ -182,14 +182,14 @@ const PivotTable = ({ pieConfig, setPieConfig }) => {
 
   const getPieConfig = () => {
     myRef.webdatarocks.highcharts.getData(
-      {
-        type: "pie",
-        styledMode: true
-      },
-      function (data) {
-        dispatch(setPieChartConfig(data.series))
-        // dispatch(setGraphConfig(data))
-      }
+        {
+          type: "pie",
+          styledMode: true
+        },
+        function (data) {
+          dispatch(setPieChartConfig(data.series))
+          // dispatch(setGraphConfig(data))
+        }
     );
   }
 
@@ -207,13 +207,12 @@ const PivotTable = ({ pieConfig, setPieConfig }) => {
     if (generalChartType === "pie") {
       setPieConfig(config);
     } else {
-      dispatch(setGraphConfig(config));
+      dispatch(setGraphConfig(JSON.parse(JSON.stringify(config))));
     }
   }
 
   const renderGraph = (data) => {
-    let graphData = Object.values(getGraphConfigs()).length !== 0 ? JSON.parse(JSON.stringify(setDefaultGraphProperties(getGraphConfigs()))) : setDefaultGraphProperties(data);
-    console.log("graphData", graphData)
+    let graphData = Object.values(getGraphConfigs()).length !== 0 ? JSON.parse(JSON.stringify(setDefaultGraphProperties(generalChartType === "pie" ? pieConfig : data))) : setDefaultGraphProperties(data);
     graphData.xAxis.title.text = `<span style="cursor:pointer;" id="custom-x-axis-title"> ${graphData.xAxis.title.text}</span>`
     graphData.yAxis[0].title.text = `<span style="cursor:pointer;" id="custom-y-axis-title"> ${graphData.yAxis[0].title.text}</span>`
     dispatch(setGeneralConfig(data.series));
@@ -223,15 +222,17 @@ const PivotTable = ({ pieConfig, setPieConfig }) => {
 
   const createChart = () => {
     myRef.webdatarocks.highcharts.getData(
-      {
-        type: config.type,
-      },
-      function (data) {
-        renderGraph(data);
-      },
-      function (data) {
-        renderGraph(data);
-      }
+        {
+          type: config.type,
+        },
+        function (data) {
+          console.log("11 callbackHandler", data)
+          renderGraph(data);
+        },
+        function (data) {
+          console.log("11 updateHandler")
+          renderGraph(data);
+        }
     );
   };
 
@@ -241,7 +242,7 @@ const PivotTable = ({ pieConfig, setPieConfig }) => {
       width: 200
     }];
     for (let i = 1; i <= totalColumns; i++) {
-      columnWidths.push({ idx: i, width: 100 })
+      columnWidths.push({idx: i, width: 100})
     }
     return columnWidths;
   }
@@ -384,7 +385,7 @@ const PivotTable = ({ pieConfig, setPieConfig }) => {
 
   const handleChartChange = type => {
     config.type = type;
-    setConfig({ ...config });
+    setConfig({...config});
     // createChart();
   };
 
@@ -416,8 +417,8 @@ const PivotTable = ({ pieConfig, setPieConfig }) => {
   }
 
   const handleTitleSave = () => {
-    config.title = { text: newTitle };
-    setConfig({ ...config });
+    config.title = {text: newTitle};
+    setConfig({...config});
     // createChart();
   };
 
@@ -461,13 +462,13 @@ const PivotTable = ({ pieConfig, setPieConfig }) => {
       }
     };
     // config.title.style.color = color;
-    setConfig({ ...config });
+    setConfig({...config});
     // createChart()
   }
 
   const handleOptionsConfigChange = (type, value) => {
     optionsConfig[type] = value;
-    setOptionsConfig({ ...optionsConfig });
+    setOptionsConfig({...optionsConfig});
   };
 
   useEffect(() => {
@@ -479,38 +480,30 @@ const PivotTable = ({ pieConfig, setPieConfig }) => {
   useEffect(() => {
     myRef && myRef.webdatarocks && myRef.webdatarocks.on("reportcomplete", function () {
       myRef && myRef.webdatarocks && handleReportFieldModal(activeTab);
-      myRef && myRef.webdatarocks && createChart()
+      myRef && myRef.webdatarocks && createChart();
     })
   })
 
-  // useEffect(() => {
-  //   if (JSON.stringify(graphConfig) != '{}') {
-  //     let newGraphConfig = JSON.parse(JSON.stringify(graphConfig));
-  //     Highcharts.chart("highchartsContainer", graphConfig);
-  //   }
-  //
-  // }, [graphConfig])
-
   useEffect(
-    () => {
-      return () => {
-        setDisplay(false);
-        setTimeout(() => {
-          setMetaData({ totalRows: null, totalColumns: null });
-          setDisplay(true);
-        }, 50);
-      }
-    },
-    [rows, columns, measures, optionsConfig]
+      () => {
+        return () => {
+          setDisplay(false);
+          setTimeout(() => {
+            setMetaData({totalRows: null, totalColumns: null});
+            setDisplay(true);
+          }, 50);
+        }
+      },
+      [rows, columns, measures, optionsConfig]
   );
 
   useEffect(
-    () => {
-      return () => {
-        if (myRef && myRef.webdatarocks && activeTab === 0) {
-          myRef &&
+      () => {
+        return () => {
+          if (myRef && myRef.webdatarocks && activeTab === 0) {
+            myRef &&
             myRef.webdatarocks.on("reportchange", function () {
-              console.log('handleReportFieldModal--->',report)
+              console.log('handleReportFieldModal--->', report)
               // let bodyStyles = document.body.style;
               // bodyStyles.setProperty('--displayFlag', 'block');
               // document.getElementById("wdr-fields-view").style.display = "block !important"
@@ -518,10 +511,10 @@ const PivotTable = ({ pieConfig, setPieConfig }) => {
               handleReportFieldModal(activeTab);
             });
 
+          }
         }
       }
-    }
-    // [value]
+      // [value]
   );
 
   const handleReportFieldModal = (activeTab) => {
@@ -538,45 +531,39 @@ const PivotTable = ({ pieConfig, setPieConfig }) => {
     }
   }
 
- 
+
   return (
-    // style={{ display: 'flex', justifyContent: 'center', marginTop: '15px' }}
-    display && (
       <div>
         <div>
-          {
-             console.log('rows==>',report)
-          }
           <div className="pivotTable">
             <div>
-              {/* <div style={{ width: '500px !important', minWidth: '700px' }}> */}
               <WebDataRocksReact.Pivot
-                ref={elem => {
-                  myRef = elem;
-                  pieRef = elem;
-                }}
-                width={"100%"}
-                height={"100%"}
-                toolbar={false}
-                report={report}
-                reportcomplete={reportComplete}
-                localizationloaded
-                customizeCell={(cellBuilder, cellData) => {
-                  if (cellData.columnIndex > metaData.totalColumns)
-                    metaData.totalColumns = cellData.columnIndex;
-                  if (cellData.rowIndex > metaData.totalRows)
-                    metaData.totalRows = cellData.rowIndex;
-                }}
-                reportchange={calculateDynamicWidth}
-                aftergriddraw={() => {
-                  const grandTotalCell = document.getElementsByClassName(
-                    "wdr-header wdr-header-c wdr-grand-total"
-                  )[0];
-                  if (grandTotalCell) grandTotalCell.innerHTML = "Total";
-                  calculateDynamicWidth();
-                  calculateDynamicHeight();
-                  // handleResize()
-                }}
+                  ref={elem => {
+                    myRef = elem;
+                    pieRef = elem;
+                  }}
+                  width={"100%"}
+                  height={"100%"}
+                  toolbar={false}
+                  report={report}
+                  reportcomplete={reportComplete}
+                  localizationloaded
+                  customizeCell={(cellBuilder, cellData) => {
+                    if (cellData.columnIndex > metaData.totalColumns)
+                      metaData.totalColumns = cellData.columnIndex;
+                    if (cellData.rowIndex > metaData.totalRows)
+                      metaData.totalRows = cellData.rowIndex;
+                  }}
+                  reportchange={calculateDynamicWidth}
+                  aftergriddraw={() => {
+                    const grandTotalCell = document.getElementsByClassName(
+                        "wdr-header wdr-header-c wdr-grand-total"
+                    )[0];
+                    if (grandTotalCell) grandTotalCell.innerHTML = "Total";
+                    calculateDynamicWidth();
+                    calculateDynamicHeight();
+                    // handleResize()
+                  }}
               />
             </div>
           </div>
@@ -586,9 +573,9 @@ const PivotTable = ({ pieConfig, setPieConfig }) => {
         <div className={"TabRoot"}>
           <div className={classes.root}>
             <Tabs
-              value={activeTab}
-              onChange={handleChange}
-              aria-label="pivot-table-tabs"
+                value={activeTab}
+                onChange={handleChange}
+                aria-label="pivot-table-tabs"
             >
               <Tab label="Fields" {...a11yProps(0)} />
               <Tab label="Options" {...a11yProps(1)} />
@@ -599,12 +586,11 @@ const PivotTable = ({ pieConfig, setPieConfig }) => {
             </TabPanel>
             <TabPanel value={activeTab} index={1}>
               <OptionsTab handleChange={handleOptionsConfigChange}
-                optionsConfig={optionsConfig} />
+                          optionsConfig={optionsConfig}/>
             </TabPanel>
           </div>
         </div>
       </div>
-    )
   );
 };
 

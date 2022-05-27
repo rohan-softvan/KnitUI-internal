@@ -41,9 +41,9 @@ export const chartEditorSlice = createSlice({
       //   plotPieChart(JSON.parse(JSON.stringify(action.payload)))
       // }
       // let selectedLegendItemsTemp = [...state.selectedLegendItems];
-      if (!state.selectedLegendItems.length > 0) {
-        state.selectedLegendItems = series.map(seriesItem => seriesItem.name);
-      }
+      // if (!state.selectedLegendItems.length > 0) {
+      //   state.selectedLegendItems = series.map(seriesItem => seriesItem.name);
+      // }
     },
     setPieChartConfig: (state, action) => {
       state.pieChartConfig = action.payload

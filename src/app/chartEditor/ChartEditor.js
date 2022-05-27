@@ -500,9 +500,9 @@ export default function ChartEditor(handleClick) {
     console.log("handleChangeHeight", newConfig)
     // dispatch(setGraphConfig(newConfig));
     // if (chartType === "pie") {
-      handleSetPieConfig(newConfig);
+    handleSetPieConfig(newConfig);
     // } else {
-      dispatch(setGraphConfig(newConfig));
+    dispatch(setGraphConfig(newConfig));
     // }
   }
 

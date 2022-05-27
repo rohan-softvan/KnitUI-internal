@@ -43,7 +43,7 @@ export default function CustomizeTab({pieConfig, setPieConfig}) {
             pieConfig={pieConfig}
             setPieConfig={setPieConfig}
         />
-        {!((getGraphConfigs().chart.type === "bar" || getGraphConfigs().chart.type === "column") && getGraphConfigs().plotOptions.series.colorByPoint) &&
+        {getGraphConfigs() && getGraphConfigs().chart &&  !((getGraphConfigs().chart.type === "bar" || getGraphConfigs().chart.type === "column") && getGraphConfigs().plotOptions.series.colorByPoint) &&
             <LegendTab
                 expanedState={expandedConfig.legend}
                 setTabState={setTabState}
