@@ -24,7 +24,8 @@ export const chartEditorSlice = createSlice({
     generalChartType: 'bar',
     selectedQuestionsOptionsList: {
       // 13: ["I eat most of my meals at home", "I eat some meals at home, some on campus"]
-    }
+    },
+    selectedLegendItems: [],
   },
   reducers: {
     setGraphConfig: (state, action) => {
@@ -34,9 +35,15 @@ export const chartEditorSlice = createSlice({
         console.log('action==>', action.payload)
         Highcharts.chart('highchartsContainer', action.payload)
       }
+      const {series} = action.payload;
+      console.log("series:", series)
       // else{
       //   plotPieChart(JSON.parse(JSON.stringify(action.payload)))
       // }
+      // let selectedLegendItemsTemp = [...state.selectedLegendItems];
+      if (!state.selectedLegendItems.length > 0) {
+        state.selectedLegendItems = series.map(seriesItem => seriesItem.name);
+      }
     },
     setPieChartConfig: (state, action) => {
       state.pieChartConfig = action.payload
@@ -74,6 +81,10 @@ export const chartEditorSlice = createSlice({
     setSelectedQuestionsOptionsList: (state, action) => {
       console.log('setSelectedQuestionsOptionsList==>', action.payload);
       state.selectedQuestionsOptionsList = action.payload;
+    },
+    setSelectedLegendItems: (state, action) => {
+      console.log('setSelectedLegendItems==>', action.payload);
+      state.selectedLegendItems = action.payload;
     }
   }
 })
@@ -90,6 +101,7 @@ export const {
   setSelectedQuestion,
   setChartType,
   setGeneralChartType,
-  setSelectedQuestionsOptionsList
+  setSelectedQuestionsOptionsList,
+  setSelectedLegendItems
 } = chartEditorSlice.actions
 export default chartEditorSlice.reducer
