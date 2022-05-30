@@ -288,10 +288,9 @@ export default function QuestionTab() {
                             />
                         )}
                       </div>
-                      <div style={{display: 'flex'}}><span
+                      <div><span
                           style={{
-                            paddingRight: '5px',
-                            minWidth: '40px'
+                            paddingRight: '5px'
                           }}>{item.questionNumber ? item.questionNumber : "-"}</span> {item.questionText ? item.questionText : "-"}
                       </div>
                     </Typography>
@@ -348,18 +347,31 @@ export default function QuestionTab() {
                             </Typography>
                           </Grid>
                           <Grid item xs={6}>
-                            {Show && <div className='selectOption'
-                                          style={selectedQuestions.includes(item.numericQuestionId) ? {color: '#fff'} : {}}>
-                              {/*<RadioGroup*/}
-                              {/*    row*/}
-                              {/*    aria-labelledby="demo-row-radio-buttons-group-label"*/}
-                              {/*    name="row-radio-buttons-group"*/}
-                              {/*>*/}
-                              {/*    <FormControlLabel value="select" control={<Radio />} label="Select all" />*/}
-                              {/*    <FormControlLabel value="deselect" control={<Radio />} label="De-select all" />*/}
-                              {/*</RadioGroup>*/}
-                              <Checkbox/> Select All
-                            </div>}
+                          {Show && <div className='selectOption'
+                    style={selectedQuestions.includes(item.numericQuestionId) ? { color: '#fff' } : {}}>
+                    
+                    {selectedQuestions.includes(item.numericQuestionId) ? (
+                      <img
+                        src={SubCheckboxSelected}
+                        width={"19px"}
+                        height={"16px"}
+                        onClick={(e) => {
+                          setSelectedQuestionsState(item, true, undefined, "remove");
+                        }}
+                      />
+                    ) : (
+                      <img
+                        src={SubCheckboxUnselectedGray}
+                        width={"19px"}
+                        height={"16px"}
+                        onClick={(e) => {
+                          setSelectedQuestionsState(item, true, undefined)
+                        }}
+                      />
+
+                    )}
+                       Select All
+                  </div>}
                           </Grid>
                         </Grid>
                     }

@@ -1,9 +1,7 @@
-import React, {useEffect, useMemo, useRef, useState} from "react";
-import Highcharts from "highcharts";
+import React, {useEffect, useRef, useState} from "react";
 import * as WebDataRocksReact from "react-webdatarocks";
 import 'webdatarocks/webdatarocks.css'
 import "webdatarocks/webdatarocks.highcharts";
-import {DataJSON} from './jsondata/DataJson';
 import TabPanel from "./TabPanel";
 import {makeStyles, Tab, Tabs} from "@material-ui/core";
 import OptionsTab from './OptionsTab';
@@ -87,21 +85,21 @@ const PivotTable = ({pieConfig, setPieConfig}) => {
       ...config.xAxis
     }
     //TODO check this if causes issue in y axis
-    // config.yAxis = {
-    //   gridLineColor: chartEditorEnum.yAxisDefaultProps.gridLineColor,
-    //   gridLineWidth: chartEditorEnum.yAxisDefaultProps.gridLineWidth,
-    //   labels: chartEditorEnum.yAxisDefaultProps.labels,
-    //   ...config.yAxis
-    // }
-    // config.xAxis.title = chartEditorEnum.xAxisDefaultProps.title
-    // config.yAxis[0].title = chartEditorEnum.yAxisDefaultProps.title
-    // config.yAxis.title = {...chartEditorEnum.yAxisDefaultProps.title, ...config.yAxis.title}
+    config.yAxis = {
+      gridLineColor: chartEditorEnum.yAxisDefaultProps.gridLineColor,
+      gridLineWidth: chartEditorEnum.yAxisDefaultProps.gridLineWidth,
+      labels: chartEditorEnum.yAxisDefaultProps.labels,
+      title: {
+        enabled: true,
+        text: `<span style="cursor:pointer;" id="custom-y-axis-title"> ${config.yAxis[0].title.text}</span>`
+      }
+    }
 
     if (!("style" in config.xAxis.title)) {
       config.xAxis.title.style = chartEditorEnum.xAxisDefaultProps.style
     }
-    if (!("style" in config.yAxis[0].title)) {
-      config.yAxis[0].title.style = chartEditorEnum.yAxisDefaultProps.style
+    if (!("style" in config.yAxis?.title)) {
+      config.yAxis.title.style = chartEditorEnum.yAxisDefaultProps.style
     }
     if (!("legend" in config)) {
       config.legend = chartEditorEnum.legendsDefaultProps
@@ -213,8 +211,8 @@ const PivotTable = ({pieConfig, setPieConfig}) => {
 
   const renderGraph = (data) => {
     let graphData = Object.values(getGraphConfigs()).length !== 0 ? JSON.parse(JSON.stringify(setDefaultGraphProperties(generalChartType === "pie" ? pieConfig : data))) : setDefaultGraphProperties(data);
-    graphData.xAxis.title.text = `<span style="cursor:pointer;" id="custom-x-axis-title"> ${graphData.xAxis.title.text}</span>`
-    graphData.yAxis[0].title.text = `<span style="cursor:pointer;" id="custom-y-axis-title"> ${graphData.yAxis[0].title.text}</span>`
+    graphData.xAxis.title.text = `<span style="cursor:pointer;" id="custom-x-axis-title"> ${graphData.xAxis.title.text}</span>`;
+    graphData.yAxis.title.text = `<span style="cursor:pointer;" id="custom-y-axis-title"> ${graphData.yAxis.title.text}</span>`
     dispatch(setGeneralConfig(data.series));
     console.log("in createChart");
     setGraphConfigs(graphData);

@@ -35,8 +35,9 @@ const handleAxisTitleClick = (event, axisType) => {
 };
 
 
+
 export const setDefaultEventsForGraph = (graphConfig) => {
-  console.log('in setDefaultEventsForGraph function==>', graphConfig);
+  console.log('in setDefaultEventsForGraph function==>', graphConfig)
   // let newConfig = JSON.parse(JSON.stringify(graphConfig));
   let newConfig = {...graphConfig};
   //adding event listener for legends
@@ -74,18 +75,18 @@ export const setDefaultEventsForGraph = (graphConfig) => {
             .getElementById("custom-subtitle")
             .addEventListener("click", handleSubTitleClick);
       }
-      if (newConfig.chart.type !== "pie") {
-        if (document.getElementById("custom-x-axis-title")) {
-          document
-              .getElementById("custom-x-axis-title")
-              .addEventListener("click", e => handleAxisTitleClick(e, "x"));
-        }
-        if (document.getElementById("custom-y-axis-title")) {
-          document
-              .getElementById("custom-y-axis-title")
-              .addEventListener("click", e => handleAxisTitleClick(e, "y"));
-        }
-      }
+     if(newConfig.chart.type !== "pie"){
+       if (document.getElementById("custom-x-axis-title")) {
+         document
+             .getElementById("custom-x-axis-title")
+             .addEventListener("click", e => handleAxisTitleClick(e, "x"));
+       }
+       if (document.getElementById("custom-y-axis-title")) {
+         document
+             .getElementById("custom-y-axis-title")
+             .addEventListener("click", e => handleAxisTitleClick(e, "y"));
+       }
+     }
     },
     click: function () {
       updateCustomizeTab("appearance");

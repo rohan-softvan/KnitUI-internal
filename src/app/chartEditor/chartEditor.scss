@@ -161,6 +161,8 @@
                         text-overflow: ellipsis;
                         width: 33.33%;
                         align-items: center;
+                        padding-top: 5px;
+                        padding-bottom: 5px;
                         span{
                             padding:2px 3px 2px 0px;
                         }
@@ -1344,21 +1346,7 @@
         max-width:500px;
     }
 }
-@media screen and (min-width: 1366px) {
-    .series-menu-item{
-        max-width:40%;
-    }
-}
-@media screen and (min-width: 1280px) {
-    .series-menu-item{
-        max-width:35%;
-    }
-}
-@media screen and (min-width: 1199px) {
-    .series-menu-item{
-        max-width:32%;
-    }
-}
+
 .information-card .MuiPaper-rounded{
     min-width: 330px;
     padding: 10px;

@@ -113,8 +113,6 @@ export default function LegendTab({expanedState, setTabState, pieConfig, setPieC
   let colorPickerColors = useSelector((state) => state.colorPicker);
   const [Height, setHeight] = React.useState('0px');
   const [Show, setShow] = React.useState(false);
-
-
   const [alignment, setAlignment] = React.useState('center');
   const [formats, setFormats] = React.useState(() => ['bold']);
   const [usedColors, setUsedColor] = React.useState([])
