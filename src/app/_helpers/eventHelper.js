@@ -43,6 +43,9 @@ export const setDefaultEventsForGraph = (graphConfig) => {
   //adding event listener for legends
   if (graphConfig.chart.type === "pie") {
     newConfig.series[0].data.forEach((seriesItem => {
+      seriesItem.dataSorting = {
+        enabled: true
+      }
       seriesItem.events = {
         legendItemClick: function () {
           console.log("legendItemClick::: ");
@@ -52,6 +55,9 @@ export const setDefaultEventsForGraph = (graphConfig) => {
     }));
   } else {
     newConfig.series.forEach((seriesItem => {
+      seriesItem.dataSorting = {
+        enabled: true
+      }
       seriesItem.events = {
         legendItemClick: function () {
           console.log("legendItemClick::: ");

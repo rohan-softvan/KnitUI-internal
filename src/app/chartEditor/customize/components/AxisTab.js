@@ -638,7 +638,8 @@ export default function LegendTab({expanedState, setTabState, pieConfig, setPieC
                     <FormHelperText id="title-text">Gridline color</FormHelperText>
                     <div className={'colorPiker'}
                          style={{
-                           width: 'calc(100% - 15px)'
+                           width: 'calc(100% - 15px)',
+                           pointerEvents: graphConfig["xAxis"] && graphConfig["xAxis"]["gridLineWidth"] ? "auto" : "none"
                          }}>
                       <div className={'fixColors'}>
                         <div
@@ -695,16 +696,20 @@ export default function LegendTab({expanedState, setTabState, pieConfig, setPieC
                         exclusive
                         className={'chartBorderLine'}
                     >
-                      <ToggleButton value={"1px"} aria-label="1px">
+                      <ToggleButton value={"1px"} aria-label="1px"
+                                    disabled={!(graphConfig["xAxis"] && graphConfig["xAxis"]["gridLineWidth"])}>
                         1px
                       </ToggleButton>
-                      <ToggleButton value={"2px"} aria-label="2px">
+                      <ToggleButton value={"2px"} aria-label="2px"
+                                    disabled={!(graphConfig["xAxis"] && graphConfig["xAxis"]["gridLineWidth"])}>
                         2px
                       </ToggleButton>
-                      <ToggleButton value={"3px"} aria-label="3px">
+                      <ToggleButton value={"3px"} aria-label="3px"
+                                    disabled={!(graphConfig["xAxis"] && graphConfig["xAxis"]["gridLineWidth"])}>
                         3px
                       </ToggleButton>
-                      <ToggleButton value={"4px"} aria-label="4px">
+                      <ToggleButton value={"4px"} aria-label="4px"
+                                    disabled={!(graphConfig["xAxis"] && graphConfig["xAxis"]["gridLineWidth"])}>
                         4px
                       </ToggleButton>
                     </StyledToggleButtonGroup>
@@ -894,7 +899,8 @@ export default function LegendTab({expanedState, setTabState, pieConfig, setPieC
                     <FormHelperText id="title-text">Gridline color</FormHelperText>
                     <div className={'colorPiker'}
                          style={{
-                           width: 'calc(100% - 15px)'
+                           width: 'calc(100% - 15px)',
+                           pointerEvents: graphConfig["yAxis"] && graphConfig["yAxis"]["gridLineWidth"] ? "auto" : "none"
                          }}>
                       <div className={'fixColors'}>
                         <div
@@ -951,16 +957,20 @@ export default function LegendTab({expanedState, setTabState, pieConfig, setPieC
                         exclusive
                         className={'chartBorderLine'}
                     >
-                      <ToggleButton value={"1px"} aria-label="1px">
+                      <ToggleButton value={"1px"} aria-label="1px"
+                                    disabled={!(graphConfig["yAxis"] && graphConfig["yAxis"]["gridLineWidth"])}>
                         1px
                       </ToggleButton>
-                      <ToggleButton value={"2px"} aria-label="2px">
+                      <ToggleButton value={"2px"} aria-label="2px"
+                                    disabled={!(graphConfig["yAxis"] && graphConfig["yAxis"]["gridLineWidth"])}>
                         2px
                       </ToggleButton>
-                      <ToggleButton value={"3px"} aria-label="3px">
+                      <ToggleButton value={"3px"} aria-label="3px"
+                                    disabled={!(graphConfig["yAxis"] && graphConfig["yAxis"]["gridLineWidth"])}>
                         3px
                       </ToggleButton>
-                      <ToggleButton value={"4px"} aria-label="4px">
+                      <ToggleButton value={"4px"} aria-label="4px"
+                                    disabled={!(graphConfig["yAxis"] && graphConfig["yAxis"]["gridLineWidth"])}>
                         4px
                       </ToggleButton>
                     </StyledToggleButtonGroup>

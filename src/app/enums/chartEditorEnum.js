@@ -4,7 +4,7 @@ import { updateCustomizeTab } from "../_helpers/eventHelper"
 export const chartEditorEnum = {
   chartDefaultProps: {
     reflow: true,
-    backgroundColor: "#ffffff",
+    backgroundColor: "rgba(0,0,0,0)",
     borderWidth: 1,
     borderColor: "#000",
     borderRadius: 3,
@@ -74,6 +74,9 @@ export const chartEditorEnum = {
           }
         }
       },
+      dataSorting: {
+        enabled: true
+      },
       dataLabels: {
         enabled: true,
         color: 'red',
@@ -82,7 +85,8 @@ export const chartEditorEnum = {
           fontWeight: 'bold',
           fontFamily: 'Roboto',
           fontSize: "11px",
-        }
+        },
+        format: '{point.y:.1f}'// applying precision for data label
       }
     }
   },
