@@ -1,0 +1,20 @@
+.graphs-grid {
+  margin-left: 32px !important;
+}
+
+.graphs-card {
+  border-radius: 10px !important;
+
+  .question {
+    color: #001839;
+    margin: 15px;
+  }
+
+  .progress-bar-list {
+    margin-left: 34px;
+
+    .MuiTypography-root {
+      font-size: 14px !important;
+    }
+  }
+}

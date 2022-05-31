@@ -1,16 +1,17 @@
 import React, {lazy} from "react";
-import { Redirect, Switch } from "react-router-dom";
-import { PrivateRoute } from "../../components/common/PrivateRoute.js";
-import { roleEnum } from "../../enums/index.js";
+import {Redirect, Switch} from "react-router-dom";
+import {PrivateRoute} from "../../components/common/PrivateRoute.js";
+import {roleEnum} from "../../enums/index.js";
 
 const Projects = lazy(() => import("./Projects/Projects"));
 const Members = lazy(() => import("./Members/Members"));
 const Videos = lazy(() => import("./Videos/Videos"));
 const VideoDetails = lazy(() => import("./VideoDetails/VideoDetails"));
-const Data= lazy(() => import("./Data/Data"));
-const DataAnnotation= lazy(() => import("./OpenTextAnnotation/DataAnnotation"));
-const ShowReels= lazy(() => import("./ShowReels/ShowReels"));
-const Themes= lazy(() => import("./Themes/Themes"));
+const Data = lazy(() => import("./Data/Data"));
+const DataAnnotation = lazy(() => import("./OpenTextAnnotation/DataAnnotation"));
+const ShowReels = lazy(() => import("./ShowReels/ShowReels"));
+const Themes = lazy(() => import("./Themes/Themes"));
+const Graphs = lazy(() => import("./Graphs/Graphs"));
 const KnitRoutes = [
   {
     path: "/knit/projects",
@@ -78,9 +79,9 @@ const KnitRoutes = [
     Component: Themes
   },
   {
-        path: "/knit/projectsDetails/:id/Themes/annotations/:themeID",
-        name: "Project-Details",
-        Component: Themes
+    path: "/knit/projectsDetails/:id/Themes/annotations/:themeID",
+    name: "Project-Details",
+    Component: Themes
   },
   {
     path: "/knit/projectsDetails/:id/Themes/analysis/:tId",
@@ -92,35 +93,39 @@ const KnitRoutes = [
     name: "Members",
     Component: Members
   },
-
+  {
+    path: "/knit/projectsDetails/:id/Graphs",
+    name: "Graphs",
+    Component: Graphs
+  },
 ];
 //?tab=1
 export default function KnitRoute(props) {
   return (
-    <Switch>
-      <Redirect exact={true} from="/knit" to="/knit/projects" />
-      {window.location.href.split('/')[5] ?
-          localStorage.getItem("projectIdList").includes(window.location.href.split('/')[5]) ?
-              KnitRoutes.map(({ path, Component }, key) => (
-                  <PrivateRoute
-                      key={key}
-                      path={path}
-                      roles={[roleEnum.KNIT]}
-                      component={Component}
-                  />
-              ))
-              :
-              window.location.href="/knit/projects"
-          :
-                KnitRoutes.map(({ path, Component }, key) => (
-                <PrivateRoute
-                key={key}
-                path={path}
-                roles={[roleEnum.KNIT]}
-                component={Component}
-                />
+      <Switch>
+        <Redirect exact={true} from="/knit" to="/knit/projects"/>
+        {window.location.href.split('/')[5] ?
+            localStorage.getItem("projectIdList").includes(window.location.href.split('/')[5]) ?
+                KnitRoutes.map(({path, Component}, key) => (
+                    <PrivateRoute
+                        key={key}
+                        path={path}
+                        roles={[roleEnum.KNIT]}
+                        component={Component}
+                    />
                 ))
-      }
-    </Switch>
+                :
+                window.location.href = "/knit/projects"
+            :
+            KnitRoutes.map(({path, Component}, key) => (
+                <PrivateRoute
+                    key={key}
+                    path={path}
+                    roles={[roleEnum.KNIT]}
+                    component={Component}
+                />
+            ))
+        }
+      </Switch>
   );
 }

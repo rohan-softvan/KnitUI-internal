@@ -152,6 +152,9 @@ code {
 .data-grid .MuiPaper-elevation1:hover{
   box-shadow: none !important;
 }
+.graphs-grid .MuiPaper-elevation1:hover{
+  box-shadow: none !important;
+}
 .MuiCheckbox-colorSecondary.Mui-checked {
   color: #001839 !important;
 }
@@ -173,6 +176,9 @@ code {
 .header-content{
   color: #001839;
   font-weight: 700;
+}
+.padd-20{
+  padding: 20px;
 }
 // .rgHeaderCell.sortable, .rgCell{
 //   width: 400px !important;
