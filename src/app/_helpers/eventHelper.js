@@ -1,5 +1,6 @@
 import {store} from '../redux/store/index'
 import {setExpandedStateConfig, setTabValueConfig} from '../redux/slice/ChartEditorSlice'
+import Highcharts from "highcharts";
 
 export function updateCustomizeTab(tabName) {
   store.dispatch(setTabValueConfig(2))
@@ -35,7 +36,6 @@ const handleAxisTitleClick = (event, axisType) => {
 };
 
 
-
 export const setDefaultEventsForGraph = (graphConfig) => {
   console.log('in setDefaultEventsForGraph function==>', graphConfig)
   // let newConfig = JSON.parse(JSON.stringify(graphConfig));
@@ -43,9 +43,9 @@ export const setDefaultEventsForGraph = (graphConfig) => {
   //adding event listener for legends
   if (graphConfig.chart.type === "pie") {
     newConfig.series[0].data.forEach((seriesItem => {
-      seriesItem.dataSorting = {
-        enabled: true
-      }
+      // seriesItem.dataSorting = {
+      //   enabled: true
+      // }
       seriesItem.events = {
         legendItemClick: function () {
           console.log("legendItemClick::: ");
@@ -55,9 +55,9 @@ export const setDefaultEventsForGraph = (graphConfig) => {
     }));
   } else {
     newConfig.series.forEach((seriesItem => {
-      seriesItem.dataSorting = {
-        enabled: true
-      }
+      // seriesItem.dataSorting = {
+      //   enabled: true
+      // }
       seriesItem.events = {
         legendItemClick: function () {
           console.log("legendItemClick::: ");
@@ -81,18 +81,46 @@ export const setDefaultEventsForGraph = (graphConfig) => {
             .getElementById("custom-subtitle")
             .addEventListener("click", handleSubTitleClick);
       }
-     if(newConfig.chart.type !== "pie"){
-       if (document.getElementById("custom-x-axis-title")) {
-         document
-             .getElementById("custom-x-axis-title")
-             .addEventListener("click", e => handleAxisTitleClick(e, "x"));
-       }
-       if (document.getElementById("custom-y-axis-title")) {
-         document
-             .getElementById("custom-y-axis-title")
-             .addEventListener("click", e => handleAxisTitleClick(e, "y"));
-       }
-     }
+      if (newConfig.chart.type !== "pie") {
+        if (document.getElementById("custom-x-axis-title")) {
+          document
+              .getElementById("custom-x-axis-title")
+              .addEventListener("click", e => handleAxisTitleClick(e, "x"));
+        }
+        if (document.getElementById("custom-y-axis-title")) {
+          document
+              .getElementById("custom-y-axis-title")
+              .addEventListener("click", e => handleAxisTitleClick(e, "y"));
+        }
+      }
+
+      var points = this.series[0].points,
+          chart = this,
+          newPoints = [];
+
+      console.log("points::", points)
+      console.log("chart::", chart)
+      Highcharts.each(points, function (point, i) {
+        point.update({
+          name: chart.xAxis[0].categories[i]
+        }, false);
+        newPoints.push({
+          x: point.x,
+          y: point.y,
+          name: point.name
+        });
+      });
+      chart.redraw();
+      newPoints.sort(function (a, b) {
+        return b.y - a.y
+      });
+      Highcharts.each(newPoints, function (el, i) {
+        el.x = i;
+      });
+      console.log("newPoints::::", newPoints)
+      chart.series[0].setData(newPoints, true, false, false);
+      chart.xAxis[0].setCategories(newPoints.map(e=>e.name), true);
+
     },
     click: function () {
       updateCustomizeTab("appearance");

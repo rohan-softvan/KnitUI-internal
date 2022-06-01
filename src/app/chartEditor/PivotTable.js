@@ -531,43 +531,37 @@ const PivotTable = ({pieConfig, setPieConfig}) => {
 
 
   return (
-      <div>
-        <div>
-          <div className="pivotTable">
-            <div>
-              <WebDataRocksReact.Pivot
-                  ref={elem => {
-                    myRef = elem;
-                    pieRef = elem;
-                  }}
-                  width={"100%"}
-                  height={"100%"}
-                  toolbar={false}
-                  report={report}
-                  reportcomplete={reportComplete}
-                  localizationloaded
-                  customizeCell={(cellBuilder, cellData) => {
-                    if (cellData.columnIndex > metaData.totalColumns)
-                      metaData.totalColumns = cellData.columnIndex;
-                    if (cellData.rowIndex > metaData.totalRows)
-                      metaData.totalRows = cellData.rowIndex;
-                  }}
-                  reportchange={calculateDynamicWidth}
-                  aftergriddraw={() => {
-                    const grandTotalCell = document.getElementsByClassName(
-                        "wdr-header wdr-header-c wdr-grand-total"
-                    )[0];
-                    if (grandTotalCell) grandTotalCell.innerHTML = "Total";
-                    calculateDynamicWidth();
-                    calculateDynamicHeight();
-                    // handleResize()
-                  }}
-              />
-            </div>
-          </div>
-
-
-        </div>
+      <>
+        {display && <div className="pivotTable">
+          <WebDataRocksReact.Pivot
+              ref={elem => {
+                myRef = elem;
+                pieRef = elem;
+              }}
+              width={"100%"}
+              height={"100%"}
+              toolbar={false}
+              report={report}
+              reportcomplete={reportComplete}
+              localizationloaded
+              customizeCell={(cellBuilder, cellData) => {
+                if (cellData.columnIndex > metaData.totalColumns)
+                  metaData.totalColumns = cellData.columnIndex;
+                if (cellData.rowIndex > metaData.totalRows)
+                  metaData.totalRows = cellData.rowIndex;
+              }}
+              reportchange={calculateDynamicWidth}
+              aftergriddraw={() => {
+                const grandTotalCell = document.getElementsByClassName(
+                    "wdr-header wdr-header-c wdr-grand-total"
+                )[0];
+                if (grandTotalCell) grandTotalCell.innerHTML = "Total";
+                calculateDynamicWidth();
+                calculateDynamicHeight();
+                // handleResize()
+              }}
+          />
+        </div>}
         <div className={"TabRoot"}>
           <div className={classes.root}>
             <Tabs
@@ -588,7 +582,7 @@ const PivotTable = ({pieConfig, setPieConfig}) => {
             </TabPanel>
           </div>
         </div>
-      </div>
+      </>
   );
 };
 

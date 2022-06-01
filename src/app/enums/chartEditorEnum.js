@@ -74,9 +74,9 @@ export const chartEditorEnum = {
           }
         }
       },
-      dataSorting: {
-        enabled: true
-      },
+      // dataSorting: {
+      //   enabled: true
+      // },
       dataLabels: {
         enabled: true,
         color: 'red',
