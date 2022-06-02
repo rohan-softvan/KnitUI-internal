@@ -74,6 +74,10 @@ export const chartEditorSlice = createSlice({
     setSelectedQuestionsOptionsList: (state, action) => {
       console.log('setSelectedQuestionsOptionsList==>', action.payload);
       state.selectedQuestionsOptionsList = action.payload;
+    },
+    setSelectedItems: (state, action) => {
+      console.log('setSelectedItems==>', action.payload);
+      state.selectedItems = action.payload;
     }
   }
 })
@@ -90,6 +94,7 @@ export const {
   setSelectedQuestion,
   setChartType,
   setGeneralChartType,
-  setSelectedQuestionsOptionsList
+  setSelectedQuestionsOptionsList,
+  setSelectedItems
 } = chartEditorSlice.actions
 export default chartEditorSlice.reducer
