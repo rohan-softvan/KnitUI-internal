@@ -6,7 +6,7 @@ export const chartEditorEnum = {
     reflow: true,
     backgroundColor: "rgba(0,0,0,0)",
     borderWidth: 1,
-    borderColor: "#000",
+    borderColor: "#F1F1F1",
     borderRadius: 3,
     //width: 897 ,
     height: 597,
@@ -74,8 +74,15 @@ export const chartEditorEnum = {
           }
         }
       },
+      tooltip: {
+        valueDecimals: 0,
+      },
+      credits: {
+        enabled: false
+      },
       // dataSorting: {
-      //   enabled: true
+      //   enabled: true,
+      //   sortKey: 'y'
       // },
       dataLabels: {
         enabled: true,
@@ -86,7 +93,7 @@ export const chartEditorEnum = {
           fontFamily: 'Roboto',
           fontSize: "11px",
         },
-        format: '{point.y:.1f}'// applying precision for data label
+        format: '{point.y:.0f}'// applying precision for data label
       }
     }
   },

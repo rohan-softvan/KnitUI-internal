@@ -7,7 +7,7 @@ import AccordionDetails from '@material-ui/core/AccordionDetails';
 import Checkbox from '@material-ui/core/Checkbox';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import {useDispatch, useSelector} from "react-redux";
-import {setDataJSONConfig, setSelectedQuestion, setSelectedQuestionsOptionsList} from '../redux/slice/ChartEditorSlice';
+import {setDataJSONConfig, setSelectedQuestion, setSelectedQuestionsOptionsList,resetGraphConfig} from '../redux/slice/ChartEditorSlice';
 import MainChartCheckbox from '../../../src/assets/images/charteditor/MainChartCheckbox.png';
 import MainChartUncheckbox from '../../../src/assets/images/charteditor/MainChartUnheckBox.png';
 
@@ -23,7 +23,7 @@ export default function QuestionTab() {
   const projectId = useSelector(store => store.project.projectId);
   const selectedQuestionList = useSelector(store => store.chart.selectedQuestionList);
   const selectedQuestionsOptionsList = useSelector(store => store.chart.selectedQuestionsOptionsList);
-  const [selectedQuestions, setSelectedQuestions] = React.useState([...selectedQuestionList]);
+  const [selectedQuestions, setSelectedQuestions] = React.useState(selectedQuestionList ? [...selectedQuestionList] : []);
   const [subOptionSelected, setSubOptionSelected] = React.useState([]);
   const [dataJSON, setDataJSON] = React.useState([])
   const [expand, setExpand] = React.useState([]);
@@ -32,28 +32,18 @@ export default function QuestionTab() {
     setExpand((prev) => !prev);
   };
 
-  // useEffect(()=>{
-  //     setSelectedQuestionsState(selectedQuestionList)
-  // })
-  // const [isReadMore, setIsReadMore] = React.useState(true);
-  // const toggleReadMore = () => {
-  //     setIsReadMore(!isReadMore);
-  // };
-
   const [Show, setShow] = React.useState(false);
 
-  useEffect(() => {
-    console.log('questionData==>', questionData)
-  }, [questionData])
+
 
   const handleClickMenu = () => {
-    // if (Height == '30px') setHeight('100%'); else setHeight('30px');
     setShow(!Show)
   }
 
-  useEffect(() => {
+  const fetchJSONResponse = (subOptionList) =>{
+    console.log('subOPtion==>',subOptionList)
     let newList = []
-    Object.entries(subOptionSelected).map(([key, value]) => {
+    Object.entries(subOptionList).map(([key, value]) => {
       newList.push({
         "question_id": value.questionId,
         "numeric_question_ids": key,
@@ -68,37 +58,31 @@ export default function QuestionTab() {
     if (newList.length > 0) {
       dispatch(getChartJSONResponse(user_request))
     }
-    console.log('selectedQuestions==>', newList)
-  }, [selectedQuestions])
+  
+  }
 
   const setSelectedQuestionsState = (value, isQuestion, subOption, type) => {
-    console.log('value=>', value)
-    console.log('subOption=>', subOption, selectedQuestionsOptionsList, selectedQuestionList)
     let questionName = value.questionNumber + " " + value.questionName
     let dataJson = JSON.parse(JSON.stringify(dataJSON))
     let optionsList = JSON.parse(JSON.stringify(selectedQuestionsOptionsList));
-    console.log("optionsList:: ", optionsList)
     let newSelectedQuestionList = selectedQuestions;
     let newSelectedQuestionsOptionsList = {...selectedQuestionsOptionsList};
     if (isQuestion) {
-      console.log("removing ", isQuestion, type, value)
       if (type && type === "remove") {
         let selectedQuestionsUpdated = selectedQuestions.filter(e => e !== value.numericQuestionId);
         setSelectedQuestions([...selectedQuestionsUpdated])
-        // let updatedNewJson = dataJSON.filter(function (item) {
-        //   console.log("QUestio nRemove", item[questionName] === questionName)
-        //   return item[questionName] === questionName;
-        // })
-        // setDataJSON(updatedNewJson);
         newSelectedQuestionList = selectedQuestionsUpdated;
-        // dispatch(setDataJSONConfig(updatedNewJson));
         delete newSelectedQuestionsOptionsList[value.numericQuestionId];
+        dispatch(setSelectedQuestion({
+          questionList: newSelectedQuestionList,
+          text: questionName,
+          remove:true
+        }))
       } else {
         if (!selectedQuestions.includes(value.numericQuestionId)) {
           selectedQuestions.push(value.numericQuestionId);
           setSelectedQuestions([...selectedQuestions])
           newSelectedQuestionList = selectedQuestions
-          console.log('selectedQuestions=>', selectedQuestions)
         }
         if (value.questionType === "MC") {
           newSelectedQuestionsOptionsList[value.numericQuestionId] = {
@@ -108,40 +92,48 @@ export default function QuestionTab() {
         } else {
           newSelectedQuestionsOptionsList[value.numericQuestionId] = Object.keys(value.filterGraphData);
         }
+        dispatch(setSelectedQuestion({
+          questionList: newSelectedQuestionList,
+          text: questionName,
+          remove:false
+        }))
       }
       // dispatch(setSelectedQuestion([...selectedQuestions]))
       setSubOptionSelected(newSelectedQuestionsOptionsList)
-      console.log('setSelectedQuestion==>', newSelectedQuestionList)
-      dispatch(setSelectedQuestionsOptionsList(newSelectedQuestionsOptionsList))
-      dispatch(setSelectedQuestion({
-        questionList: newSelectedQuestionList,
-        text: questionName
-      }))
-
+      dispatch(setSelectedQuestionsOptionsList(newSelectedQuestionsOptionsList))    
+      fetchJSONResponse(newSelectedQuestionsOptionsList)
     } else {
-      console.log("QuestionAns", value, selectedQuestions, "type", type)
+      let updatedOptionsList = []
       if (type && type === "remove") {
         //let updatedNewJson = dataJSON.filter(item => item[questionName] !== subOption.description);
-        let updatedOptionsList = optionsList[value.numericQuestionId].optionList.filter(opt => opt !== subOption.description);
-        console.log("updatedOptionsList::", updatedOptionsList)
+         updatedOptionsList = optionsList[value.numericQuestionId].optionList.filter(opt => opt !== subOption.description);
         let newSelectedQuestionsOptionsList = JSON.parse(JSON.stringify(selectedQuestionsOptionsList));
         newSelectedQuestionsOptionsList[value.numericQuestionId].optionList = [...updatedOptionsList];
+        if(updatedOptionsList.length === 0){
+          delete newSelectedQuestionsOptionsList[value.numericQuestionId]
+          let selectedQuestionsUpdated = selectedQuestions.filter(e => e !== value.numericQuestionId);
+          setSelectedQuestions([...selectedQuestionsUpdated])
+          newSelectedQuestionList = selectedQuestionsUpdated;
+          dispatch(setSelectedQuestion({
+            questionList: newSelectedQuestionList,
+            text: questionName,
+            remove:true
+          }))
+        }
+
         dispatch(setSelectedQuestionsOptionsList(newSelectedQuestionsOptionsList))
-        //setDataJSON(updatedNewJson)
-        //dispatch(setDataJSONConfig(updatedNewJson))
+        fetchJSONResponse(newSelectedQuestionsOptionsList)
       } else {
         // let updatedOptionsList = optionsList[value.numericQuestionId]?.optionList ? [...optionsList[value.numericQuestionId].optionList] : [];
-        let updatedOptionsList = optionsList[value.numericQuestionId] ? [...optionsList[value.numericQuestionId]?.optionList] : [];
+         updatedOptionsList = optionsList[value.numericQuestionId] ? [...optionsList[value.numericQuestionId]?.optionList] : [];
         updatedOptionsList.push(subOption.description);
-        console.log("updatedOptionsList:: ", updatedOptionsList)
         let newSelectedQuestionsOptionsList = JSON.parse(JSON.stringify(selectedQuestionsOptionsList));
-        console.log("newSelectedQuestionsOptionsList:: ", newSelectedQuestionsOptionsList)
         newSelectedQuestionsOptionsList[value.numericQuestionId] = {}
-        newSelectedQuestionsOptionsList[value.numericQuestionId].optionList = [...updatedOptionsList];
+        newSelectedQuestionsOptionsList[value.numericQuestionId].questionId = value.questionId;
+        newSelectedQuestionsOptionsList[value.numericQuestionId].optionList = updatedOptionsList;
         dispatch(setSelectedQuestionsOptionsList(newSelectedQuestionsOptionsList))
+        fetchJSONResponse(newSelectedQuestionsOptionsList)
 
-
-        console.log('subOptionSelected==>', subOptionSelected)
         // if (!selectedQuestions.includes(value.numericQuestionId)) {
         //   selectedQuestions.push(value.numericQuestionId)
         //   setSelectedQuestions([...selectedQuestions])
@@ -155,83 +147,81 @@ export default function QuestionTab() {
           dispatch(setSelectedQuestion({
             questionList: newSelectedQuestionList,
             text: questionName,
+            remove:false
           }))
         }
       }
+     }
+    if(newSelectedQuestionList && newSelectedQuestionList.length === 0){
+      dispatch(resetGraphConfig())
     }
-    console.log("dataJSON <<< ", dataJSON, selectedQuestions)
-  }
-  const setSelectedQuestionsStateForGraphType = (item, subOption, key, isQuestion, type) => {
-    console.log('value=>', item, key)
-    let questionName = item.questionNumber + " " + item.questionName
-    let dataJson = JSON.parse(JSON.stringify(dataJSON))
-    //let dataJson = [];
-    if (isQuestion) {
-      console.log("removing ", isQuestion)
-      if (type && type === "remove") {
-        let selectedQuestionsUpdated = selectedQuestions.filter(e => e !== item.questionId);
-        setSelectedQuestions([...selectedQuestionsUpdated])
-        let updatedList = dataJSON.filter(function (item) {
-          console.log("QUestio nRemove", item[questionName] === questionName)
-          return item[questionName] === questionName;
-        })
-        setDataJSON(updatedList);
-        dispatch(setDataJSONConfig(updatedList))
-      } else {
-        selectedQuestions.push(item.questionId);
-        setSelectedQuestions([...selectedQuestions])
-      }
-    } else {
-      console.log("QuestionAns", selectedQuestions, "type", type)
-      if (type && type === "remove") {
-        let updatedNewJson = dataJSON.filter(item => item[questionName] != key)
-        console.log("subOption", subOption, updatedNewJson)
-        setDataJSON(updatedNewJson)
-        dispatch(setDataJSONConfig(updatedNewJson))
-      } else {
-        if (dataJSON.length <= 0 || selectedQuestions.includes(item.questionId)) {
-          for (let i = 0; i < subOption.sum; i++) {
-            let QuestionAns = key
-            dataJSON.push({[questionName]: QuestionAns})
-          }
-        } else {
-          let totalLength;
-          console.log('data.length==>', dataJSON.length, subOption.total, dataJSON.length < subOption.total)
-          if (dataJSON.length < subOption.sum) {
-            totalLength = subOption.sum - dataJSON.length
-          } else {
-            totalLength = subOption.sum
-          }
-          console.log('data.length==> after', totalLength)
-          let QuestionAns = key
-          // dataJSON[questionName]=QuestionAns
-          dataJSON.map(i => i[questionName] = QuestionAns)
-          // }
-          for (let i = 0; i < totalLength; i++) {
-            dataJSON.push({[questionName]: QuestionAns})
-          }
-        }
-        setDataJSON(dataJSON)
-        dispatch(setDataJSONConfig(dataJSON))
-        selectedQuestions.push(item.questionId);
-        setSelectedQuestions([...selectedQuestions])
-      }
-      // for (const questionChoice in value.total) {
-      //     let QuestionAns = value.filterQuestionChoice[questionChoice].description
-      //     dataJSON.push({[questionName]:QuestionAns})
-      // }
-    }
-    dispatch(setSelectedQuestion(selectedQuestions))
-
-    console.log("dataJSON <<< ", dataJSON)
   }
 
-  React.useEffect(() => {
-    // console.log("selectedQuestions:: ", selectedQuestions);
-  }, [selectedQuestions])
+  // const setSelectedQuestionsStateForGraphType = (item, subOption, key, isQuestion, type) => {
+  //   let questionName = item.questionNumber + " " + item.questionName
+  //   let dataJson = JSON.parse(JSON.stringify(dataJSON))
+  //   //let dataJson = [];
+  //   if (isQuestion) {
+  //     if (type && type === "remove") {
+  //       let selectedQuestionsUpdated = selectedQuestions.filter(e => e !== item.questionId);
+  //       setSelectedQuestions([...selectedQuestionsUpdated])
+  //       let updatedList = dataJSON.filter(function (item) {
+  //         console.log("QUestio nRemove", item[questionName] === questionName)
+  //         return item[questionName] === questionName;
+  //       })
+  //       setDataJSON(updatedList);
+  //       dispatch(setDataJSONConfig(updatedList))
+  //     } else {
+  //       selectedQuestions.push(item.questionId);
+  //       setSelectedQuestions([...selectedQuestions])
+  //     }
+  //   } else {
+  //     console.log("QuestionAns", selectedQuestions, "type", type)
+  //     if (type && type === "remove") {
+  //       let updatedNewJson = dataJSON.filter(item => item[questionName] != key)
+  //       console.log("subOption", subOption, updatedNewJson)
+  //       setDataJSON(updatedNewJson)
+  //       dispatch(setDataJSONConfig(updatedNewJson))
+  //     } else {
+  //       if (dataJSON.length <= 0 || selectedQuestions.includes(item.questionId)) {
+  //         for (let i = 0; i < subOption.sum; i++) {
+  //           let QuestionAns = key
+  //           dataJSON.push({[questionName]: QuestionAns})
+  //         }
+  //       } else {
+  //         let totalLength;
+  //         console.log('data.length==>', dataJSON.length, subOption.total, dataJSON.length < subOption.total)
+  //         if (dataJSON.length < subOption.sum) {
+  //           totalLength = subOption.sum - dataJSON.length
+  //         } else {
+  //           totalLength = subOption.sum
+  //         }
+  //         console.log('data.length==> after', totalLength)
+  //         let QuestionAns = key
+  //         // dataJSON[questionName]=QuestionAns
+  //         dataJSON.map(i => i[questionName] = QuestionAns)
+  //         // }
+  //         for (let i = 0; i < totalLength; i++) {
+  //           dataJSON.push({[questionName]: QuestionAns})
+  //         }
+  //       }
+  //       setDataJSON(dataJSON)
+  //       dispatch(setDataJSONConfig(dataJSON))
+  //       selectedQuestions.push(item.questionId);
+  //       setSelectedQuestions([...selectedQuestions])
+  //     }
+  //     // for (const questionChoice in value.total) {
+  //     //     let QuestionAns = value.filterQuestionChoice[questionChoice].description
+  //     //     dataJSON.push({[questionName]:QuestionAns})
+  //     // }
+  //   }
+  //   dispatch(setSelectedQuestion(selectedQuestions))
+
+  //   console.log("dataJSON <<< ", dataJSON)
+  // }
+
 
   const handleAccordionExpandClick = (questionId) => {
-    console.log("questionId:: ", questionId)
     if (expand.includes(questionId)) {
       let index = expand.indexOf(questionId);
       if (index !== -1) {
@@ -242,9 +232,11 @@ export default function QuestionTab() {
     }
     setExpand([...expand]);
   };
+
   useEffect(() => {
-    console.log("Expand: ", expand)
   }, [expand])
+
+
   return (
       questionData && questionData.map((item, index) => item.questionType === 'MC' && (
               <div key={index} className={'accordianChart'}>
@@ -271,7 +263,6 @@ export default function QuestionTab() {
                                 onClick={(e) => {
                                   e.stopPropagation();
                                   // e.target.checked ? setSelectedQuestionsState(item, true) : setSelectedQuestionsState(item, true, "remove")
-                                  console.log("removing ")
                                   setSelectedQuestionsState(item, true, undefined, "remove");
                                 }}
                             />
@@ -306,7 +297,6 @@ export default function QuestionTab() {
                           color: '#fff',
                         } : {}}
                     >
-                      {console.log('selectedQuestionsOptionsList[Number(item.numericQuestionId)]==>', selectedQuestionsOptionsList[Number(item.numericQuestionId)])}
                       <ul>
                         {item.filterQuestionChoice && item.filterQuestionChoice.map(el => (
                             <li>
@@ -347,31 +337,31 @@ export default function QuestionTab() {
                             </Typography>
                           </Grid>
                           <Grid item xs={6}>
-                          {Show && <div className='selectOption'
-                    style={selectedQuestions.includes(item.numericQuestionId) ? { color: '#fff' } : {}}>
-                    
-                    {selectedQuestions.includes(item.numericQuestionId) ? (
-                      <img
-                        src={SubCheckboxSelected}
-                        width={"19px"}
-                        height={"16px"}
-                        onClick={(e) => {
-                          setSelectedQuestionsState(item, true, undefined, "remove");
-                        }}
-                      />
-                    ) : (
-                      <img
-                        src={SubCheckboxUnselectedGray}
-                        width={"19px"}
-                        height={"16px"}
-                        onClick={(e) => {
-                          setSelectedQuestionsState(item, true, undefined)
-                        }}
-                      />
+                            {Show && <div className='selectOption'
+                                          style={selectedQuestions.includes(item.numericQuestionId) ? {color: '#fff'} : {}}>
 
-                    )}
-                       Select All
-                  </div>}
+                              {selectedQuestions.includes(item.numericQuestionId) ? (
+                                  <img
+                                      src={SubCheckboxSelected}
+                                      width={"19px"}
+                                      height={"16px"}
+                                      onClick={(e) => {
+                                        setSelectedQuestionsState(item, true, undefined, "remove");
+                                      }}
+                                  />
+                              ) : (
+                                  <img
+                                      src={SubCheckboxUnselectedGray}
+                                      width={"19px"}
+                                      height={"16px"}
+                                      onClick={(e) => {
+                                        setSelectedQuestionsState(item, true, undefined)
+                                      }}
+                                  />
+
+                              )}
+                              Select All
+                            </div>}
                           </Grid>
                         </Grid>
                     }

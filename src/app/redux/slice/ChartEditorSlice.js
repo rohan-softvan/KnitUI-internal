@@ -20,18 +20,22 @@ export const chartEditorSlice = createSlice({
     currentTab: 0,
     selectedItems: [{rows: [], columns: [], measures: []}],
     selectedQuestionList: [],
-    chartType: 'bar',
-    generalChartType: 'bar',
+    chartType: 'column',
+    generalChartType: 'column',
     selectedQuestionsOptionsList: {
       // 13: ["I eat most of my meals at home", "I eat some meals at home, some on campus"]
     }
   },
   reducers: {
+    resetGraphConfig: (state, action) => {
+      state.dataJSON = {}
+      state.graphConfig = {}
+      state.selectedItems = [{rows: [], columns: [], measures: []}]
+      Highcharts.chart('highchartsContainer', {})
+    },
     setGraphConfig: (state, action) => {
-      // state.graphConfig = action.payload
       state.graphConfig = setDefaultEventsForGraph(action.payload);
-      if (action.payload.chart.type !== "pie") {
-        console.log('action==>', action.payload)
+      if (action.payload?.chart?.type !== "pie") {
         Highcharts.chart('highchartsContainer', action.payload)
       }
       // else{
@@ -51,29 +55,69 @@ export const chartEditorSlice = createSlice({
       state.currentTab = action.payload
     },
     setExpandedStateConfig: (state, action) => {
-      console.log('exdpanded==?', action.payload)
       state.expandedStateConfig = action.payload
     },
     setSelectedQuestion: (state, action) => {
-      console.log('action.payloadd==>', current(state.selectedItems), action)
       state.selectedQuestionList = action.payload.questionList;
-      const type = action.payload.questionList.length % 2 === 0 ? "rows" : "columns";
-      if (state.selectedItems[0].measures.length <= 0) {
-        state.selectedItems[0].measures.push({uniqueName: "count", aggregation: "sum"})
+      if (action.payload.questionList?.length > 0) {
+        const type = action.payload?.questionList?.length % 2 === 0 ? "rows" : "columns";
+        if (state.selectedItems[0].measures.length <= 0) {
+          state.selectedItems[0].measures.push({uniqueName: "count", aggregation: "sum"})
+        }
+        if (action.payload.remove) {
+          //state.selectedItems[0].columns
+          // row
+          if (state.selectedItems[0].columns.length > 0) {
+            for (let i in state.selectedItems[0].columns) {
+              if (state.selectedItems[0].columns[i] && action.payload.text == state.selectedItems[0].columns[i].uniqueName) {
+                state.selectedItems[0].columns = state.selectedItems[0].columns.filter(el => el.uniqueName !== action.payload.text)
+              }
+            }
+          }
+          if (state.selectedItems[0].rows.length > 0) {
+            for (let i in state.selectedItems[0].rows) {
+              if (action.payload.text == state.selectedItems[0].rows[i].uniqueName) {
+                state.selectedItems[0].rows = state.selectedItems[0].rows.filter(el => el.uniqueName !== action.payload.text)
+              }
+            }
+          }
+          // }
+          // if(action.payload.text == state.selectedItems[0].rows){
+          //   state.selectedItems[0].rows=state.selectedItems[0].rows.filter(el => el.uniqueName !== ation.payload.text)
+          // }
+        } else {
+          state.selectedItems[0][type].push({uniqueName: action.payload.text, sort: "asc"});
+        }
       }
-      state.selectedItems[0][type].push({uniqueName: action.payload.text, sort: "asc"});
     },
     setChartType: (state, action) => {
-      console.log('chart Type==>', action.payload)
       state.chartType = action.payload
     },
     setGeneralChartType: (state, action) => {
-      console.log('setGeneralChartType==>', action.payload)
       state.generalChartType = action.payload
     },
     setSelectedQuestionsOptionsList: (state, action) => {
-      console.log('setSelectedQuestionsOptionsList==>', action.payload);
       state.selectedQuestionsOptionsList = action.payload;
+    },
+    resetAllGraphConfigs: (state, action) => {
+      state.graphConfig = {};
+      state.pieChartConfig = {};
+      state.generalConfig = {};
+      state.dataJSON = [];
+      state.expandedStateConfig = {
+        heading: false,
+        appearance: false,
+        legend: false,
+        axis: false,
+        series: false,
+        dataLables: false
+      };
+      state.currentTab = 0;
+      state.selectedItems = [{rows: [], columns: [], measures: []}];
+      state.selectedQuestionList = [];
+      state.chartType = 'column';
+      state.generalChartType = 'column';
+      state.selectedQuestionsOptionsList = {}
     },
     setSelectedItems: (state, action) => {
       console.log('setSelectedItems==>', action.payload);
@@ -95,6 +139,8 @@ export const {
   setChartType,
   setGeneralChartType,
   setSelectedQuestionsOptionsList,
+  resetAllGraphConfigs,
+  resetGraphConfig,
   setSelectedItems
 } = chartEditorSlice.actions
 export default chartEditorSlice.reducer

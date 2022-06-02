@@ -146,19 +146,19 @@ function OptionsTab({optionsConfig, handleChange}) {
                                 <label htmlFor="wdr-lt-2">Classic form</label>
                             </div>
                         </li>
-                        {/*<li>*/}
-                        {/*    <div className="wdr-radio-wrap">*/}
-                        {/*        <input*/}
-                        {/*            type="radio"*/}
-                        {/*            name="wdr-layout-1650358735631"*/}
-                        {/*            id="wdr-lt-3"*/}
-                        {/*            value="flat"*/}
-                        {/*            onChange={() => handleChange("layout", "flat")}*/}
-                        {/*            checked={optionsConfig.layout === "flat"}*/}
-                        {/*        />*/}
-                        {/*        <label htmlFor="wdr-lt-3">Flat form</label>*/}
-                        {/*    </div>*/}
-                        {/*</li>*/}
+                        {/* <li>
+                            <div className="wdr-radio-wrap">
+                                <input
+                                    type="radio"
+                                    name="wdr-layout-1650358735631"
+                                    id="wdr-lt-3"
+                                    value="flat"
+                                    onChange={() => handleChange("layout", "flat")}
+                                    checked={optionsConfig.layout === "flat"}
+                                />
+                                <label htmlFor="wdr-lt-3">Flat form</label>
+                            </div>
+                        </li> */}
                     </ul>
                 </div>
             </div>

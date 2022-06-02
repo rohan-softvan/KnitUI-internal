@@ -1728,10 +1728,10 @@ class SearchFilter extends Component {
 
            <TextField label={selectedSearch.key === 4 ? data.lable : data.name}
                       onKeyDown={(event)=> this.handleKeyDown(event, isExistsId,
-                          selectedTextTrans, selectedSubSearch, selectedSearch)} type="text"
+                          selectedTextTrans, selectedSubSearch, selectedSearch)} 
+                          type="text"
                            className={"textboxWidth"} InputProps={typeNumber}
                            name={data.name}
-                           type="text"
                            value={selectedSearch.key === 4 ? value: null }
                            onChange={(event) => this.handleTextChange(event, selectedSearch)}/>
           <div
@@ -2091,7 +2091,6 @@ class SearchFilter extends Component {
                                    className={"textboxWidth"}
                                    onKeyDown={(event) => this.handleDBTEKeyDown(
                                        event, selectedSubSearch)}
-                                   type="text"
                                    />
                       </Grid>
                       <Grid
