@@ -6,9 +6,8 @@ import TabPanel from "./TabPanel";
 import {makeStyles, Tab, Tabs} from "@material-ui/core";
 import OptionsTab from './OptionsTab';
 import {useDispatch, useSelector} from "react-redux";
-import {setGeneralConfig, setGraphConfig, setPieChartConfig} from "../redux/slice/ChartEditorSlice";
+import {setGeneralConfig, setGraphConfig, setPieChartConfig, setSelectedItems} from "../redux/slice/ChartEditorSlice";
 import {chartEditorEnum} from "../enums";
-
 
 const PivotTable = ({pieConfig, setPieConfig}) => {
   const dispatch = useDispatch();
@@ -56,6 +55,7 @@ const PivotTable = ({pieConfig, setPieConfig}) => {
   let graphConfig = useSelector((state) => state.chart.graphConfig);
   let myRef = useRef();
   let pieRef = useRef();
+  let previousRef = useRef(true);
 
   const reportComplete = () => {
     calculateDynamicWidth();
@@ -91,7 +91,7 @@ const PivotTable = ({pieConfig, setPieConfig}) => {
       labels: chartEditorEnum.yAxisDefaultProps.labels,
       title: {
         enabled: true,
-        text: `<span style="cursor:pointer;" id="custom-y-axis-title"> ${config.yAxis.length > 0 && config.yAxis[0].title.text}</span>`
+        text: `<span style="cursor:pointer;" id="custom-y-axis-title"> ${config.yAxis?.title?.text || config.yAxis[0].title.text}</span>`
       }
     }
 
@@ -151,6 +151,7 @@ const PivotTable = ({pieConfig, setPieConfig}) => {
       if ("colors" in config) {
         delete config.colors;
       }
+      console.log("config.series::", config.series)
       // if series is exactly 3
       if (config.series.length === 3) {
         config.series.forEach((seriesItem, index) => {
@@ -208,7 +209,58 @@ const PivotTable = ({pieConfig, setPieConfig}) => {
   }
 
   const renderGraph = (data) => {
-    let graphData = Object.values(getGraphConfigs()).length !== 0 ? JSON.parse(JSON.stringify(setDefaultGraphProperties(generalChartType === "pie" ? pieConfig : data))) : setDefaultGraphProperties(data);
+    let newGraphConfig = {};
+    let isSameSeries = false;
+    // redux data
+    if (Object.values(getGraphConfigs()).length !== 0) {
+      newGraphConfig = JSON.parse(JSON.stringify(getGraphConfigs()));
+      console.log("newGraphConfig:: before::", newGraphConfig)
+      console.log("data:: before::", data);
+      if (data.chart.type === "pie") {
+        if (data.series[0].data.length === newGraphConfig.series[0].data.length && data.series[0].data.every(function (value, index) {
+          return value.name === newGraphConfig.series[0].data[index].name && value.y === newGraphConfig.series[0].data[index].y
+        })) {
+          isSameSeries = true;
+        } else {
+          isSameSeries = false;
+        }
+      } else {
+        if (data.series.length === newGraphConfig.series.length) {
+          data.series.forEach((e, i) => {
+            if (e.name === newGraphConfig.series[i].name) {
+              if (e.data.length === newGraphConfig.series[i].data.length && e.data.every(function (value, index) {
+                return value === newGraphConfig.series[i].data[index]
+              })) {
+                isSameSeries = true;
+              } else {
+                isSameSeries = false;
+              }
+            } else {
+              isSameSeries = false;
+            }
+          })
+        } else {
+          isSameSeries = false;
+        }
+      }
+      console.log("isSameSeries:: ", isSameSeries)
+      if (!isSameSeries) {
+        if (generalChartType === "pie") {
+          newGraphConfig.series = data.series;
+          newGraphConfig.xAxis.categories = data.series[0].data.map(e => e.name);
+          newGraphConfig.yAxis = data.yAxis
+        } else {
+          newGraphConfig.series = data.series;
+          newGraphConfig.xAxis.categories = data.xAxis.categories;
+          // newGraphConfig.yAxis = data.yAxis
+        }
+      }
+    } else {
+      // if no data in redux(initial graph load)
+      newGraphConfig = JSON.parse(JSON.stringify(data));
+    }
+    console.log("newGraphConfig::", newGraphConfig)
+    let graphData = JSON.parse(JSON.stringify(isSameSeries ? newGraphConfig : setDefaultGraphProperties(newGraphConfig)));
     graphData.xAxis.title.text = `<span style="cursor:pointer;" id="custom-x-axis-title"> ${graphData.xAxis.title.text}</span>`;
     graphData.yAxis.title.text = `<span style="cursor:pointer;" id="custom-y-axis-title"> ${graphData.yAxis.title.text}</span>`
     dispatch(setGeneralConfig(data.series));
@@ -216,9 +268,15 @@ const PivotTable = ({pieConfig, setPieConfig}) => {
   }
 
   const createChart = () => {
+    console.log("getReport()::: ", myRef.webdatarocks.getReport());
+    const rows1 = myRef && myRef.webdatarocks.getReport().slice.rows ? myRef.webdatarocks.getReport().slice.rows : [];
+    const columns1 = myRef && myRef.webdatarocks.getReport().slice.columns ? myRef.webdatarocks.getReport().slice.columns : [];
+    const measures1 = myRef && myRef.webdatarocks.getReport().slice.measures ? myRef.webdatarocks.getReport().slice.measures : [];
+    console.log("{rows, columns, measures}", {rows1, columns1, measures1})
+
     myRef.webdatarocks.highcharts.getData(
         {
-          type: config.type,
+          type: generalChartType === "pie" ? "pie" : config.type,
         },
         function (data) {
           renderGraph(data);
@@ -227,7 +285,17 @@ const PivotTable = ({pieConfig, setPieConfig}) => {
           renderGraph(data);
         }
     );
+    if (previousRef.current) {
+      previousRef.current = false;
+      return;
+    }
+    //do not execute below code while initial load
+    dispatch(setSelectedItems([{rows: rows1, columns: columns1, measures: measures1}]));
+    setRows(rows1);
+    setColumns(columns1);
+    setMeasures(measures1);
   };
+
 
   const getDynamicWidth = (totalColumns) => {
     let columnWidths = [{
@@ -248,18 +316,18 @@ const PivotTable = ({pieConfig, setPieConfig}) => {
       columns: [...getDynamicWidth(metaData.totalColumns)]
     },
 
-  
+
     slice: {
       rows: rows,
       columns: columns,
       measures: measures,
       "sorting": {
         "column": {
-            "type": "desc",
-            "tuple": [],
-            "measure": "count"
+          "type": "desc",
+          "tuple": [],
+          "measure": "count"
         }
-    },
+      },
       expands: {
         expandAll: true
       },
@@ -439,7 +507,7 @@ const PivotTable = ({pieConfig, setPieConfig}) => {
           }, 50);
         }
       },
-      [rows, columns, measures, optionsConfig]
+      [optionsConfig]
   );
 
   useEffect(
@@ -464,7 +532,7 @@ const PivotTable = ({pieConfig, setPieConfig}) => {
 
   const handleReportFieldModal = (activeTab) => {
     if (activeTab === 0) {
-      if(JSON.stringify(dataJSONConfig) !== "{}"){
+      if (JSON.stringify(dataJSONConfig) !== "{}") {
         let bodyStyles = document.body.style;
         bodyStyles.setProperty('--displayFlag', 'block');
         document.getElementById("wdr-fields-view").style.display = "block !important"
@@ -480,68 +548,68 @@ const PivotTable = ({pieConfig, setPieConfig}) => {
 
 
   return (
-    <>
-    {display && 
-      <div>
-        <div>
-          <div className="pivotTable">
+      <>
+        {display &&
             <div>
-              <WebDataRocksReact.Pivot
-                  ref={elem => {
-                    myRef = elem;
-                    pieRef = elem;
-                  }}
-                  width={"100%"}
-                  height={"100%"}
-                  toolbar={false}
-                  report={report}
-                  reportcomplete={reportComplete}
-                  localizationloaded
-                  customizeCell={(cellBuilder, cellData) => {
-                    if (cellData.columnIndex > metaData.totalColumns)
-                      metaData.totalColumns = cellData.columnIndex;
-                    if (cellData.rowIndex > metaData.totalRows)
-                      metaData.totalRows = cellData.rowIndex;
-                  }}
-                  reportchange={calculateDynamicWidth}
-                  aftergriddraw={() => {
-                    const grandTotalCell = document.getElementsByClassName(
-                        "wdr-header wdr-header-c wdr-grand-total"
-                    )[0];
-                    if (grandTotalCell) grandTotalCell.innerHTML = "Total";
-                    calculateDynamicWidth();
-                    calculateDynamicHeight();
-                    // handleResize()
-                  }}
-              />
+              <div>
+                <div className="pivotTable">
+                  <div>
+                    <WebDataRocksReact.Pivot
+                        ref={elem => {
+                          myRef = elem;
+                          pieRef = elem;
+                        }}
+                        width={"100%"}
+                        height={"100%"}
+                        toolbar={false}
+                        report={report}
+                        reportcomplete={reportComplete}
+                        localizationloaded
+                        customizeCell={(cellBuilder, cellData) => {
+                          if (cellData.columnIndex > metaData.totalColumns)
+                            metaData.totalColumns = cellData.columnIndex;
+                          if (cellData.rowIndex > metaData.totalRows)
+                            metaData.totalRows = cellData.rowIndex;
+                        }}
+                        reportchange={calculateDynamicWidth}
+                        aftergriddraw={() => {
+                          const grandTotalCell = document.getElementsByClassName(
+                              "wdr-header wdr-header-c wdr-grand-total"
+                          )[0];
+                          if (grandTotalCell) grandTotalCell.innerHTML = "Total";
+                          calculateDynamicWidth();
+                          calculateDynamicHeight();
+                          // handleResize()
+                        }}
+                    />
+                  </div>
+                </div>
+
+
+              </div>
+              <div className={"TabRoot"}>
+                <div className={classes.root}>
+                  <Tabs
+                      value={activeTab}
+                      onChange={handleChange}
+                      aria-label="pivot-table-tabs"
+                  >
+                    <Tab label="Fields" {...a11yProps(0)} />
+                    <Tab label="Options" {...a11yProps(1)} />
+                  </Tabs>
+
+                  <TabPanel value={activeTab} index={0}>
+                    {renderFieldsTab()}
+                  </TabPanel>
+                  <TabPanel value={activeTab} index={1}>
+                    <OptionsTab handleChange={handleOptionsConfigChange}
+                                optionsConfig={optionsConfig}/>
+                  </TabPanel>
+                </div>
+              </div>
             </div>
-          </div>
-
-
-        </div>
-        <div className={"TabRoot"}>
-          <div className={classes.root}>
-            <Tabs
-                value={activeTab}
-                onChange={handleChange}
-                aria-label="pivot-table-tabs"
-            >
-              <Tab label="Fields" {...a11yProps(0)} />
-              <Tab label="Options" {...a11yProps(1)} />
-            </Tabs>
-
-            <TabPanel value={activeTab} index={0}>
-              {renderFieldsTab()}
-            </TabPanel>
-            <TabPanel value={activeTab} index={1}>
-              <OptionsTab handleChange={handleOptionsConfigChange}
-                          optionsConfig={optionsConfig}/>
-            </TabPanel>
-          </div>
-        </div>
-      </div>
-    }
-    </>
+        }
+      </>
   );
 };
 
