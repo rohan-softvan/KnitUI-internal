@@ -41,7 +41,6 @@ export default function QuestionTab() {
   }
 
   const fetchJSONResponse = (subOptionList) =>{
-    console.log('subOPtion==>',subOptionList)
     let newList = []
     Object.entries(subOptionList).map(([key, value]) => {
       newList.push({
@@ -120,7 +119,6 @@ export default function QuestionTab() {
             remove:true
           }))
         }
-
         dispatch(setSelectedQuestionsOptionsList(newSelectedQuestionsOptionsList))
         fetchJSONResponse(newSelectedQuestionsOptionsList)
       } else {

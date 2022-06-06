@@ -27,10 +27,10 @@ export const chartEditorSlice = createSlice({
     }
   },
   reducers: {
-    resetGraphConfig: (state, action) => {
-      state.dataJSON = {}
-      state.graphConfig = {}
-      state.selectedItems = [{rows: [], columns: [], measures: []}]
+    resetGraphConfig:(state,action)=>{
+      state.dataJSON={}
+      state.graphConfig={}
+      state.selectedItems=[{rows: [], columns: [], measures: []}]
       Highcharts.chart('highchartsContainer', {})
     },
     setGraphConfig: (state, action) => {
@@ -64,30 +64,30 @@ export const chartEditorSlice = createSlice({
         if (state.selectedItems[0].measures.length <= 0) {
           state.selectedItems[0].measures.push({uniqueName: "count", aggregation: "sum"})
         }
-        if (action.payload.remove) {
+        if(action.payload.remove){
           //state.selectedItems[0].columns
           // row
-          if (state.selectedItems[0].columns.length > 0) {
-            for (let i in state.selectedItems[0].columns) {
-              if (state.selectedItems[0].columns[i] && action.payload.text == state.selectedItems[0].columns[i].uniqueName) {
-                state.selectedItems[0].columns = state.selectedItems[0].columns.filter(el => el.uniqueName !== action.payload.text)
-              }
+          if(state.selectedItems[0].columns.length > 0){
+          for(let i in state.selectedItems[0].columns){
+            if(state.selectedItems[0].columns[i] && action.payload.text == state.selectedItems[0].columns[i].uniqueName){
+              state.selectedItems[0].columns=state.selectedItems[0].columns.filter(el => el.uniqueName !== action.payload.text)
             }
           }
-          if (state.selectedItems[0].rows.length > 0) {
-            for (let i in state.selectedItems[0].rows) {
-              if (action.payload.text == state.selectedItems[0].rows[i].uniqueName) {
-                state.selectedItems[0].rows = state.selectedItems[0].rows.filter(el => el.uniqueName !== action.payload.text)
+        }
+          if(state.selectedItems[0].rows.length > 0){
+            for(let i in state.selectedItems[0].rows){
+              if(state.selectedItems[0].rows[i] && action.payload.text == state.selectedItems[0].rows[i].uniqueName){
+                state.selectedItems[0].rows=state.selectedItems[0].rows.filter(el => el.uniqueName !== action.payload.text)
               }
             }
           }
           // }
           // if(action.payload.text == state.selectedItems[0].rows){
-          //   state.selectedItems[0].rows=state.selectedItems[0].rows.filter(el => el.uniqueName !== ation.payload.text)
-          // }
-        } else {
-          state.selectedItems[0][type].push({uniqueName: action.payload.text, sort: "asc"});
-        }
+            //   state.selectedItems[0].rows=state.selectedItems[0].rows.filter(el => el.uniqueName !== ation.payload.text)
+            // }
+          }else{
+            state.selectedItems[0][type].push({uniqueName: action.payload.text, sort: "asc"});
+          }
       }
     },
     setChartType: (state, action) => {
@@ -118,9 +118,9 @@ export const chartEditorSlice = createSlice({
       state.chartType = 'column';
       state.generalChartType = 'column';
       state.selectedQuestionsOptionsList = {}
+
     },
     setSelectedItems: (state, action) => {
-      console.log('setSelectedItems==>', action.payload);
       state.selectedItems = action.payload;
     }
   }

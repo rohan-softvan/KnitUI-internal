@@ -2392,7 +2392,6 @@ class SearchFilter extends Component {
   }
 }
 const mapStateToProps = (state) => {
-  // console.log('satte==>',state)
   return {
       questionData: store.getState().data.questionData,
       themeDetails: state.data.setThemeDetails,

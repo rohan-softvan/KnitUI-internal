@@ -119,7 +119,6 @@ export default function Heading({expanedState, setTabState, pieConfig, setPieCon
     const [titleFont, settitleFont] = React.useState('');
 
     function getGraphConfigs() {
-        console.log("in getGraphConfigs: ", generalChartType)
         if (generalChartType === "pie") {
             return JSON.parse(JSON.stringify(pieConfig))
         } else {

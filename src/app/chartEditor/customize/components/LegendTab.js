@@ -126,7 +126,6 @@ export default function LegendTab({expanedState, setTabState, pieConfig, setPieC
   let generalChartType = useSelector((state) => state.chart.generalChartType);
 
   function getGraphConfigs() {
-    console.log("in getGraphConfigs: ", generalChartType)
     if (generalChartType === "pie") {
       return JSON.parse(JSON.stringify(pieConfig))
     } else {

@@ -10,7 +10,6 @@ const decimalToHex = alpha =>
 
 function CustomColorPicker(props) {
   let graphConfig = useSelector((state) => state.chart.graphConfig);
-  console.log("usedColors: ", props.usedColors)
   const selectedColor = props.component === "legend" ?
       graphConfig[props.component].itemStyle.color :
       props.component === "backgroundColor" ?

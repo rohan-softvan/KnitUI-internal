@@ -124,7 +124,6 @@ export default function DatalabelsTab({expanedState, setTabState, pieConfig, set
 
 
     function getGraphConfigs() {
-        console.log("in getGraphConfigs: ", generalChartType)
         if (generalChartType === "pie") {
             return JSON.parse(JSON.stringify(pieConfig))
         } else {
@@ -143,7 +142,6 @@ export default function DatalabelsTab({expanedState, setTabState, pieConfig, set
 
 
     const handleTitleFormatting = (event, newFormats,) => {
-        console.log("newFormats", newFormats);
         setFormats(newFormats);
         let newConfig = getGraphConfigs();
         let dataLabelsStyle = newConfig['plotOptions']['series']['dataLabels']['style'];
@@ -154,7 +152,6 @@ export default function DatalabelsTab({expanedState, setTabState, pieConfig, set
     };
 
     const handleTitleAlignment = (event, newAlignment) => {
-        console.log("newAlignment", newAlignment);
         setAlignment(newAlignment);
         let newConfig = getGraphConfigs();
         let dataLabels = newConfig['plotOptions']['series']['dataLabels'];
@@ -189,7 +186,6 @@ export default function DatalabelsTab({expanedState, setTabState, pieConfig, set
         const {checked} = event.target;
         let newConfig = getGraphConfigs();
         newConfig.plotOptions.series.dataLabels.enabled = checked
-        console.log("Checked Console for datalabel", newConfig)
         setGraphConfigs(newConfig);
     }
 

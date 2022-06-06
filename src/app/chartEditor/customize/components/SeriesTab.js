@@ -80,7 +80,6 @@ export default function SeriesTab({expanedState, setTabState, pieConfig, setPieC
   const [selectedSeries, setSelectedSeries] = React.useState(getSelectedSeries(generalChartType === "pie" ? pieConfig : graphConfig))
 
   function getGraphConfigs() {
-    console.log("in getGraphConfigs: ", generalChartType)
     if (generalChartType === "pie") {
       return JSON.parse(JSON.stringify(pieConfig))
     } else {

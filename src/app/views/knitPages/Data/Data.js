@@ -323,8 +323,8 @@ class Data extends Component {
   };
 
   getCSVDetails = (pageSize, projectId) => {
-    let { questionCardListBox } = this.props;
-    let questionsList = questionCardListBox;
+    let { questionCardListBox,tableData } = this.props;
+    let questionsList = tableData;
     let mainList = this.props.mainList;
     let csvDetailsData = [];
     let questionsData = [];

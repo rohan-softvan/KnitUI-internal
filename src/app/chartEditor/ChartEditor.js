@@ -494,7 +494,6 @@ export default function ChartEditor(handleClick) {
   const handleChangeWidth = (width, height) => {
     // let newValueW = event.nativeEvent.layerX;
     // let newValueH = event.nativeEvent.layerY;
-    // console.log("Final W H", newValueW, newValueH)
     let newConfig = getGraphConfigs()
     newConfig["chart"]["width"] = width;
     newConfig["chart"]["height"] = height
@@ -833,8 +832,6 @@ export default function ChartEditor(handleClick) {
                             let width = ref.clientWidth;
                             // let height = Number(graphConfig.chart.height) + d.height;
                             let height = ref.clientHeight;
-                            console.log('e==>', e, d, graphConfig, Number(graphConfig.chart.width), width, ref.clientWidth)
-                            console.log('Checked Width and Height', ref.clientWidth, ref.clientHeight)
                             handleChangeWidth(width, height)
                           }}
                           handleStyles={{

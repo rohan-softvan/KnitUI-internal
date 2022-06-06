@@ -4,7 +4,6 @@ import {setExpandedStateConfig, setTabValueConfig} from '../redux/slice/ChartEdi
 export function updateCustomizeTab(tabName) {
   store.dispatch(setTabValueConfig(2))
   let expandedConfig = store.getState().chart.expandedStateConfig
-  console.log('expandedConfig==>', expandedConfig, store.getState())
   let updatedExpandedState = {}
   Object.keys(expandedConfig).forEach(el => updatedExpandedState[el] = false);
   updatedExpandedState[tabName] = true;
@@ -19,50 +18,34 @@ export const removeHTML = (str) => {
 
 
 const handleTitleClick = event => {
-  console.log("event::", event.currentTarget.textContent)
-  console.log("handleTitleClick invoked 😁");
   updateCustomizeTab("heading");
 };
 
 const handleSubTitleClick = event => {
-  console.log("handleSubTitleClick invoked 😄");
   updateCustomizeTab("heading");
 };
 
 const handleAxisTitleClick = (event, axisType) => {
-  console.log("handleAxisTitleClick invoked 😄", axisType);
   updateCustomizeTab("axis");
 };
 
 
 export const setDefaultEventsForGraph = (graphConfig) => {
-  console.log('in setDefaultEventsForGraph function==>', graphConfig)
   if (graphConfig && Object.keys(graphConfig).length > 0) {
-    // let newConfig = JSON.parse(JSON.stringify(graphConfig));
     let newConfig = {...graphConfig};
     //adding event listener for legends
     if (graphConfig.chart.type === "pie") {
       newConfig.series[0].data.forEach((seriesItem => {
-        // seriesItem.dataSorting = {
-        //   enabled: true,
-        //   sortKey: 'y'
-        // }
         seriesItem.events = {
           legendItemClick: function () {
-            console.log("legendItemClick::: ");
             updateCustomizeTab("legend");
           }
         }
       }));
     } else {
       newConfig.series.forEach((seriesItem => {
-        // seriesItem.dataSorting = {
-        //   enabled: true,
-        //   sortKey: 'y'
-        // }
         seriesItem.events = {
           legendItemClick: function () {
-            console.log("legendItemClick::: ");
             updateCustomizeTab("legend");
           }
         }
@@ -72,7 +55,6 @@ export const setDefaultEventsForGraph = (graphConfig) => {
     //adding event listener for background
     newConfig.chart.events = {
       load: function () {
-        console.log("loaded chart", newConfig);
         if (newConfig.title.text && document.getElementById("custom-title")) {
           document
               .getElementById("custom-title")

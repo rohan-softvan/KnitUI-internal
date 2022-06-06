@@ -59,7 +59,6 @@ export default function AppearanceTab({expanedState, setTabState, pieConfig, set
     let generalChartType = useSelector((state) => state.chart.generalChartType);
 
     function getGraphConfigs() {
-        console.log("in getGraphConfigs: ", generalChartType)
         if (generalChartType === "pie") {
             return JSON.parse(JSON.stringify(pieConfig))
         } else {
@@ -127,11 +126,9 @@ export default function AppearanceTab({expanedState, setTabState, pieConfig, set
 
     const handleCallback = (childData) => {
         setCurrentColor(childData)
-        console.log("childData: ", childData)
     }
 
     const handleColorChange = (component, color) => {
-        console.log(component, color)
         let newConfig = getGraphConfigs();
         let chart = newConfig["chart"];
         if (color === "transparent") {
