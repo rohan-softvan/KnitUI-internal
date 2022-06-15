@@ -50,7 +50,6 @@ class Dashboard extends Component {
     componentDidMount() {
         let userId = cookie.get("user_Id")
         let email =cookie.get("user_email")
-        console.log('email==>',email)
         signal();
 
         if(userId){
@@ -178,7 +177,6 @@ getPlayerID = async () =>{
                             projectIdList.push(response.data.project_details[i]._id.$oid)
                         }
                     }
-                    console.log('projectIdList==>',projectIdList)
                     localStorage.setItem("projectIdList",projectIdList)
                     userId=response.data.user_details._id.$oid;
                     this.setState({ userID: response.data.user_details._id.$oid,organizationId:response.data.user_details.organization_id[0].$oid },()=>{

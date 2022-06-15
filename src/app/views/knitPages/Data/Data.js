@@ -203,6 +203,7 @@ class Data extends Component {
           this.setState({ isListView: true })
           this.setState({ isTableView: false })
         } else {
+          this.props.setProjectId(projectId);
           if (!this.props.mainList || (Array.isArray(this.props.mainList) && this.props.mainList.length <= 0)) {
             this.props.fetchData(this.state.projectId);
             this.props.fetDataTableData();
@@ -284,7 +285,7 @@ class Data extends Component {
     } else {
       selectedList = selectedList.filter(el => el != data.id);
     }
-    this.props.updateTableData(data)
+    // this.props.updateTableData(data)
     this.setState({ mainList: this.state.mainList, selectedList }, () => {
       this.handleAction("is_favourite", !data.isFavourite);
     });
@@ -403,7 +404,8 @@ class Data extends Component {
           mainList = mainList.map(data => {
             // data.isChecked = false;
             // return data;
-            this.props.handleCheckboxChecked(data)
+            // this.props.handleCheckboxChecked(data)
+            this.props.handleAllSelect(false)
           });
           csvDetailsData = [questionsData, ...csvDetailsData];
           let outerThis = this;
@@ -440,6 +442,10 @@ class Data extends Component {
         dataActionDropdown(user_data).then((response) => {
           if (response.status_code == 200 && response.success == true) {
             //  this.props.fetDataTableData()
+            for(let i in this.state.selectedList){
+              this.props.updateTableData({id:this.state.selectedList[i]})
+            }
+            this.props.handleAllSelect(false)
             this.setState({ menuValue: 0, selectedList: [] });
           }
         });
@@ -492,7 +498,7 @@ class Data extends Component {
             DATA
           </Typography>
           {this.state.isListView ?
-            <Typography className={"subTitle"}>Showing {this.props.totalCount} of {this.props.totalCount}</Typography>
+            <Typography className={"subTitle"}>Showing {this.props.totalCount ? this.props.totalCount : 0} of {this.props.totalCount ? this.props.totalCount : 0 }</Typography>
             :
             <Typography className={"subTitle"}>Showing {this.props.totalCount ? this.props.totalCount < 10 ? this.props.totalCount : 10 : 0} of {this.props.totalCount}</Typography>
           }
@@ -1114,7 +1120,7 @@ class Data extends Component {
               projectId={this.state.projectId}
               page={this.state.page}
               isQuestionLoad={this.state.isQuestionLoad}
-              isResponseLoad={this.state.isResponseLoad}
+              isResponseLoad={this.props.isResponseLoad}
               order={this.state.order}
               filteredData={this.state.filteredData}
               totalRecord={this.props.totalCount}
@@ -1235,7 +1241,7 @@ class Data extends Component {
                   <Typography>Sorry, that filter combination has no results. Please try different criteria.</Typography>
                 </div>
               </div>
-              : this.state.isListView &&
+              : this.state.isListView && !this.props.isListViewResponse && 
               <>
                 {this.renderMultiChoiceSkeleton()}
                 {this.renderImageSkeleton()}
@@ -1545,7 +1551,9 @@ const mapStateToProps = (state) => {
     totalCount: store.getState().data.totalCount,
     setAllUserResponse: state.data.setAllUserResponse,
     videoQuestionIds:state.data.videoQuestionIds,
-    videoQuestionList:state.data.videoQuestionList
+    videoQuestionList:state.data.videoQuestionList,
+    isResponseLoad:state.data.isResponseLoad,
+    isListViewResponse: state.data.isListViewResponse
   };
 };
 

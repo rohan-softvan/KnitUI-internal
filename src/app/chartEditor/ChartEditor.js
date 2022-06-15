@@ -129,6 +129,7 @@ function suba11yProps(index) {
 export default function ChartEditor(handleClick) {
   const dispatch = useDispatch();
   let graphConfig = useSelector((state) => state.chart.graphConfig);
+  let selectedItems = useSelector((state) => state.chart.selectedItems);
   let pieSeriesConfig = useSelector((state) => state.chart.pieChartConfig);
   let generalSeriesConfig = useSelector((state) => state.chart.generalConfig);
   let tabValue = useSelector((state) => state.chart.currentTab);
@@ -147,7 +148,7 @@ export default function ChartEditor(handleClick) {
   /*Setting config for pie chart and rendering graph*/
   const handleSetPieConfig = (config) => {
     if (config && Object.keys(config).length > 0) {
-      const finalConfig = setDefaultEventsForGraph(config);
+      const finalConfig = setDefaultEventsForGraph(config, selectedItems[0]?.measures[0]?.aggregation);
       setPieConfig(finalConfig);
       Highcharts.chart("highchartsContainer", finalConfig);
     }

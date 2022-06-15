@@ -41,7 +41,9 @@ export const dataSlice = createSlice({
     allSearchDataList:[],
     applyButtonDisabledStatus:false,
     videoQuestionIds:[],
-    videoQuestionList:[]
+    videoQuestionList:[],
+    isResponseLoad:false,
+    isListViewResponse:false
   },
   reducers: {
     resetProjectStoreData: (state,action) => {
@@ -67,6 +69,7 @@ export const dataSlice = createSlice({
       state.dataView= ""
       state.allSearchDataList=[]
       ORIGINAL_QUESTION_DATA=[]
+      state.isListViewResponse=false
     },
     setViewData: (state, action) => {
       state.dataView = action.payload;
@@ -84,38 +87,43 @@ export const dataSlice = createSlice({
         state.applyButtonDisabledStatus=true
         // state.questionCardListBox =[]
         let questionCardListBox = [];
-        for (let i in action.payload.data) {
-          if (action.payload.data[i].question_type != "Draw") {
-            questionCardListBox.push({
-              questionId: action.payload.data[i].question_id,
-              questionType: action.payload.data[i].question_type,
-              questionName: action.payload.data[i].question_text,
-              questionNumber: action.payload.data[i].question_name,
-              isSunBurst: action.payload.data[i].is_sunburst,
-              numericQuestionId: action.payload.data[i].numeric_question_id,
-              questionChoice: action.payload.data[i].question_choices,
-              genericDataType: action.payload.data[i].generic_data_type,
-              questionSelector: action.payload.data[i].question_selector,
-              sorting: Math.floor(action.payload.data[i].sorting_key)
-            });
+        if(JSON.stringify(action.payload.data) != '{}'){
+          for (let i in action.payload.data) {
+            if (action.payload.data[i].question_type != "Draw") {
+              questionCardListBox.push({
+                questionId: action.payload.data[i].question_id,
+                questionType: action.payload.data[i].question_type,
+                questionName: action.payload.data[i].question_text,
+                questionNumber: action.payload.data[i].question_name,
+                isSunBurst: action.payload.data[i].is_sunburst,
+                numericQuestionId: action.payload.data[i].numeric_question_id,
+                questionChoice: action.payload.data[i].question_choices,
+                genericDataType: action.payload.data[i].generic_data_type,
+                questionSelector: action.payload.data[i].question_selector,
+                sorting: Math.floor(action.payload.data[i].sorting_key)
+              });
+            }
           }
-        }
-        state.originalQuestionData = questionCardListBox;
-        ORIGINAL_QUESTION_DATA=questionCardListBox
-        state.questionData = questionCardListBox;
-        if (state.dataView == "list") {
-          questionCardListBox &&
-          questionCardListBox.map((item, index) => {
-            // state.applyButtonDisabledStatus=true
-            questionCardListBox = fetchAnswerFromId(
-              action.payload.projectId,
-              item.questionId,
-              item.questionName,
-              item.questionNumber,
-              item.numericQuestionId,
-              questionCardListBox
-            );
-          })
+          state.originalQuestionData = questionCardListBox;
+          ORIGINAL_QUESTION_DATA=questionCardListBox
+          state.questionData = questionCardListBox;
+          if (state.dataView == "list") {
+            questionCardListBox &&
+            questionCardListBox.map((item, index) => {
+              // state.applyButtonDisabledStatus=true
+              questionCardListBox = fetchAnswerFromId(
+                action.payload.projectId,
+                item.questionId,
+                item.questionName,
+                item.questionNumber,
+                item.numericQuestionId,
+                questionCardListBox
+              );
+            })
+          }
+        }else{
+          state.isListViewResponse=true
+          // console.log('isListViewResponse==?',state.isListViewResponse,action.payload.data)
         }
       //  state.applyButtonDisabledStatus=false
       } catch (e) {
@@ -268,6 +276,7 @@ export const dataSlice = createSlice({
       }
       state.tableRowData = rowData;
       TABLE_DATA=rowData
+      state.isResponseLoad=true
       localStorage.setItem('tabularData',JSON.stringify(rowData))
     },
 
@@ -578,7 +587,6 @@ const setSunbrustChartData = (userIdList, filterResponseList) => {
   if (filterResponseList.chartData) {
     let childList = [];
     for (let i in filterResponseList.chartData.children) {
-      console.log('childList==>',filterResponseList.chartData.children)
       if (filterResponseList.chartData.children[i].children) {
         getChildrenUserId(
           userIdList,

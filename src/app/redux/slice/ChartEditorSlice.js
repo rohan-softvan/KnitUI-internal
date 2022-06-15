@@ -1,6 +1,6 @@
 import {createSlice, current} from '@reduxjs/toolkit'
 import Highcharts from "highcharts";
-import {setDefaultEventsForGraph} from "../../_helpers/eventHelper";
+import {setDefaultEventsForGraph, setPercentForDataLabels} from "../../_helpers/eventHelper";
 
 export const chartEditorSlice = createSlice({
   name: 'chartEditorSlice',
@@ -34,13 +34,10 @@ export const chartEditorSlice = createSlice({
       Highcharts.chart('highchartsContainer', {})
     },
     setGraphConfig: (state, action) => {
-      state.graphConfig = setDefaultEventsForGraph(action.payload);
+      state.graphConfig = setDefaultEventsForGraph(action.payload, state.selectedItems[0]?.measures[0]?.aggregation);
       if (action.payload?.chart?.type !== "pie") {
-        Highcharts.chart('highchartsContainer', action.payload)
+        Highcharts.chart('highchartsContainer', state.graphConfig)
       }
-      // else{
-      //   plotPieChart(JSON.parse(JSON.stringify(action.payload)))
-      // }
     },
     setPieChartConfig: (state, action) => {
       state.pieChartConfig = action.payload
@@ -122,6 +119,11 @@ export const chartEditorSlice = createSlice({
     },
     setSelectedItems: (state, action) => {
       state.selectedItems = action.payload;
+      const {measures} = action.payload?.[0];
+      let config = setPercentForDataLabels(measures[0]?.aggregation, JSON.parse(JSON.stringify(current(state.graphConfig))));
+      if (config?.chart?.type !== "pie") {
+        Highcharts.chart('highchartsContainer', config)
+      }
     }
   }
 })

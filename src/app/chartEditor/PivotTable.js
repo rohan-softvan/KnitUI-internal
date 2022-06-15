@@ -41,18 +41,6 @@ const PivotTable = ({pieConfig, setPieConfig}) => {
 
   const [columns, setColumns] = useState(selectedQuestion[0].columns);
   const [measures, setMeasures] = useState(selectedQuestion[0].measures);
-  // const [rows, setRows] = useState({
-  //   uniqueName: "Q8 Do you have a meal plan for on-campus dining?"
-  // });
-
-  // const [columns, setColumns] = useState({
-  //   uniqueName: "Q6 We would like to learn a little bit more about how you structure meal time between home, work and school. Which of these best describes you?"
-  // }, {
-  //   uniqueName: "Q20 Would you be interested in ordering from a food locker like this?"
-  // });
-  // const [measures, setMeasures] = useState({
-  //   uniqueName: "sum"
-  // });
   let graphConfig = useSelector((state) => state.chart.graphConfig);
   let myRef = useRef();
   let pieRef = useRef();
@@ -60,10 +48,6 @@ const PivotTable = ({pieConfig, setPieConfig}) => {
 
   const reportComplete = () => {
     calculateDynamicWidth();
-    // setTimeout(() => {
-    //myRef && myRef.webdatarocks && createChart();
-    // }, 500)
-
   };
 
   const setDefaultGraphProperties = (graphConfig) => {
@@ -78,6 +62,9 @@ const PivotTable = ({pieConfig, setPieConfig}) => {
       config.subtitle = chartEditorEnum.subtitleDefaultProps
     }
     config.exporting = {enabled: false}
+    config.tooltip = {
+      valueSuffix: '',
+    }
     config.xAxis = {
       // title: chartEditorEnum.xAxisDefaultProps.title,
       gridLineColor: chartEditorEnum.xAxisDefaultProps.gridLineColor,
@@ -92,7 +79,8 @@ const PivotTable = ({pieConfig, setPieConfig}) => {
       labels: chartEditorEnum.yAxisDefaultProps.labels,
       title: {
         enabled: true,
-        text: `<span style="cursor:pointer;" id="custom-y-axis-title"> ${config.yAxis.length > 0 && config.yAxis[0].title.text}</span>`
+        // text: `<span style="cursor:pointer;" id="custom-y-axis-title"> ${config.yAxis.length > 0 && config.yAxis[0].title.text}</span>`
+        text: `<span style="cursor:pointer;" id="custom-y-axis-title"> ${config.yAxis?.title?.text || config.yAxis[0]?.title?.text || "Y-axis-title"}</span>`
       }
     }
 
@@ -208,28 +196,68 @@ const PivotTable = ({pieConfig, setPieConfig}) => {
     }
   }
 
-  const renderGraph = (data) => {
+  const renderGraph = (data) => {	
     let newGraphConfig = {};
-    // redux data
-    if (Object.values(getGraphConfigs()).length !== 0) {
-      newGraphConfig = JSON.parse(JSON.stringify(getGraphConfigs()));
-      if (generalChartType === "pie") {
-        newGraphConfig.series = data.series;
-        newGraphConfig.xAxis.categories = data.series[0].data.map(e => e.name);
-        newGraphConfig.yAxis = data.yAxis
-      } else {
-        newGraphConfig.series = data.series;
-        newGraphConfig.xAxis.categories = data.xAxis.categories;
-        // newGraphConfig.yAxis = data.yAxis
-      }
-    } else {
-      // if no data in redux(initial graph load)
-      newGraphConfig = JSON.parse(JSON.stringify(data));
-    }
-    let graphData = JSON.parse(JSON.stringify(setDefaultGraphProperties(newGraphConfig)));    graphData.xAxis.title.text = `<span style="cursor:pointer;" id="custom-x-axis-title"> ${graphData.xAxis.title.text}</span>`;
-    graphData.yAxis.title.text = `<span style="cursor:pointer;" id="custom-y-axis-title"> ${graphData.yAxis.title.text}</span>`
-    dispatch(setGeneralConfig(data.series));
-    setGraphConfigs(graphData);
+    let isSameSeries = false;	
+    let xAxisTitle = data.xAxis.title.text;
+    let yAxisTitle = data.yAxis?.title?.text || data.yAxis[0]?.title?.text;
+    // redux data	
+    if (Object.values(getGraphConfigs()).length !== 0) {	
+      newGraphConfig = JSON.parse(JSON.stringify(getGraphConfigs()));	
+      if (data.chart.type === "pie") {	
+        if (data.series[0].data.length === newGraphConfig.series[0].data.length && data.series[0].data.every(function (value, index) {	
+          return value.name === newGraphConfig.series[0].data[index].name && value.y === newGraphConfig.series[0].data[index].y	
+        })) {	
+          isSameSeries = true;	
+          xAxisTitle = newGraphConfig.xAxis?.title?.text;
+          yAxisTitle = newGraphConfig.yAxis?.title?.text;
+        } else {	
+          isSameSeries = false;	
+        }	
+      } else {	
+        if (data.series.length === newGraphConfig.series.length) {	
+          data.series.forEach((e, i) => {	
+            if (e.name === newGraphConfig.series[i].name) {	
+              if (e.data.length === newGraphConfig.series[i].data.length && e.data.every(function (value, index) {	
+                return value === newGraphConfig.series[i].data[index]	
+              })) {	
+                isSameSeries = true;	
+                xAxisTitle = newGraphConfig.xAxis?.title?.text;
+                yAxisTitle = newGraphConfig.yAxis?.title?.text;
+              } else {	
+                isSameSeries = false;	
+              }	
+            } else {	
+              isSameSeries = false;	
+            }	
+          })	
+        } else {	
+          isSameSeries = false;	
+        }	
+      }	
+      if (!isSameSeries) {	
+        if (generalChartType === "pie") {	
+          newGraphConfig.series = data.series;	
+          newGraphConfig.xAxis.categories = data.series[0].data.map(e => e.name);	
+          newGraphConfig.yAxis = data.yAxis	
+        } else {	
+          newGraphConfig.series = data.series;	
+          newGraphConfig.xAxis.categories = data.xAxis.categories;	
+         
+          // newGraphConfig.yAxis = data.yAxis	
+        }	
+      }	
+    } else {	
+      // if no data in redux(initial graph load)	
+      newGraphConfig = JSON.parse(JSON.stringify(data));	
+    }	
+    let graphData = JSON.parse(JSON.stringify(isSameSeries ? newGraphConfig : setDefaultGraphProperties(newGraphConfig)));	
+    // graphData.xAxis.title.text = `<span style="cursor:pointer;" id="custom-x-axis-title"> ${graphData.xAxis.title.text}</span>`;	
+    // graphData.yAxis.title.text = `<span style="cursor:pointer;" id="custom-y-axis-title"> ${graphData.yAxis.title.text}</span>`	
+    graphData.xAxis.title.text = `<span style="cursor:pointer;" id="custom-x-axis-title"> ${xAxisTitle}</span>`;
+    graphData.yAxis.title.text = `<span style="cursor:pointer;" id="custom-y-axis-title"> ${yAxisTitle}</span>`;
+    dispatch(setGeneralConfig(data.series));	
+    setGraphConfigs(graphData);	
   }
 
   const createChart = () => {
@@ -357,45 +385,6 @@ const PivotTable = ({pieConfig, setPieConfig}) => {
     // applyButtonStyle();
   };
 
-  const handleChartChange = type => {
-    config.type = type;
-    setConfig({...config});
-    // createChart();
-  };
-
-  const handleNewTtileChange = e => {
-    setNewTitle(e.target.value);
-  };
-
-  const handleFontChangeSize = (e) => {
-    // config.title = {
-    //   // text: `<p style="cursor:pointer;" id="custom-title">`+ newTitle?newTitle : '-' +`</p>`,
-    //   style: {
-    //     color: config.color ? config.color : color,
-    //     fontWeight: config.fontWeight ? config.fontWeight : "bold",
-    //     fontFamily: config.fontWeight ? config.fontWeight  : "Roboto",
-    //     // fontSize: '50px',
-    //     "fontSize": e.target.value+'px'
-    //   }
-    // };
-    setFontSize(e.target.value)
-    // config.title.style.color = color;
-    // setConfig({ ...config });
-    // setTimeout(() => {
-
-    // }, 2000);
-  }
-
-  const handleChangeFamily = (e) => {
-    setFontFamily(e.target.value)
-  }
-
-  const handleTitleSave = () => {
-    config.title = {text: newTitle};
-    setConfig({...config});
-    // createChart();
-  };
-
   function a11yProps(index) {
     return {
       id: `pivot-table-tab-${index}`,
@@ -475,12 +464,7 @@ const PivotTable = ({pieConfig, setPieConfig}) => {
           if (myRef && myRef.webdatarocks && activeTab === 0) {
             myRef &&
             myRef.webdatarocks.on("reportchange", function () {
-              // let bodyStyles = document.body.style;
-              // bodyStyles.setProperty('--displayFlag', 'block');
-              // document.getElementById("wdr-fields-view").style.display = "block !important"
-              // document.getElementsByClassName("wdr-ui-element wdr-ui wdr-fields-view-wrap")[0].style.display = "block"
               handleReportFieldModal(activeTab);
-              // dispatch(resetGraphConfig())
             });
 
           }

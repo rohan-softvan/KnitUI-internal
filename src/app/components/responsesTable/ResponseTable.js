@@ -205,7 +205,7 @@ class ResponseTable extends Component {
             <TableBody>
             {this.props.TableData && this.props.TableData.length > 0 ?   
               <>
-                {this.props.isResponseLoad ? 
+                {!this.props.isResponseLoad ? 
                 <>
                   {this.skeletontable()}
                 </>
@@ -249,22 +249,20 @@ class ResponseTable extends Component {
                             src={FavouriteChecked}
                             height={"17px"}
                             width={"18px"}
-                            className={"favourite-icon"}
+                            className={"favourite-icon cursor"}
                             onClick={(e) => {
                               this.props.favourite(row);
                             }}
-                            className={"cursor"}
                           />
                         ) : (
                           <img
                             src={FavouriteUnchecked}
                             height={"17px"}
                             width={"18px"}
-                            className={"favourite-icon"}
+                            className={"favourite-icon cursor"}
                             onClick={(e) => {
                               this.props.favourite(row);
                             }}
-                            className={"cursor"}
                           />
                         )}
                       </TableCell>
@@ -365,7 +363,8 @@ class ResponseTable extends Component {
                  </div>
                </TableCell>
              </TableRow>
-              :
+              : !this.props.isResponseLoad &&
+              // <></>
               this.skeletontable()
               }
               </>

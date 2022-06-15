@@ -29,10 +29,21 @@ const handleAxisTitleClick = (event, axisType) => {
   updateCustomizeTab("axis");
 };
 
+export const setPercentForDataLabels = (aggregation, config) => {
+  if (aggregation === "percent" || aggregation === "percentofcolumn" || aggregation === "percentofrow" || aggregation === "%difference") {
+    config.plotOptions.series.dataLabels.format = "{point.y:.0f}%";
+    config.tooltip.valueSuffix = '%';
+  } else {
+    config.plotOptions.series.dataLabels.format = "{point.y:.0f}";
+    config.tooltip.valueSuffix = '';
+  }
+  return config;
+}
 
-export const setDefaultEventsForGraph = (graphConfig) => {
+export const setDefaultEventsForGraph = (graphConfig, aggregation) => {
   if (graphConfig && Object.keys(graphConfig).length > 0) {
     let newConfig = {...graphConfig};
+    newConfig = setPercentForDataLabels(aggregation, JSON.parse(JSON.stringify(newConfig)));
     //adding event listener for legends
     if (graphConfig.chart.type === "pie") {
       newConfig.series[0].data.forEach((seriesItem => {
